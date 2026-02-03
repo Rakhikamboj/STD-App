@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, Home, Search, BookOpen, MessageCircle, UserPlus } from 'lucide-react';
+import { Heart, UserPlus } from 'lucide-react';
 import styles from './Navigation.module.css';
 
 const Navigation = () => {
@@ -10,7 +10,9 @@ const Navigation = () => {
     <nav className={styles.nav}>
       <div className={styles.container}>
         <Link to="/" className={styles.logo}>
-          <Heart className={styles.logoIcon} />
+          <div className={styles.logoIconWrapper}>
+            <Heart className={styles.logoIcon} />
+          </div>
           <span className={styles.logoText}>HealthPath</span>
         </Link>
 
@@ -21,29 +23,36 @@ const Navigation = () => {
                 to="/" 
                 className={`${styles.link} ${location.pathname === '/' ? styles.active : ''}`}
               >
-                <Home size={18} />
+              
                 <span>Home</span>
               </Link>
               <Link 
                 to="/symptom-checker" 
                 className={`${styles.link} ${location.pathname === '/symptom-checker' ? styles.active : ''}`}
               >
-                <Search size={18} />
+               
                 <span>Symptom Checker</span>
               </Link>
               <Link 
                 to="/education" 
                 className={`${styles.link} ${location.pathname === '/education' ? styles.active : ''}`}
               >
-                <BookOpen size={18} />
+                
                 <span>Education</span>
               </Link>
               <Link 
                 to="/community" 
                 className={`${styles.link} ${location.pathname === '/community' ? styles.active : ''}`}
               >
-                <MessageCircle size={18} />
+               
                 <span>Community</span>
+              </Link>
+              <Link 
+                to="/faq" 
+                className={`${styles.link} ${location.pathname === '/faq' ? styles.active : ''}`}
+              >
+               
+                <span>FAQ</span>
               </Link>
             </>
           )}
