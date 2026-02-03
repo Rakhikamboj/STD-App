@@ -167,8 +167,11 @@ const SymptomChecker = () => {
             Answer a few questions to get personalized health guidance
           </p>
         </div>
-
+ <div className={styles.questionNumber}>
+            Question {currentQuestion + 1} of {questions.length}
+          </div>
         <div className={styles.progressBar}>
+          
           <div 
             className={styles.progressFill} 
             style={{ width: `${progress}%` }}
@@ -176,9 +179,7 @@ const SymptomChecker = () => {
         </div>
 
         <div className={styles.questionCard}>
-          <div className={styles.questionNumber}>
-            Question {currentQuestion + 1} of {questions.length}
-          </div>
+         
           
           <h2 className={styles.question}>{question?.question}</h2>
 
