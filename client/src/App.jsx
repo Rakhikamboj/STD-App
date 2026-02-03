@@ -6,6 +6,7 @@ import EducationHub from './pages/EducationHub';
 import Community from './pages/Community';
 import DoctorAuth from './pages/DoctorAuth';
 import DoctorDashboard from './pages/DoctorDashboard';
+import ResultsScreen from './pages/ResultsScreen';
 // import './index.css';
 
 function App() {
@@ -16,6 +17,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/symptom-checker" element={<SymptomChecker />} />
+          <Route path="/symptom-result" element={<ResultsScreen />} />
+          
           <Route path="/education" element={<EducationHub />} />
           <Route path="/community" element={<Community />} />
           <Route path="/doctor/login" element={<DoctorAuth />} />

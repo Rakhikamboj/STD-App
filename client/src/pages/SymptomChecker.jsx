@@ -72,9 +72,10 @@ const SymptomChecker = () => {
     try {
     
       const response = await api.post(`/symptoms/analyze`, { 
-        responses: finalResponses 
+        responses
       });
       setResult(response.data);
+      console.log("response----->", responses)
     } catch (err) {
       setError('Failed to analyze symptoms. Please try again.');
       console.error(err);
@@ -161,7 +162,7 @@ const SymptomChecker = () => {
     <div className={styles.container}>
       <div className={styles.checker}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Sexual Health Assessment</h1>
+          {/* <h1 className={styles.title}>Sexual Health Assessment</h1> */}
           <p className={styles.subtitle}>
             Answer a few questions to get personalized health guidance
           </p>

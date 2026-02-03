@@ -28,4 +28,4 @@ const symptomReportSchema = new mongoose.Schema({
   timestamps: true
 });
 
-export default symptomReportSchema
+export default mongoose.model('SymptomReport', symptomReportSchema);

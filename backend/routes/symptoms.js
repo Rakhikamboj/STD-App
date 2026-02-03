@@ -136,25 +136,45 @@ router.post('/analyze', async (req, res) => {
     const sessionId = uuidv4();
 
     // Optional: Store report in MongoDB (uncomment if using SymptomReport model)
-    // const report = await SymptomReport.create({
-    //   responses,
-    //   riskLevel,
-    //   recommendations,
-    //   possibleConditions,
-    //   sessionId,
-    //   hasSymptoms
-    // });
-
-    res.status(201).json({
-      sessionId,
+    const report = await SymptomReport.create({
+      responses,
+      riskLevel,
       recommendations,
       possibleConditions,
-      hasSymptoms,
+      sessionId,
+      hasSymptoms
+    });
+
+    res.status(201).json({
+      sessionId: report.sessionId,
+      riskLevel: report.riskLevel,
+      recommendations: report.recommendations,
+     
+      possibleConditions: report.possibleConditions,
+      hasSymptoms: report.hasSymptoms,
       message: 'Your health assessment is complete. Please review the recommendations below.'
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error analyzing symptoms' });
+  }
+});
+
+// @route   GET /api/symptoms/report/:sessionId
+// @desc    Get symptom report by session ID
+// @access  Public
+router.get('/report/:sessionId', async (req, res) => {
+  try {
+    const report = await SymptomReport.findOne({ sessionId: req.params.sessionId });
+
+    if (!report) {
+      return res.status(404).json({ message: 'Report not found' });
+    }
+
+    res.json(report);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error fetching report' });
   }
 });
 
@@ -273,12 +293,20 @@ router.get('/questions', (req, res) => {
       ],
       category: 'testing'
     },
+   
     {
-      id: 'additionalConcerns',
-      question: 'Do you have any additional concerns?',
-      type: 'text',
-      placeholder: 'Please describe any other concerns you may have...',
-      category: 'concerns'
+      id: 'lastTest',
+      question: 'When was your last STI test?',
+      type: 'multiple-choice',
+      options: [
+        'Within the last 3 months',
+        '3-6 months ago',
+        '6-12 months ago',
+        'Over a year ago',
+        'Never tested',
+        'Prefer not to answer'
+      ],
+      category: 'testing'
     }
   ];
 
