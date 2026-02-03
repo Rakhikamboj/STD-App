@@ -1,0 +1,251 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f4fdfb 0%, #ffffff 50%, #f0fdfa 100%);
+}
+
+.imageGallery {
+  max-width: 1000px;
+  margin: 0 auto;
+  animation: slideUp 0.6s ease-out;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.disclaimer {
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  color: #92400e;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.disclaimer strong {
+  font-weight: 700;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin: 40px 0;
+}
+
+.galleryItem {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.galleryItem:hover {
+  border-color: #0d9488;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(13, 148, 136, 0.15);
+}
+
+.itemPreview {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.preview {
+  width: 120px;
+  height: 120px;
+}
+
+.itemLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 16px;
+  line-height: 1.4;
+}
+
+.detailView {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(13, 148, 136, 0.08);
+}
+
+.backToGallery {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #0d9488;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 0;
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+}
+
+.backToGallery:hover {
+  gap: 12px;
+  color: #0f766e;
+}
+
+.description {
+  margin: 32px 0;
+  padding: 24px;
+  background: #f4fdfb;
+  border-radius: 12px;
+  border-left: 4px solid #0d9488;
+}
+
+.description h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 12px;
+}
+
+.description p {
+  font-size: 1rem;
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.description ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.description li {
+  font-size: 0.9375rem;
+  color: #374151;
+  line-height: 1.6;
+  padding-left: 24px;
+  position: relative;
+}
+
+.description li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #0d9488;
+  font-weight: 700;
+}
+
+.nextSteps {
+  margin: 32px 0;
+  padding: 24px;
+  background: #ecfdf5;
+  border-radius: 12px;
+  border-left: 4px solid #10b981;
+}
+
+.nextSteps h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 12px;
+}
+
+.nextSteps p {
+  font-size: 1rem;
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.nextSteps ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nextSteps li {
+  font-size: 0.9375rem;
+  color: #374151;
+  line-height: 1.6;
+  padding-left: 24px;
+  position: relative;
+}
+
+.nextSteps li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #10b981;
+  font-weight: 700;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 16px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+  }
+
+  .detailView {
+    padding: 24px;
+  }
+
+  .description,
+  .nextSteps {
+    padding: 16px;
+  }
+
+  .itemLabel {
+    margin: 12px;
+    font-size: 0.875rem;
+  }
+}
