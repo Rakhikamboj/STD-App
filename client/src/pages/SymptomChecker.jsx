@@ -219,9 +219,7 @@ const SymptomChecker = () => {
           
           <h2 className={styles.question}>{question?.question}</h2>
 
-          {question?.helpText && (
-            <p className={styles.helpText}>{question.helpText}</p>
-          )}
+       
 
           <div className={styles.answers}>
             {question?.type === 'yes-no' ? (
@@ -365,7 +363,11 @@ const SymptomChecker = () => {
           </div>
 
           {/* Show reference images notice after yes selection and on subsequent questions */}
+             {question?.helpText && (
+            <p className={styles.helpText}>{question.helpText}</p>
+          )}
           {(showReferenceImagesNotice || (responses.referenceImages === 'yes' && currentQuestion > 7)) && (
+            
             <div className={styles.referenceImagesNotice}>
               <AlertCircle size={18} className={styles.noticeIcon} />
               <div className={styles.noticeContent}>
