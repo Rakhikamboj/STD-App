@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AlertCircle, CheckCircle, Loader, Shield, ChevronRight, ChevronLeft } from 'lucide-react';
+import { AlertCircle, CheckCircle, Loader, Shield, ChevronRight, ChevronLeft, CheckIcon } from 'lucide-react';
 import api from '../utils/api';
 import ResultsScreen from './ResultsScreen';
 import styles from './SymptomChecker.module.css';
@@ -282,7 +282,7 @@ const SymptomChecker = () => {
                         </div>
                         {responses[question.id] === option.value && (
                           <div className={styles.selectedCheckmark}>
-                            <CheckCircle size={24} />
+                            <CheckIcon size={18} />
                           </div>
                         )}
                       </div>
