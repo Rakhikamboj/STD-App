@@ -1,0 +1,248 @@
+/* Floating Button */
+.floatingButton {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: linear-gradient(135deg, #0d9488 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(13, 148, 136, 0.4);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.floatingButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(13, 148, 136, 0.5);
+}
+
+.floatingButton:active {
+  transform: translateY(0);
+}
+
+/* Poll Panel */
+.pollPanel {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 380px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Poll Header */
+.pollHeader {
+  background: linear-gradient(135deg, #0d9488 0%, #2563eb 100%);
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pollHeaderContent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pollHeaderIcon {
+  opacity: 0.9;
+}
+
+.pollTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.closeButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  color: white;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Poll Body */
+.pollBody {
+  padding: 20px;
+}
+
+.pollQuestion {
+  margin-bottom: 20px;
+}
+
+.responseCount {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.responseCount svg {
+  color: #0d9488;
+}
+
+.pollQuestion h4 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Poll Options */
+.pollOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.pollOption {
+  position: relative;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  text-align: left;
+}
+
+.pollOption:hover:not(.voted) {
+  border-color: #0d9488;
+  background: #f0fdfa;
+}
+
+.pollOption.selected {
+  border-color: #0d9488;
+  background: #f0fdfa;
+}
+
+.pollOption.voted {
+  cursor: default;
+}
+
+.optionText {
+  position: relative;
+  z-index: 2;
+  font-size: 14px;
+  color: #334155;
+  font-weight: 500;
+  flex: 1;
+}
+
+.optionPercentage {
+  position: relative;
+  z-index: 2;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0d9488;
+  margin-left: 12px;
+}
+
+.optionBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(13, 148, 136, 0.15) 0%, rgba(13, 148, 136, 0.05) 100%);
+  transition: width 0.5s ease;
+  z-index: 1;
+  border-radius: 8px;
+}
+
+/* Poll Footer */
+.pollFooter {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
+}
+
+.communityPrompt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.promptIcon {
+  color: #0d9488;
+  flex-shrink: 0;
+}
+
+.communityButton {
+  display: block;
+  width: 100%;
+  background: linear-gradient(135deg, #d946ef 0%, #0d9488 100%);
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(217, 70, 239, 0.2);
+}
+
+.communityButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(217, 70, 239, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pollPanel {
+    width: calc(100vw - 32px);
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .floatingButton {
+    right: 16px;
+    bottom: 16px;
+  }
+}

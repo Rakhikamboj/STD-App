@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Heart, Shield, Users, BookOpen, ArrowRight, CheckCircle } from 'lucide-react';
 import styles from './HomePage.module.css';
+import QuickPoll from '../components/QuickPoll';
 
 const HomePage = () => {
   return (
@@ -226,6 +227,9 @@ const HomePage = () => {
           </p>
         </div>
       </footer>
+
+      {/* Quick Poll Component */}
+      <QuickPoll />
     </div>
   );
 };
