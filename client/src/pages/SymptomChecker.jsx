@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { AlertCircle, CheckCircle, ArrowRight, ArrowLeft, Loader, Image as ImageIcon, Sparkles } from 'lucide-react';
+import { AlertCircle, CheckCircle, ArrowRight, ArrowLeft, Loader, Shield } from 'lucide-react';
 import api from '../utils/api';
+import ResultsScreen from './ResultsScreen';
 import styles from './SymptomChecker.module.css';
 
 const SymptomChecker = () => {
@@ -10,9 +11,9 @@ const SymptomChecker = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
-  const [showReferenceImages, setShowReferenceImages] = useState(false);
   const [selectedReferenceImages, setSelectedReferenceImages] = useState([]);
   const [referenceImageData, setReferenceImageData] = useState({});
+  const [showReferenceImagesNotice, setShowReferenceImagesNotice] = useState(false);
 
   useEffect(() => {
     fetchQuestions();
@@ -49,11 +50,31 @@ const SymptomChecker = () => {
     } else {
       setResponses({ ...responses, [question.id]: answer });
       
-      if (!question.multiselect && question.type !== 'text' && currentQuestion < questions.length - 1) {
+      // Show reference images notice if user selects "yes" for reference images question
+      if (question.id === 'q8_referenceImages' || question.type === 'yes-no' && question.id.includes('referenceImages')) {
+        if (answer === 'yes') {
+          setShowReferenceImagesNotice(true);
+        } else {
+          setShowReferenceImagesNotice(false);
+        }
+      }
+      
+      // Don't auto-advance for image selection questions
+      if (!question.multiselect && question.type !== 'text' && question.type !== 'image-selection' && currentQuestion < questions.length - 1) {
         setTimeout(() => setCurrentQuestion(currentQuestion + 1), 300);
-      } else if (!question.multiselect && question.type !== 'text' && currentQuestion === questions.length - 1) {
+      } else if (!question.multiselect && question.type !== 'text' && question.type !== 'image-selection' && currentQuestion === questions.length - 1) {
         submitResponses({ ...responses, [question.id]: answer });
       }
+    }
+  };
+
+  const handleImageSelection = (imageType) => {
+    const question = questions[currentQuestion];
+    setResponses({ ...responses, [question.id]: imageType });
+    
+    // Track selected reference images for analysis
+    if (!selectedReferenceImages.includes(imageType)) {
+      setSelectedReferenceImages([...selectedReferenceImages, imageType]);
     }
   };
 
@@ -63,14 +84,6 @@ const SymptomChecker = () => {
     } else {
       submitResponses();
     }
-  };
-
-  const handleReferenceImageToggle = (imageType) => {
-    setSelectedReferenceImages(prev => 
-      prev.includes(imageType)
-        ? prev.filter(t => t !== imageType)
-        : [...prev, imageType]
-    );
   };
 
   const submitResponses = async (finalResponses = responses) => {
@@ -97,6 +110,11 @@ const SymptomChecker = () => {
   const handleBack = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
+      // Reset reference images notice when going back
+      const prevQuestion = questions[currentQuestion - 1];
+      if (prevQuestion?.id === 'q8_referenceImages') {
+        setShowReferenceImagesNotice(responses[prevQuestion.id] === 'yes');
+      }
     }
   };
 
@@ -106,19 +124,17 @@ const SymptomChecker = () => {
     setResult(null);
     setError('');
     setSelectedReferenceImages([]);
-    setShowReferenceImages(false);
+    setShowReferenceImagesNotice(false);
   };
 
   if (loading) {
     return (
       <div className={styles.container}>
         <div className={styles.loading}>
-          <div className={styles.aiSpinner}>
-            <Sparkles size={48} />
-          </div>
-          <p>Analyzing your responses with AI...</p>
+          <Loader className={styles.spinner} size={48} />
+          <p>Analyzing your responses...</p>
           <p className={styles.loadingSubtext}>
-            Getting personalized insights from our health AI
+            Generating personalized health insights
           </p>
         </div>
       </div>
@@ -126,94 +142,14 @@ const SymptomChecker = () => {
   }
 
   if (result) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.result}>
-          <div className={styles.resultHeader}>
-            <h1 className={styles.resultTitle}>Your Health Assessment Results</h1>
-            {result.analyzedByAI && (
-              <div className={styles.aiBadge}>
-                <Sparkles size={16} />
-                AI-Powered Analysis
-              </div>
-            )}
-          </div>
-
-          {result.aiMessage && (
-            <div className={styles.aiMessage}>
-              <Sparkles size={20} />
-              <p>{result.aiMessage}</p>
-            </div>
-          )}
-
-          <div className={styles.resultSection}>
-            <h2 className={styles.resultSectionTitle}>
-              <AlertCircle size={24} />
-              Conditions to Discuss with Your Doctor
-            </h2>
-            <div className={styles.conditions}>
-              {result.possibleConditions.map((condition, index) => (
-                <div key={index} className={styles.conditionCard}>
-                  <h3 className={styles.conditionName}>{condition.condition}</h3>
-                  <p className={styles.conditionDesc}>{condition.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.resultSection}>
-            <h2 className={styles.resultSectionTitle}>
-              <CheckCircle size={24} />
-              Personalized Recommendations
-            </h2>
-            <ul className={styles.recommendations}>
-              {result.recommendations.map((rec, index) => (
-                <li key={index} className={styles.recommendation}>{rec}</li>
-              ))}
-            </ul>
-          </div>
-
-          {selectedReferenceImages.length > 0 && (
-            <div className={styles.resultSection}>
-              <h3 className={styles.resultSectionTitle}>
-                <ImageIcon size={20} />
-                Reference Images You Selected
-              </h3>
-              <div className={styles.selectedImagesDisplay}>
-                {selectedReferenceImages.map(imageType => {
-                  const imageInfo = referenceImageData[imageType];
-                  return imageInfo ? (
-                    <div key={imageType} className={styles.selectedImageChip}>
-                      <ImageIcon size={16} />
-                      {imageInfo.label}
-                    </div>
-                  ) : null;
-                })}
-              </div>
-            </div>
-          )}
-
-          <div className={styles.disclaimer}>
-            <strong>Important:</strong> This assessment provides general guidance only and is not a substitute 
-            for professional medical advice. Always consult with a qualified healthcare provider for 
-            diagnosis and treatment.
-          </div>
-
-          <div className={styles.resultActions}>
-            <button onClick={restart} className="btn btn-primary">
-              Take Another Assessment
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+    return <ResultsScreen result={result} onRestart={restart} />;
   }
 
   if (questions.length === 0) {
     return (
       <div className={styles.container}>
         <div className={styles.loading}>
-          <Loader className="spinner" size={48} />
+          <Loader className={styles.spinner} size={48} />
           <p>Loading assessment...</p>
         </div>
       </div>
@@ -221,37 +157,42 @@ const SymptomChecker = () => {
   }
 
   const question = questions[currentQuestion];
-  const progress = ((currentQuestion + 1) / questions.length) * 100;
+  const progress = Math.round(((currentQuestion + 1) / questions.length) * 100);
   const isMultiselect = question.multiselect;
   const currentAnswers = responses[question.id] || [];
-  const canProceed = isMultiselect || question.type === 'text' || responses[question.id] !== undefined;
+  const canProceed = isMultiselect || question.type === 'text' || question.type === 'image-selection' || responses[question.id] !== undefined;
 
   return (
     <div className={styles.container}>
       <div className={styles.checker}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Sexual Health Assessment</h1>
-          <p className={styles.subtitle}>
-            <Sparkles size={18} />
-            AI-powered guidance with personalized recommendations
-          </p>
+          <div className={styles.logo}>
+            <div className={styles.logoIcon}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="currentColor"/>
+              </svg>
+            </div>
+            <span className={styles.logoText}>HealthPath</span>
+          </div>
         </div>
 
-        <div className={styles.progressBar}>
-          <div 
-            className={styles.progressFill} 
-            style={{ width: `${progress}%` }}
-          />
+        <div className={styles.progressSection}>
+          <div className={styles.progressInfo}>
+            <span className={styles.progressText}>Question {currentQuestion + 1} of {questions.length}</span>
+            <span className={styles.progressPercent}>{progress}% complete</span>
+          </div>
+          <div className={styles.progressBar}>
+            <div 
+              className={styles.progressFill} 
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
 
         <div className={styles.questionCard}>
-          <div className={styles.questionNumber}>
-            Question {currentQuestion + 1} of {questions.length}
-          </div>
-          
           {question?.sensitive && (
             <div className={styles.sensitiveAlert}>
-              <AlertCircle size={18} />
+              <Shield size={18} />
               <span>{question?.sensitiveMessage}</span>
             </div>
           )}
@@ -269,13 +210,13 @@ const SymptomChecker = () => {
                   onClick={() => handleAnswer('yes')}
                   className={`${styles.answerButton} ${responses[question.id] === 'yes' ? styles.selected : ''}`}
                 >
-                  Yes
+                  Yes, show me reference images
                 </button>
                 <button
                   onClick={() => handleAnswer('no')}
                   className={`${styles.answerButton} ${responses[question.id] === 'no' ? styles.selected : ''}`}
                 >
-                  No
+                  No, I prefer text descriptions only
                 </button>
               </>
             ) : question?.type === 'text' ? (
@@ -286,6 +227,43 @@ const SymptomChecker = () => {
                 className={styles.textInput}
                 rows="4"
               />
+            ) : question?.type === 'image-selection' ? (
+              <div className={styles.imageSelectionGrid}>
+                {question?.options?.map((option) => {
+                  const imageInfo = referenceImageData[option.imageType];
+                  return (
+                    <div
+                      key={option.value}
+                      onClick={() => handleImageSelection(option.value)}
+                      className={`${styles.imageOptionCard} ${
+                        responses[question.id] === option.value ? styles.selectedImageOption : ''
+                      }`}
+                    >
+                      <div className={styles.imageWrapper}>
+                        {imageInfo?.imagePath ? (
+                          <img 
+                            src={imageInfo.imagePath} 
+                            alt={option.label}
+                            className={styles.optionImage}
+                          />
+                        ) : (
+                          <div className={styles.imagePlaceholder}>
+                            <span>{option.label}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className={styles.imageOptionLabel}>
+                        {option.label}
+                      </div>
+                      {responses[question.id] === option.value && (
+                        <div className={styles.selectedCheckmark}>
+                          <CheckCircle size={24} />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             ) : (
               question?.options?.map((option) => (
                 <button
@@ -303,91 +281,50 @@ const SymptomChecker = () => {
             )}
           </div>
 
-          {question?.showReferenceImages && question?.referenceImageTypes && (
-            <div className={styles.referenceImagesSection}>
-              <button 
-                onClick={() => setShowReferenceImages(!showReferenceImages)}
-                className={styles.toggleImagesButton}
-              >
-                <ImageIcon size={20} />
-                {showReferenceImages ? 'Hide' : 'View'} Reference Images
-                {selectedReferenceImages.length > 0 && (
-                  <span className={styles.selectedCount}>
-                    ({selectedReferenceImages.length} selected)
-                  </span>
-                )}
-              </button>
-
-              {showReferenceImages && (
-                <div className={styles.referenceImagesGrid}>
-                  <p className={styles.imagesHelpText}>
-                    Select all images that match your symptoms (you can select multiple):
-                  </p>
-                  {question.referenceImageTypes.map(imageType => {
-                    const imageInfo = referenceImageData[imageType];
-                    if (!imageInfo) return null;
-
-                    return (
-                      <div 
-                        key={imageType}
-                        className={`${styles.referenceImageCard} ${
-                          selectedReferenceImages.includes(imageType) ? styles.selectedImage : ''
-                        }`}
-                        onClick={() => handleReferenceImageToggle(imageType)}
-                      >
-                        <div className={styles.imagePlaceholder}>
-                          <ImageIcon size={32} />
-                        </div>
-                        <h4 className={styles.imageLabel}>{imageInfo.label}</h4>
-                        <p className={styles.imageDescription}>{imageInfo.description}</p>
-                        <ul className={styles.imageDetails}>
-                          {imageInfo.details?.slice(0, 2).map((detail, idx) => (
-                            <li key={idx}>{detail}</li>
-                          ))}
-                        </ul>
-                        {selectedReferenceImages.includes(imageType) && (
-                          <div className={styles.selectedIconWrapper}>
-                            <CheckCircle className={styles.selectedIcon} size={24} />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+          {/* Show reference images notice after yes selection and on subsequent questions */}
+          {(showReferenceImagesNotice || (responses.q8_referenceImages === 'yes' && currentQuestion > 7)) && (
+            <div className={styles.referenceImagesNotice}>
+              <AlertCircle size={18} className={styles.noticeIcon} />
+              <div className={styles.noticeContent}>
+                <strong>Reference Images Enabled</strong>
+                <p>You'll see medical reference images to help identify symptoms. These are for educational purposes only.</p>
+              </div>
             </div>
           )}
 
-          {(isMultiselect || question?.type === 'text' || question?.type === 'yes-no') && (
-            <button 
-              onClick={handleNext}
-              disabled={!canProceed}
-              className={styles.continueButton}
-            >
-              Continue
-              <ArrowRight size={20} />
-            </button>
-          )}
-
           <div className={styles.navigationButtons}>
-            {currentQuestion > 0 && (
-              <button onClick={handleBack} className={styles.backButton}>
-                <ArrowLeft size={20} />
-                Back
+            <button 
+              onClick={handleBack} 
+              className={styles.backButton}
+              disabled={currentQuestion === 0}
+            >
+              <ArrowLeft size={20} />
+              Back
+            </button>
+            
+            {(isMultiselect || question?.type === 'text' || question?.type === 'image-selection') && (
+              <button 
+                onClick={handleNext}
+                disabled={!canProceed}
+                className={styles.continueButton}
+              >
+                Continue
+                <ArrowRight size={20} />
               </button>
             )}
           </div>
         </div>
 
         {error && (
-          <div className="alert alert-danger">
+          <div className={styles.errorAlert}>
+            <AlertCircle size={18} />
             {error}
           </div>
         )}
 
-        <div className={styles.disclaimer}>
-          <AlertCircle size={16} />
-          <span>Your responses are completely anonymous and AI-analyzed for personalized guidance</span>
+        <div className={styles.privacyNotice}>
+          <Shield size={16} />
+          <span>Your responses are anonymous and help us provide better recommendations</span>
         </div>
       </div>
     </div>

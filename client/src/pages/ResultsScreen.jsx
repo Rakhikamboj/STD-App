@@ -1,29 +1,10 @@
 import React, { useState } from 'react';
-import { AlertCircle, CheckCircle, Heart, Book, MessageCircle, Share2, Copy } from 'lucide-react';
+import { Clock, AlertCircle, ChevronRight, MessageCircle, Share2, Copy, FileText } from 'lucide-react';
 import styles from './ResultsScreen.module.css';
 
 const ResultsScreen = ({ result, onRestart }) => {
   const [copied, setCopied] = useState(false);
-  const [showPartnerTemplate, setShowPartnerTemplate] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState('direct');
-
-  const templates = {
-    direct: {
-      title: 'Direct Message',
-      description: 'Share directly with your partner',
-      template: `I recently got tested for my sexual health and I wanted to be transparent with you. I'm working with my healthcare provider to address some things that came up. I'd really appreciate if you could also get tested so we can both stay healthy. It's important to me that we communicate openly about this. [Your healthcare provider's guidance may be specific to your situation]`
-    },
-    anonymous: {
-      title: 'Anonymous Notification Service',
-      description: 'Your health department can notify them confidentially',
-      template: `Many health departments offer confidential partner notification services. You can ask your healthcare provider to initiate this. They'll contact your partner(s) without revealing your identity, giving them a chance to get tested.`
-    },
-    supportive: {
-      title: 'Supportive Approach',
-      description: 'Focus on health and relationship',
-      template: `I care about both of our health and I have something important to share. I recently discovered some health concerns that I'm addressing with my doctor. Because of the nature of it, it's important that you get tested too. I know this might be uncomfortable, but I value our honesty with each other. Can we talk about this together?`
-    }
-  };
+  const [expandedCondition, setExpandedCondition] = useState(null);
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
@@ -31,215 +12,207 @@ const ResultsScreen = ({ result, onRestart }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const conditionDetails = {
+    'Chlamydia': {
+      incubation: '7-21 days',
+      prevalence: 'Very common, especially in young adults',
+      expandedInfo: 'Chlamydia is one of the most common STIs and is completely curable with a simple course of antibiotics. Many people have no symptoms, which is why routine testing is important.'
+    },
+    'Gonorrhea': {
+      incubation: '2-14 days',
+      prevalence: 'Common, often occurs with chlamydia',
+      expandedInfo: 'Gonorrhea is treatable with antibiotics, though some strains are becoming resistant. It\'s important to get tested and treated promptly to prevent complications.'
+    },
+    'Trichomoniasis': {
+      incubation: '5-28 days',
+      prevalence: 'Common but underdiagnosed',
+      expandedInfo: 'Trichomoniasis is easily treated with a single dose of medication. Many people have no symptoms but can still pass it to partners.'
+    },
+    'Genital Herpes': {
+      incubation: '2-12 days',
+      prevalence: 'Very common, often asymptomatic',
+      expandedInfo: 'Genital herpes is manageable with antiviral medications. While there\'s no cure, outbreaks can be controlled and transmission risk can be reduced.'
+    },
+    'Genital Warts': {
+      incubation: '3 weeks to 8 months',
+      prevalence: 'Common, caused by HPV',
+      expandedInfo: 'Genital warts are caused by certain types of HPV. They can be treated, and vaccines are available to prevent the most common types.'
+    },
+    'Syphilis': {
+      incubation: '10-90 days',
+      prevalence: 'Increasing in recent years',
+      expandedInfo: 'Syphilis is curable with antibiotics, especially when caught early. Left untreated, it can cause serious health problems.'
+    }
+  };
+
+  const partnerTemplates = {
+    direct: {
+      title: 'Direct Message',
+      message: '"I recently got tested and found out I have [condition]. I wanted to let you know so you can get tested too. It\'s treatable, and I\'m already working with my doctor."'
+    },
+    anonymous: {
+      title: 'Anonymous Notification',
+      message: 'Many health departments offer anonymous partner notification services. They\'ll contact your partners without revealing your identity.'
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.result}>
         {/* Header */}
         <div className={styles.resultHeader}>
-          <h1 className={styles.resultTitle}>Your Health Assessment</h1>
+          <h1 className={styles.resultTitle}>Your Personalized Overview</h1>
           <p className={styles.resultSubtitle}>
-            Thank you for completing this assessment. Here's what we found:
+            This is not a diagnosis. Please consult a healthcare provider for proper evaluation.
           </p>
         </div>
 
-        {/* Main Message */}
-        {result.hasSymptoms ? (
-          <div className={styles.mainMessage}>
-            <AlertCircle size={32} style={{ color: '#0d9488' }} />
+        {/* Follow-up Banner */}
+        {result.hasSymptoms && (
+          <div className={styles.followUpBanner}>
+            <Clock className={styles.bannerIcon} size={24} />
             <div>
-              <h2>Medical Evaluation Suggested</h2>
-              <p>
-                Consider scheduling an appointment with a healthcare provider within the next few days. 
-                They can properly evaluate your symptoms and recommend appropriate testing if needed.
+              <h3 className={styles.bannerTitle}>Follow-Up Recommended</h3>
+              <p className={styles.bannerText}>
+                Schedule a routine appointment in the coming week or two
               </p>
             </div>
           </div>
-        ) : (
-          <div className={styles.mainMessage} style={{ borderColor: '#10b981', background: '#ecfdf5' }}>
-            <CheckCircle size={32} style={{ color: '#10b981' }} />
-            <div>
-              <h2>Proactive Health Management</h2>
-              <p>
-                You're being proactive about your sexual health! Continue practicing safe sex 
-                and get tested regularly as recommended by your healthcare provider.
-              </p>
-            </div>
+        )}
+
+        {/* AI Message */}
+        {result.aiMessage && (
+          <div className={styles.aiMessageBox}>
+            <p>{result.aiMessage}</p>
           </div>
         )}
 
         {/* Possible Considerations */}
         {result.possibleConditions && result.possibleConditions.length > 0 && (
           <div className={styles.resultSection}>
-            <h2 className={styles.resultSectionTitle}>
-              <AlertCircle size={24} />
-              Possible Considerations
-            </h2>
+            <h2 className={styles.sectionTitle}>Possible Considerations</h2>
             <p className={styles.sectionDescription}>
               Based on your responses, here are some conditions that share similar characteristics. 
               Remember, many STIs have similar symptoms, and proper testing is the only way to know for sure.
             </p>
+
             <div className={styles.conditions}>
-              {result.possibleConditions.map((condition, index) => (
-                <div key={index} className={styles.conditionCard}>
-                  <div className={styles.conditionContent}>
-                    <h3 className={styles.conditionName}>{condition.condition}</h3>
-                    {condition.description && (
-                      <p className={styles.conditionDescription}>{condition.description}</p>
+              {result.possibleConditions.map((condition, index) => {
+                const details = Object.keys(conditionDetails).find(key => 
+                  condition.condition.toLowerCase().includes(key.toLowerCase())
+                );
+                const conditionInfo = details ? conditionDetails[details] : null;
+                const isExpanded = expandedCondition === index;
+
+                return (
+                  <div 
+                    key={index} 
+                    className={`${styles.conditionCard} ${isExpanded ? styles.expanded : ''}`}
+                    onClick={() => setExpandedCondition(isExpanded ? null : index)}
+                  >
+                    <div className={styles.conditionHeader}>
+                      <h3 className={styles.conditionName}>{condition.condition}</h3>
+                    </div>
+                    
+                    <p className={styles.conditionDescription}>{condition.description}</p>
+
+                    {conditionInfo && (
+                      <>
+                        <div className={styles.conditionMeta}>
+                          <div className={styles.metaItem}>
+                            <strong>Incubation Period:</strong> {conditionInfo.incubation}
+                          </div>
+                          <div className={styles.metaItem}>
+                            <strong>Prevalence:</strong> {conditionInfo.prevalence}
+                          </div>
+                        </div>
+
+                        {isExpanded && (
+                          <div className={styles.expandedInfo}>
+                            <p>{conditionInfo.expandedInfo}</p>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
 
-        {/* Recommendations */}
+        {/* Your Next Steps */}
         {result.recommendations && result.recommendations.length > 0 && (
           <div className={styles.resultSection}>
-            <h2 className={styles.resultSectionTitle}>
-              <CheckCircle size={24} />
-              Your Next Steps
-            </h2>
-            <ul className={styles.recommendations}>
-              {result.recommendations.map((rec, index) => (
-                <li key={index} className={styles.recommendation}>{rec}</li>
+            <h2 className={styles.sectionTitle}>Your Next Steps</h2>
+            <div className={styles.nextSteps}>
+              {result.recommendations.slice(0, 4).map((rec, index) => (
+                <div key={index} className={styles.stepItem}>
+                  <div className={styles.stepNumber}>{index + 1}</div>
+                  <p className={styles.stepText}>{rec}</p>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
 
         {/* Partner Notification */}
         {result.hasSymptoms && (
-          <div className={styles.resultSection}>
-            <h2 className={styles.resultSectionTitle}>
-              <Heart size={24} />
-              Partner Notification
-            </h2>
-            <p className={styles.sectionDescription}>
-              If you test positive, letting partners know is the responsible thing to do. 
-              Here are some thoughtful approaches:
-            </p>
+          <div className={styles.partnerNotificationSection}>
+            <div className={styles.gradientCard}>
+              <h2 className={styles.gradientCardTitle}>Partner Notification Templates</h2>
+              <p className={styles.gradientCardSubtitle}>
+                If you test positive, letting partners know is the responsible thing to do. 
+                Here are some ways to approach it:
+              </p>
 
-            <div className={styles.templateSelector}>
-              {Object.entries(templates).map(([key, template]) => (
-                <button
-                  key={key}
-                  onClick={() => {
-                    setShowPartnerTemplate(true);
-                    setSelectedTemplate(key);
-                  }}
-                  className={`${styles.templateButton} ${
-                    showPartnerTemplate && selectedTemplate === key ? styles.selected : ''
-                  }`}
-                >
-                  <MessageCircle size={20} />
-                  {template.title}
-                </button>
-              ))}
-            </div>
-
-            {showPartnerTemplate && templates[selectedTemplate] && (
-              <div className={styles.templateDetail}>
-                <h3>{templates[selectedTemplate].title}</h3>
-                <p className={styles.templateDescription}>
-                  {templates[selectedTemplate].description}
-                </p>
-                <div className={styles.templateContent}>
-                  <p>{templates[selectedTemplate].template}</p>
+              <div className={styles.templates}>
+                <div className={styles.templateCard}>
+                  <h3 className={styles.templateTitle}>Direct Message</h3>
+                  <p className={styles.templateMessage}>
+                    "I recently got tested and found out I have [condition]. I wanted to let you 
+                    know so you can get tested too. It's treatable, and I'm already working with my doctor."
+                  </p>
                 </div>
-                <button
-                  onClick={() => copyToClipboard(templates[selectedTemplate].template)}
-                  className={styles.copyButton}
-                >
-                  <Copy size={18} />
-                  {copied ? 'Copied!' : 'Copy Text'}
-                </button>
+
+                <div className={styles.templateCard}>
+                  <h3 className={styles.templateTitle}>Anonymous Notification</h3>
+                  <p className={styles.templateMessage}>
+                    Many health departments offer anonymous partner notification services. They'll 
+                    contact your partners without revealing your identity.
+                  </p>
+                </div>
               </div>
-            )}
+            </div>
           </div>
         )}
 
-        {/* Education Hub */}
-        <div className={styles.resultSection}>
-          <h2 className={styles.resultSectionTitle}>
-            <Book size={24} />
-            Education Hub
-          </h2>
-          <p className={styles.sectionDescription}>
-            Learn more about sexual health, STI testing, and prevention:
-          </p>
-          <div className={styles.educationLinks}>
-            <a 
-              href="https://www.plannedparenthood.org/learn/health-and-wellness/stis" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className={styles.educationLink}
-            >
-              <span>STI Information & Prevention - Planned Parenthood</span>
-              <Share2 size={16} />
-            </a>
-            <a 
-              href="https://www.cdc.gov/std/index.html" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className={styles.educationLink}
-            >
-              <span>CDC STI Testing & Treatment Guide</span>
-              <Share2 size={16} />
-            </a>
-            <a 
-              href="https://www.aasect.org/find-a-provider" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className={styles.educationLink}
-            >
-              <span>Find a Sexual Health Provider</span>
-              <Share2 size={16} />
-            </a>
-            <a 
-              href="https://www.webmd.com/sexual-conditions/guide/stis" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className={styles.educationLink}
-            >
-              <span>Understanding Common STIs</span>
-              <Share2 size={16} />
-            </a>
+        {/* Bottom Action Cards */}
+        <div className={styles.actionCards}>
+          <div className={styles.actionCard}>
+            <FileText className={styles.actionIcon} size={32} />
+            <div>
+              <h3 className={styles.actionTitle}>Education Hub</h3>
+              <p className={styles.actionDescription}>Learn more about STI prevention</p>
+            </div>
+            <ChevronRight className={styles.actionArrow} size={20} />
+          </div>
+
+          <div className={styles.actionCard}>
+            <MessageCircle className={styles.actionIcon} size={32} />
+            <div>
+              <h3 className={styles.actionTitle}>Ask a Doctor</h3>
+              <p className={styles.actionDescription}>Get answers from professionals</p>
+            </div>
+            <ChevronRight className={styles.actionArrow} size={20} />
           </div>
         </div>
 
-        {/* Ask Doctor Section */}
-        <div className={styles.resultSection}>
-          <h2 className={styles.resultSectionTitle}>
-            <MessageCircle size={24} />
-            Ask a Doctor Anonymously
-          </h2>
-          <p className={styles.sectionDescription}>
-            Have specific questions? Connect with medical professionals who can provide personalized guidance:
-          </p>
-          <div className={styles.doctorServices}>
-            <div className={styles.service}>
-              <h3>Telehealth Options</h3>
-              <p>Many platforms offer confidential video consultations with licensed doctors.</p>
-              <button className={styles.ctaButton}>
-                Find Telehealth Providers
-              </button>
-            </div>
-            <div className={styles.service}>
-              <h3>Sexual Health Clinics</h3>
-              <p>Local sexual health clinics often provide discreet, judgment-free care.</p>
-              <button className={styles.ctaButton}>
-                Find Health Clinics
-              </button>
-            </div>
-            <div className={styles.service}>
-              <h3>Anonymous Text Lines</h3>
-              <p>Text your health questions to confidential health information services.</p>
-              <button className={styles.ctaButton}>
-                Health Text Services
-              </button>
-            </div>
-          </div>
+        {/* Start New Assessment */}
+        <div className={styles.restartSection}>
+          <button onClick={onRestart} className={styles.restartButton}>
+            Start New Assessment
+          </button>
         </div>
 
         {/* Important Disclaimer */}
@@ -250,26 +223,9 @@ const ResultsScreen = ({ result, onRestart }) => {
             <p>
               This tool provides general guidance only and is not a substitute for professional medical advice. 
               Always consult with a qualified healthcare provider for diagnosis, treatment recommendations, 
-              and personalized medical guidance. The information provided here is educational and should not 
-              be used for self-diagnosis.
+              and personalized medical guidance.
             </p>
           </div>
-        </div>
-
-        {/* Privacy Notice */}
-        <div className={styles.privacyNotice}>
-          <strong>Privacy Notice:</strong> Your responses were completely anonymous and have not been stored. 
-          This assessment is confidential and provided for educational purposes only.
-        </div>
-
-        {/* Action Buttons */}
-        <div className={styles.resultActions}>
-          <button onClick={onRestart} className={styles.restartButton}>
-            Take Assessment Again
-          </button>
-          <a href="/" className={styles.homeButton}>
-            Return to Home
-          </a>
         </div>
       </div>
     </div>

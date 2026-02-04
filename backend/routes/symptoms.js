@@ -1,7 +1,12 @@
-import express from 'express'
+import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import SymptomReport from '../models/SymptomReport.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
@@ -67,18 +72,35 @@ const analyzeSymptomsFallback = (responses) => {
   recommendations.push('Remember to communicate openly with your sexual partners about health and testing.');
   recommendations.push('Access to confidential, judgment-free care is available.');
 
-  // Identify possible conditions
-  if (Array.isArray(bumpDetails) && bumpDetails.includes('Small fluid-filled blisters (like tiny water bubbles)')) {
-    possibleConditions.push({
-      condition: 'Genital Herpes',
-      description: 'Characterized by fluid-filled blisters that are often painful. Highly manageable with proper medical care and antiviral medications.'
-    });
-  }
-
-  if (discharge === 'Yes, unusual discharge' && Array.isArray(dischargeDetail) && dischargeDetail.includes('Thick, white discharge (like cottage cheese)')) {
-    possibleConditions.push({
-      condition: 'Yeast Infection',
-      description: 'Fungal infection that is very common and easily treated with antifungal medications.'
+  // Identify possible conditions based on selected reference images
+  if (Array.isArray(responses.selectedReferenceImages)) {
+    responses.selectedReferenceImages.forEach(imageType => {
+      if (imageType === 'herpes') {
+        possibleConditions.push({
+          condition: 'Genital Herpes (HSV)',
+          description: 'Characterized by fluid-filled blisters that are often painful. Highly manageable with proper medical care and antiviral medications.'
+        });
+      } else if (imageType === 'warts') {
+        possibleConditions.push({
+          condition: 'Genital Warts (HPV)',
+          description: 'Caused by human papillomavirus. Multiple effective treatment options available, and vaccines can prevent certain types of HPV.'
+        });
+      } else if (imageType === 'yeast') {
+        possibleConditions.push({
+          condition: 'Yeast Infection',
+          description: 'Fungal infection that is very common and easily treated with antifungal medications.'
+        });
+      } else if (imageType === 'scabies') {
+        possibleConditions.push({
+          condition: 'Scabies',
+          description: 'Parasitic infection treatable with topical medications. Contagious through close contact.'
+        });
+      } else if (imageType === 'ulcer') {
+        possibleConditions.push({
+          condition: 'Ulcerative Lesions',
+          description: 'Requires professional medical evaluation to determine the underlying cause and appropriate treatment.'
+        });
+      }
     });
   }
 
@@ -97,7 +119,7 @@ const analyzeSymptomsFallback = (responses) => {
   return { riskLevel, recommendations, possibleConditions, hasSymptoms };
 };
 
-// Gemini AI-powered symptom analysis
+// Gemini AI-powered symptom analysis (feedback only, no image generation)
 const analyzeWithGemini = async (responses) => {
   if (!model) {
     console.log('Gemini not available, using fallback analysis');
@@ -126,6 +148,7 @@ Important guidelines:
 - Avoid creating unnecessary anxiety
 - If symptoms are present, encourage timely medical attention
 - If no concerning symptoms, reinforce preventive care
+- Consider the reference images they selected (if any) in your analysis
 
 Please respond in the following JSON format:
 {
@@ -189,7 +212,7 @@ router.post('/analyze', async (req, res) => {
     // Generate unique session ID
     const sessionId = uuidv4();
 
-    // Optional: Store report in MongoDB
+    // Store report in MongoDB
     try {
       await SymptomReport.create({
         responses,
@@ -197,7 +220,8 @@ router.post('/analyze', async (req, res) => {
         recommendations,
         possibleConditions,
         sessionId,
-        hasSymptoms
+        hasSymptoms,
+        selectedReferenceImages: responses.selectedReferenceImages || []
       });
     } catch (dbError) {
       console.log('MongoDB storage skipped:', dbError.message);
@@ -210,6 +234,7 @@ router.post('/analyze', async (req, res) => {
       hasSymptoms,
       aiMessage,
       analyzedByAI,
+      selectedReferenceImages: responses.selectedReferenceImages || [],
       message: 'Your health assessment is complete. Please review the recommendations below.'
     });
   } catch (error) {
@@ -273,25 +298,23 @@ router.get('/questions', (req, res) => {
         'Not sure',
         'Prefer not to answer'
       ],
-      category: 'symptoms',
-      sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+      category: 'symptoms'
     },
     {
       id: 'q5_sores_bumps_rash',
-      question: 'Have you noticed any sores, bumps, or rashes?',
+      question: 'Have you noticed any sores, bumps, or rashes??',
       type: 'multiple-choice',
       options: [
-        'Yes, on genital area',
-        'Yes, elsewhere on body',
-        'No',
-        'Not sure'
+       'Yes, on genital area',
+       'Yes, elsewhere on body',
+       'No',
+       'Not sure'
       ],
       category: 'symptoms',
       sensitive: true,
       sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.',
       showReferenceImages: true,
-      referenceImageTypes: ['herpes', 'warts', 'yeast', 'scabies', 'ulcer']
+      helpText: 'This helps us guide you without needing to see or store any photos. Your answers are private and stay on your device.'
     },
     {
       id: 'q6_pain',
@@ -322,16 +345,13 @@ router.get('/questions', (req, res) => {
         'None of these'
       ],
       category: 'symptoms',
-      multiselect: true,
-      sensitive: false
+      multiselect: true
     },
     {
-      id: 'q8_referenceImages',
+      id: 'referenceImages',
       question: 'Would you like to see reference images to help identify your symptoms?',
       type: 'yes-no',
-      category: 'visual',
-      sensitive: false,
-      helpText: 'Medical reference images can help you better understand and identify symptoms. All images are educational diagrams.'
+      category: 'visual'
     },
     {
       id: 'q9_lastTest',
@@ -348,18 +368,43 @@ router.get('/questions', (req, res) => {
       category: 'testing',
       sensitive: false
     },
-    {
+    
+     {
       id: 'q10_additionalConcerns',
-      question: 'Do you have any additional concerns you\'d like to mention?',
+      question: 'Do you have any additional concerns?',
       type: 'text',
       placeholder: 'Please describe any other concerns you may have (optional)...',
       category: 'concerns',
       sensitive: true,
-      sensitiveMessage: 'This is optional. Share only what you\'re comfortable with.'
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+    },
+    {
+      id: 'q11_skinCondition',
+      question: 'Which image best matches your skin condition or symptoms? This helps us guide you without needing to see or store any photos. Your answers are private and stay on your device.',
+       type: 'image-selection',
+      options: [
+        { value: 'clear', label: 'Clear Skin', imageType: 'clear' },
+        { value: 'acne', label: 'Acne/Bumpy', imageType: 'acne' },
+        { value: 'patchy', label: 'Patchy/Discolored', imageType: 'patchy' },
+        { value: 'rash', label: 'Rash/Irritation', imageType: 'rash' },
+        { value: 'blisters', label: 'Blisters/Sores', imageType: 'blisters' },
+        { value: 'dry', label: 'Dry/Flaky Skin', imageType: 'dry' }
+      ],
+      category: 'visual-detail',
+      sensitive: true,
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+    },
+    {
+      id: 'q12_texture',
+      question: 'Which texture best describes what you\'re experiencing? This helps us guide you without needing to see or store any photos. Your answers are private and stay on your device.',
+      type: 'image-selection',
+      category: 'visual-detail',
+      sensitive: true,
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
     },
     {
       id: 'q13_bumpsOrSores',
-      question: 'If you have bumps or sores, what do they look or feel like? (Select all that apply)',
+      question: 'If you have bumps or sores in the genital area, what do they look or feel like?',
       type: 'multiple-choice',
       options: [
         'Small fluid-filled blisters (like tiny water bubbles)',
@@ -373,13 +418,11 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'Select all options that match your experience.',
-      showReferenceImages: true,
-      referenceImageTypes: ['herpes', 'ulcer', 'warts']
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
     },
     {
       id: 'q14_soreDescription',
-      question: 'If you notice a sore or lesion, which of these best describes it? (Select all that apply)',
+      question: 'If you notice a sore or lesion, which of these best describes it?',
       type: 'multiple-choice',
       options: [
         'Single, round, painless sore (chancre)',
@@ -393,13 +436,11 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'Select all that apply to your situation.',
-      showReferenceImages: true,
-      referenceImageTypes: ['ulcer']
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
     },
     {
       id: 'q15_genitalBumps',
-      question: 'If you see or feel bumps in the genital area, what do they look like? (Select all that apply)',
+      question: 'If you see or feel bumps in the genital area, what do they look like?',
       type: 'multiple-choice',
       options: [
         'Small, flesh-colored or gray bumps',
@@ -413,13 +454,11 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'Select all that match your observation.',
-      showReferenceImages: true,
-      referenceImageTypes: ['warts']
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
     },
     {
       id: 'q16_discharge_detail',
-      question: 'If you have discharge or irritation, what does it look or feel like? (Select all that apply)',
+      question: 'If you have discharge or irritation, what does the area feel or look like?',
       type: 'multiple-choice',
       options: [
         'Thick, white discharge (like cottage cheese)',
@@ -433,13 +472,11 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'Your responses help us provide better guidance.',
-      showReferenceImages: true,
-      referenceImageTypes: ['yeast']
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
     },
     {
       id: 'q17_itching_rash',
-      question: 'If you have itching or a rash, what does it look or feel like? (Select all that apply)',
+      question: 'If you have itching or a rash, what does it look or feel like?',
       type: 'multiple-choice',
       options: [
         'Intense itching, especially at night',
@@ -453,13 +490,11 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'Select all symptoms you\'re experiencing.',
-      showReferenceImages: true,
-      referenceImageTypes: ['scabies']
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
     },
     {
       id: 'q18_painfulSores',
-      question: 'If you have painful sores, which of these best describes them? (Select all that apply)',
+      question: 'If you have painful sores, which of these best describes them?',
       type: 'multiple-choice',
       options: [
         'Painful, deep ulcers (open sores)',
@@ -473,13 +508,11 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'This information helps provide accurate guidance.',
-      showReferenceImages: true,
-      referenceImageTypes: ['ulcer', 'herpes']
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
     },
     {
       id: 'q19_skinBumps',
-      question: 'If you notice small bumps on your skin, what do they look like? (Select all that apply)',
+      question: 'If you notice small bumps on your skin, what do they look like?',
       type: 'multiple-choice',
       options: [
         'Small, round, dome-shaped bumps',
@@ -493,17 +526,16 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'Your detailed responses ensure personalized guidance.',
-      showReferenceImages: true,
-      referenceImageTypes: ['warts']
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
     }
   ];
 
   res.json(questions);
 });
 
+
 // @route   GET /api/symptoms/reference-images
-// @desc    Get reference image information
+// @desc    Get reference image information with actual image paths
 // @access  Public
 router.get('/reference-images', (req, res) => {
   const images = {
@@ -511,6 +543,7 @@ router.get('/reference-images', (req, res) => {
       id: 'herpes',
       label: 'Genital Herpes (HSV)',
       description: 'Fluid-filled blisters that are often painful',
+      imagePath: '/assets/Genetial-herps.png',
       details: [
         'Typically appears 2-7 days after exposure',
         'Blisters are painful and may rupture',
@@ -522,6 +555,7 @@ router.get('/reference-images', (req, res) => {
       id: 'warts',
       label: 'Genital Warts (HPV)',
       description: 'Cauliflower-like growths caused by HPV',
+      imagePath: '/assets/Genital-warts.png',
       details: [
         'Can appear weeks to months after exposure',
         'Usually painless but may cause itching',
@@ -529,21 +563,11 @@ router.get('/reference-images', (req, res) => {
         'Vaccines can prevent certain types of HPV'
       ]
     },
-    yeast: {
-      id: 'yeast',
-      label: 'Yeast Infection',
-      description: 'Thick discharge with intense itching and irritation',
-      details: [
-        'Discharge often thick and cottage cheese-like',
-        'Red, inflamed, irritated tissue',
-        'One of the most common vaginal infections',
-        'Easily treated with antifungal medications'
-      ]
-    },
     scabies: {
       id: 'scabies',
       label: 'Scabies',
       description: 'Parasitic infection with burrow tracks and intense itching',
+      imagePath: '/assets/scabies.png',
       details: [
         'Intense itching, especially at night',
         'Thin wavy lines (burrows) on skin',
@@ -555,15 +579,60 @@ router.get('/reference-images', (req, res) => {
       id: 'ulcer',
       label: 'Ulcerative Lesions',
       description: 'Painful open sores requiring medical evaluation',
+      imagePath: '/assets/ulcer.png',
       details: [
         'Deep, painful open wounds',
         'Irregular edges and may produce discharge',
         'Often accompanied by swollen lymph nodes',
         'Requires professional treatment'
       ]
+    },
+    // Visual selection images for q5
+    clear: {
+      id: 'clear',
+      label: 'Clear Skin',
+      description: 'No visible skin concerns',
+      imagePath: '/assets/clear-skin.jpg',
+      category: 'visual-selection'
+    },
+    acne: {
+      id: 'acne',
+      label: 'Acne/Bumpy',
+      description: 'Raised bumps or acne-like appearance',
+      imagePath: '/assets/acne-bumpy.jpg',
+      category: 'visual-selection'
+    },
+    patchy: {
+      id: 'patchy',
+      label: 'Patchy/Discolored',
+      description: 'Uneven skin tone or discoloration',
+      imagePath: '/assets/patchy.jpg',
+      category: 'visual-selection'
+    },
+    rash: {
+      id: 'rash',
+      label: 'Rash/Irritation',
+      description: 'Red, irritated, or inflamed skin',
+      imagePath: '/assets/rash.jpg',
+      category: 'visual-selection'
+    },
+    blisters: {
+      id: 'blisters',
+      label: 'Blisters/Sores',
+      description: 'Fluid-filled blisters or open sores',
+      imagePath: '/assets/blisters.jpg',
+      category: 'visual-selection'
+    },
+    dry: {
+      id: 'dry',
+      label: 'Dry/Flaky Skin',
+      description: 'Dry, scaly, or flaky appearance',
+      imagePath: '/assets/dry-flaky.jpg',
+      category: 'visual-selection'
     }
   };
 
   res.json(images);
 });
+
 export default router;
