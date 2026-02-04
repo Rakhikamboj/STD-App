@@ -32,8 +32,6 @@ const analyzeSymptomsFallback = (responses) => {
   const bumps = responses.q5_sores_bumps_rash;
   const pain = responses.q6_pain || [];
   const flulike = responses.q7_flulike || [];
-  const bumpDetails = responses.q13_bumpsOrSores || [];
-  const dischargeDetail = responses.q16_discharge_detail || [];
   const lastTest = responses.q9_lastTest;
 
   // Score based on symptoms
@@ -85,11 +83,6 @@ const analyzeSymptomsFallback = (responses) => {
           condition: 'Genital Warts (HPV)',
           description: 'Caused by human papillomavirus. Multiple effective treatment options available, and vaccines can prevent certain types of HPV.'
         });
-      } else if (imageType === 'yeast') {
-        possibleConditions.push({
-          condition: 'Yeast Infection',
-          description: 'Fungal infection that is very common and easily treated with antifungal medications.'
-        });
       } else if (imageType === 'scabies') {
         possibleConditions.push({
           condition: 'Scabies',
@@ -119,7 +112,7 @@ const analyzeSymptomsFallback = (responses) => {
   return { riskLevel, recommendations, possibleConditions, hasSymptoms };
 };
 
-// Gemini AI-powered symptom analysis (feedback only, no image generation)
+// Gemini AI-powered symptom analysis with encouraging language
 const analyzeWithGemini = async (responses) => {
   if (!model) {
     console.log('Gemini not available, using fallback analysis');
@@ -130,36 +123,62 @@ const analyzeWithGemini = async (responses) => {
     // Prepare symptom data for Gemini
     const symptomData = JSON.stringify(responses, null, 2);
     
-    const prompt = `You are a compassionate, knowledgeable sexual health advisor. A user has completed a confidential health assessment with the following responses:
+    const prompt = `You are a compassionate, empathetic sexual health advisor who provides warm, supportive guidance. A user has completed a confidential health assessment with the following responses:
 
 ${symptomData}
+
+CRITICAL TONE GUIDELINES - READ CAREFULLY:
+- Use GENTLE, REASSURING, and ENCOURAGING language throughout
+- Frame everything POSITIVELY - emphasize that seeking information shows wisdom and self-care
+- AVOID alarmist or anxiety-inducing phrases
+- Use phrases like "you're taking an important step" and "it's completely normal to have questions"
+- Emphasize that most conditions are TREATABLE and MANAGEABLE
+- Use softer language: instead of "you need to see a doctor immediately" say "speaking with a healthcare provider when you can would be helpful"
+- Normalize their experience: "Many people experience similar symptoms"
+- Show empathy: "It's understandable to feel concerned, and your health matters"
+- Be validating: "Thank you for being proactive about your sexual health"
+- End recommendations with reassurance, not urgency
 
 Based on these responses, please provide:
 
 1. A list of 4-6 personalized, actionable recommendations (as an array of strings)
+   - Use gentle, encouraging language in each recommendation
+   - Frame as helpful suggestions, not demands or warnings
+   - Include reassurance where appropriate
+   
 2. Possible conditions that match their symptoms (as an array of objects with "condition" and "description" fields)
-3. An empathetic, encouraging message about their health journey
+   - For each condition, emphasize TREATABILITY and POSITIVE OUTCOMES
+   - Use reassuring language about treatment options
+   - Avoid scary medical jargon when possible
+   
+3. An empathetic, encouraging message about their health journey (this is VERY important)
+   - Start with validation and praise for taking this step
+   - Use warm, supportive tone throughout
+   - End with encouragement and hope
+   - Make them feel supported, not scared
+   - Example opening: "Thank you for taking time to learn about your health. Seeking information is a positive and proactive step."
+   - Example closing: "Remember, you're not alone, and support is available whenever you need it."
 
-Important guidelines:
-- Be warm, supportive, and non-judgmental
-- Emphasize that seeking information is a positive step
-- Recommend professional medical consultation when appropriate
-- Focus on education and empowerment
-- Avoid creating unnecessary anxiety
-- If symptoms are present, encourage timely medical attention
-- If no concerning symptoms, reinforce preventive care
+Important additional guidelines:
+- If symptoms are present, gently suggest healthcare consultation without creating panic
+- If no concerning symptoms, reinforce preventive care positively
 - Consider the reference images they selected (if any) in your analysis
+- Use inclusive, non-judgmental language
+- Emphasize confidentiality and judgment-free care
+- Focus on empowerment, not fear
+- NEVER use phrases like "serious concern", "urgent", "dangerous" unless absolutely critical
+- Instead use "worth discussing with a provider", "treatable", "manageable"
 
 Please respond in the following JSON format:
 {
-  "recommendations": ["recommendation 1", "recommendation 2", ...],
+  "recommendations": ["recommendation 1 with gentle language", "recommendation 2 with encouragement", ...],
   "possibleConditions": [
     {
       "condition": "Condition Name",
-      "description": "Brief, reassuring description with treatment outlook"
+      "description": "Reassuring description emphasizing treatability and positive outcomes"
     }
   ],
-  "supportiveMessage": "An encouraging, personalized message",
+  "supportiveMessage": "A warm, empathetic, encouraging message that validates their choice to seek information and provides hope and reassurance",
   "hasSymptoms": true/false
 }`;
 
@@ -244,7 +263,7 @@ router.post('/analyze', async (req, res) => {
 });
 
 // @route   GET /api/symptoms/questions
-// @desc    Get symptom checker questions (19 questions with reference image support)
+// @desc    Get symptom checker questions with conditional image/text display
 // @access  Public
 router.get('/questions', (req, res) => {
   const questions = [
@@ -302,7 +321,7 @@ router.get('/questions', (req, res) => {
     },
     {
       id: 'q5_sores_bumps_rash',
-      question: 'Have you noticed any sores, bumps, or rashes??',
+      question: 'Have you noticed any sores, bumps, or rashes?',
       type: 'multiple-choice',
       options: [
        'Yes, on genital area',
@@ -312,9 +331,7 @@ router.get('/questions', (req, res) => {
       ],
       category: 'symptoms',
       sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.',
-      showReferenceImages: true,
-      helpText: 'This helps us guide you without needing to see or store any photos. Your answers are private and stay on your device.'
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
     },
     {
       id: 'q6_pain',
@@ -351,7 +368,8 @@ router.get('/questions', (req, res) => {
       id: 'referenceImages',
       question: 'Would you like to see reference images to help identify your symptoms?',
       type: 'yes-no',
-      category: 'visual'
+      category: 'visual',
+      helpText: 'Medical reference images can help you better understand and identify symptoms. All images are educational diagrams.'
     },
     {
       id: 'q9_lastTest',
@@ -368,39 +386,66 @@ router.get('/questions', (req, res) => {
       category: 'testing',
       sensitive: false
     },
-    
-     {
+    {
       id: 'q10_additionalConcerns',
       question: 'Do you have any additional concerns?',
       type: 'text',
       placeholder: 'Please describe any other concerns you may have (optional)...',
       category: 'concerns',
       sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+      sensitiveMessage: 'This is optional. Share only what you\'re comfortable with.'
     },
     {
       id: 'q11_skinCondition',
-      question: 'Which image best matches your skin condition or symptoms? This helps us guide you without needing to see or store any photos. Your answers are private and stay on your device.',
-       type: 'image-selection',
-      options: [
-        { value: 'herpes', label: 'Blisters /Herepes-like', imageType: 'herpes' },
-        { value: 'warts', label: 'Warts', imageType: 'warts' },
+      question: 'Which of following best matches your skin condition or symptoms?',
+      questionText: 'Which of these best describes your skin condition or symptoms?',
+      type: 'conditional',
+      conditionalOn: 'referenceImages',
+      imageOptions: [
+        { value: 'herpes', label: 'Blisters/Herpes-like', imageType: 'herpes' },
+        { value: 'bumpy', label: 'Warts', imageType: 'bumpy' },
         { value: 'scabies', label: 'Scabies-like Rash', imageType: 'scabies' },
-        { value: 'ulcer', label: 'Ulcer / Open Sore', imageType: 'ulcer' },
-        { value: 'blisters', label: 'Blisters/Sores', imageType: 'blisters' },
-        { value: 'dry', label: 'Dry/Flaky Skin', imageType: 'dry' }
+        { value: 'swollen', label: 'Ulcer/Open Sore', imageType: 'swollen' },
+        { value: 'none', label: 'None of these match', imageType: 'none' }
+      ],
+      textOptions: [
+        'Small fluid-filled blisters',
+        'Wart-like bumps or growths',
+        'Rash with intense itching',
+        'Open sores or ulcers',
+        'None of these describe my symptoms'
       ],
       category: 'visual-detail',
       sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.',
+      helpText: 'This helps us guide you without needing to see or store any photos. Your answers are private and stay on your device.'
     },
     {
       id: 'q12_texture',
-      question: 'Which texture best describes what you\'re experiencing? This helps us guide you without needing to see or store any photos. Your answers are private and stay on your device.',
-      type: 'image-selection',
+      question: 'Which texture best describes what you\'re experiencing?',
+      questionText: 'Which texture best describes what you\'re experiencing?',
+      type: 'conditional',
+      conditionalOn: 'referenceImages',
+      imageOptions: [
+        { value: 'smooth', label: 'Smooth/No Issues', imageType: 'smooth' },
+        { value: 'bumpy', label: 'Small Bumps', imageType: 'bumpy' },
+        { value: 'rough', label: 'Rough/Textured', imageType: 'rough' },
+        { value: 'inflamed', label: 'Red/Inflamed', imageType: 'inflamed' },
+        { value: 'swollen', label: 'Swollen Area', imageType: 'swollen' },
+         { value: 'none', label: 'None of these match', imageType: 'none' }
+      ],
+      textOptions: [
+        'Smooth skin with no visible issues',
+        'Small raised bumps on the skin',
+        'Rough or textured surface',
+        'Red, inflamed, or irritated skin',
+        'Swollen or puffy area',
+        'None of these describe what I\'m experiencing'
+      ],
       category: 'visual-detail',
       sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.',
+      helpText: 'This helps us guide you without needing to see or store any photos. Your answers are private and stay on your device.'
     },
     {
       id: 'q13_bumpsOrSores',
@@ -418,7 +463,7 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+      sensitiveMessage: 'Select all that apply to your situation.'
     },
     {
       id: 'q14_soreDescription',
@@ -436,7 +481,7 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+      sensitiveMessage: 'Select all that apply to your situation.'
     },
     {
       id: 'q15_genitalBumps',
@@ -454,7 +499,7 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+      sensitiveMessage: 'Select all that match your observation.'
     },
     {
       id: 'q16_discharge_detail',
@@ -472,7 +517,7 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+      sensitiveMessage: 'Your responses help us provide better guidance.'
     },
     {
       id: 'q17_itching_rash',
@@ -490,7 +535,7 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+      sensitiveMessage: 'Select all symptoms you\'re experiencing.'
     },
     {
       id: 'q18_painfulSores',
@@ -508,7 +553,7 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+      sensitiveMessage: 'This information helps provide accurate guidance.'
     },
     {
       id: 'q19_skinBumps',
@@ -526,13 +571,12 @@ router.get('/questions', (req, res) => {
       category: 'symptom-detail',
       multiselect: true,
       sensitive: true,
-      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
+      sensitiveMessage: 'Your detailed responses ensure personalized guidance.'
     }
   ];
 
   res.json(questions);
 });
-
 
 // @route   GET /api/symptoms/reference-images
 // @desc    Get reference image information with actual image paths
@@ -541,7 +585,7 @@ router.get('/reference-images', (req, res) => {
   const images = {
     herpes: {
       id: 'herpes',
-      label: 'Genital Herpes (HSV)',
+      label: 'Blisters/Herpes-like',
       description: 'Fluid-filled blisters that are often painful',
       imagePath: '/assets/Genetial-herps.png',
       details: [
@@ -553,7 +597,7 @@ router.get('/reference-images', (req, res) => {
     },
     warts: {
       id: 'warts',
-      label: 'Genital Warts (HPV)',
+      label: 'Warts',
       description: 'Cauliflower-like growths caused by HPV',
       imagePath: '/assets/Genital-warts.png',
       details: [
@@ -565,7 +609,7 @@ router.get('/reference-images', (req, res) => {
     },
     scabies: {
       id: 'scabies',
-      label: 'Scabies',
+      label: 'Scabies-like Rash',
       description: 'Parasitic infection with burrow tracks and intense itching',
       imagePath: '/assets/scabies.png',
       details: [
@@ -577,8 +621,8 @@ router.get('/reference-images', (req, res) => {
     },
     ulcer: {
       id: 'ulcer',
-      label: 'Ulcerative Lesions',
-      description: 'Painful open sores requiring medical evaluation',
+      label: 'Ulcer/Open Sore',
+      description: 'Open sores requiring medical evaluation',
       imagePath: '/assets/ulcer.png',
       details: [
         'Deep, painful open wounds',
@@ -587,48 +631,48 @@ router.get('/reference-images', (req, res) => {
         'Requires professional treatment'
       ]
     },
-    // Visual selection images for q5
-    clear: {
-      id: 'clear',
-      label: 'Clear Skin',
-      description: 'No visible skin concerns',
-      imagePath: '/assets/clear-skin.jpg',
-      category: 'visual-selection'
+    none: {
+      id: 'none',
+      label: 'None of these match',
+      description: 'None of the above match my symptoms',
+      imagePath: '/assets/none-placeholder.png',
+      details: []
     },
-    acne: {
-      id: 'acne',
-      label: 'Acne/Bumpy',
-      description: 'Raised bumps or acne-like appearance',
-      imagePath: '/assets/acne-bumpy.jpg',
-      category: 'visual-selection'
+    // Texture images
+    smooth: {
+      id: 'smooth',
+      label: 'Smooth/No Issues',
+      description: 'Smooth skin with no visible concerns',
+      imagePath: '/assets/smooth-skin.jpg',
+      category: 'texture'
     },
-    patchy: {
-      id: 'patchy',
-      label: 'Patchy/Discolored',
-      description: 'Uneven skin tone or discoloration',
-      imagePath: '/assets/patchy.jpg',
-      category: 'visual-selection'
+    bumpy: {
+      id: 'bumpy',
+      label: 'Small Bumps',
+      description: 'Small raised bumps on the skin',
+      imagePath: '/assets/small-bumps.jpg',
+      category: 'texture'
     },
-    rash: {
-      id: 'rash',
-      label: 'Rash/Irritation',
-      description: 'Red, irritated, or inflamed skin',
-      imagePath: '/assets/rash.jpg',
-      category: 'visual-selection'
+    rough: {
+      id: 'rough',
+      label: 'Rough/Textured',
+      description: 'Rough or textured skin surface',
+      imagePath: '/assets/rough-textured.jpg',
+      category: 'texture'
     },
-    blisters: {
-      id: 'blisters',
-      label: 'Blisters/Sores',
-      description: 'Fluid-filled blisters or open sores',
-      imagePath: '/assets/blisters.jpg',
-      category: 'visual-selection'
+    inflamed: {
+      id: 'inflamed',
+      label: 'Red/Inflamed',
+      description: 'Red, inflamed, or irritated skin',
+      imagePath: '/assets/red-inflamed.jpg',
+      category: 'texture'
     },
-    dry: {
-      id: 'dry',
-      label: 'Dry/Flaky Skin',
-      description: 'Dry, scaly, or flaky appearance',
-      imagePath: '/assets/dry-flaky.jpg',
-      category: 'visual-selection'
+    swollen: {
+      id: 'swollen',
+      label: 'Swollen Area',
+      description: 'Swollen or puffy skin area',
+      imagePath: '/assets/swollen-area.jpg',
+      category: 'texture'
     }
   };
 
