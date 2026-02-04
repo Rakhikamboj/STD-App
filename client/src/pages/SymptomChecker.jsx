@@ -3,6 +3,17 @@ import { AlertCircle, CheckCircle, ArrowRight, ArrowLeft, Loader, Shield } from 
 import api from '../utils/api';
 import ResultsScreen from './ResultsScreen';
 import styles from './SymptomChecker.module.css';
+import herpes from '../assets/Genetial-herps.png';
+import scabies from '../assets/Genital-scabies2.png';
+import warts from '../assets/Genital-warts.png';
+import ulcer from '../assets/ulcer.png'; 
+
+export const referenceImagesMap ={
+  herpes,
+  scabies,
+  warts,
+  ulcer
+}
 
 const SymptomChecker = () => {
   const [questions, setQuestions] = useState([]);
@@ -219,42 +230,49 @@ const SymptomChecker = () => {
                 rows="4"
               />
             ) : question?.type === 'image-selection' ? (
-              <div className={styles.imageSelectionGrid}>
-                {question?.options?.map((option) => {
-                  const imageInfo = referenceImageData[option.imageType];
-                  return (
-                    <div
-                      key={option.value}
-                      onClick={() => handleImageSelection(option.value)}
-                      className={`${styles.imageOptionCard} ${
-                        responses[question.id] === option.value ? styles.selectedImageOption : ''
-                      }`}
-                    >
-                      <div className={styles.imageWrapper}>
-                        {imageInfo?.imagePath ? (
-                          <img 
-                            src={imageInfo.imagePath} 
-                            alt={option.label}
-                            className={styles.optionImage}
-                          />
-                        ) : (
-                          <div className={styles.imagePlaceholder}>
-                            <span>{option.label}</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className={styles.imageOptionLabel}>
-                        {option.label}
-                      </div>
-                      {responses[question.id] === option.value && (
-                        <div className={styles.selectedCheckmark}>
-                          <CheckCircle size={24} />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+  <div className={styles.imageSelectionGrid}>
+    {question?.options?.map((option) => {
+      const imageSrc = referenceImagesMap[option.imageType];
+
+      return (
+        <div
+          key={option.value}
+          onClick={() => handleImageSelection(option.value)}
+          className={`${styles.imageOptionCard} ${
+            responses[question.id] === option.value
+              ? styles.selectedImageOption
+              : ''
+          }`}
+        >
+          <div className={styles.imageWrapper}>
+            {imageSrc ? (
+              <img
+                src={imageSrc}
+                alt={option.label}
+                className={styles.optionImage}
+              />
+            ) : (
+              <div className={styles.imagePlaceholder}>
+                <span>{option.label}</span>
               </div>
+            )}
+          </div>
+
+          <div className={styles.imageOptionLabel}>
+            {option.label}
+          </div>
+
+          {responses[question.id] === option.value && (
+            <div className={styles.selectedCheckmark}>
+              <CheckCircle size={24} />
+            </div>
+          )}
+        </div>
+      );
+    })}
+  </div>
+
+
             ) : (
               question?.options?.map((option) => (
                 <button

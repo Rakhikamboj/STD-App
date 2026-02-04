@@ -383,10 +383,10 @@ router.get('/questions', (req, res) => {
       question: 'Which image best matches your skin condition or symptoms? This helps us guide you without needing to see or store any photos. Your answers are private and stay on your device.',
        type: 'image-selection',
       options: [
-        { value: 'clear', label: 'Clear Skin', imageType: 'clear' },
-        { value: 'acne', label: 'Acne/Bumpy', imageType: 'acne' },
-        { value: 'patchy', label: 'Patchy/Discolored', imageType: 'patchy' },
-        { value: 'rash', label: 'Rash/Irritation', imageType: 'rash' },
+        { value: 'herpes', label: 'Blisters /Herepes-like', imageType: 'herpes' },
+        { value: 'warts', label: 'Warts', imageType: 'warts' },
+        { value: 'scabies', label: 'Scabies-like Rash', imageType: 'scabies' },
+        { value: 'ulcer', label: 'Ulcer / Open Sore', imageType: 'ulcer' },
         { value: 'blisters', label: 'Blisters/Sores', imageType: 'blisters' },
         { value: 'dry', label: 'Dry/Flaky Skin', imageType: 'dry' }
       ],

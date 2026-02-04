@@ -69,13 +69,13 @@ background: linear-gradient(to bottom right, #f2fdfa 0%, #ffffff 50%, #dbeafe 10
 .sensitiveAlert {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  background: #dbeafe;
+  gap: 0.79rem;
+  background: #f2f7ff;
   border: 1px solid #93c5fd;
   border-radius: 8px;
   padding: 0.875rem 1rem;
   margin-bottom: 1.5rem;
-  font-size: 0.875rem;
+  font-size: 0.81rem;
   color: #1e40af;
 }
 
@@ -124,14 +124,15 @@ background: linear-gradient(to bottom right, #f2fdfa 0%, #ffffff 50%, #dbeafe 10
   border-color: #14b8a6;
   background: #f0fdfa;
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(20, 184, 166, 0.1);
+
 }
 
 .answerButton.selected {
-  background: #14b8a6;
-  color: white;
+
+  background-color:#f0fdfa ;
+  color: #334155;
   border-color: #14b8a6;
-  box-shadow: 0 4px 6px -1px rgba(20, 184, 166, 0.3);
+
 }
 
 .textInput {
