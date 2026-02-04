@@ -35,14 +35,16 @@ const QuickPoll = () => {
     <>
       {/* Floating Button */}
       {!isOpen && (
-        <button 
-          className={styles.floatingButton}
-          onClick={() => setIsOpen(true)}
-          aria-label="Open Quick Poll"
-        >
-          <BarChart3 size={20} />
-          <span>Quick Poll</span>
+        <button className={styles.floatingButton} onClick={() => setIsOpen(true)}>   
+
+          <BarChart3 className={styles.icon}size={20} />
+          <span className={styles.text}>
+  Quick Poll
+</span>
+
+         
         </button>
+        
       )}
 
       {/* Poll Panel */}
