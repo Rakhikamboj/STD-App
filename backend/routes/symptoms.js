@@ -112,7 +112,7 @@ const analyzeSymptomsFallback = (responses) => {
   return { riskLevel, recommendations, possibleConditions, hasSymptoms };
 };
 
-// Gemini AI-powered symptom analysis with encouraging language
+
 const analyzeWithGemini = async (responses) => {
   if (!model) {
     console.log('Gemini not available, using fallback analysis');
