@@ -10,7 +10,7 @@
 }
 
 .container {
-  max-width: 1400px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
@@ -35,30 +35,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   background: #0d9488;
   border-radius: 0.5rem;
   flex-shrink: 0;
+  z-index: 900px;
 }
 
 .logoIcon {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   color: white;
 }
 
 .logoText {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #1f2937;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #000000;
 }
 
 /* Navigation Links */
 .links {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 3rem;
 }
 
 .link {
@@ -66,7 +67,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 15px;
   font-weight: 500;
   color: #4b5563;
   text-decoration: none;
@@ -84,18 +85,13 @@
 
 .link.active {
   color: #0d9488;
+  background: #f2fdfa;
+  padding: 8px 12px;
+  border-radius: 8px;
   font-weight: 600;
 }
 
-.link.active::after {
-  content: '';
-  position: absolute;
-  bottom: -0.75rem;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #0d9488;
-}
+
 
 .doctorLink {
   display: inline-flex;

@@ -57,13 +57,13 @@ const Navigation = () => {
             </>
           )}
           
-          <Link 
+          {/* <Link 
             to="/doctor/login" 
             className={`${styles.doctorLink} ${isDoctorPath ? styles.active : ''}`}
           >
             <UserPlus size={18} />
             <span>For Doctors</span>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </nav>

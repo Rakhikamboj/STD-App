@@ -35,11 +35,11 @@
 }
 
 .heroTitle {
-  font-size: 3.5rem;
+  font-size: 2.8rem;
   font-weight: 700;
   color: #1f2937;
-  margin-bottom: 1.5rem;
-  line-height: 1.2;
+  margin-bottom: 1.3rem;
+  line-height: 1;
 }
 
 .heroAccent {
@@ -47,11 +47,11 @@
 }
 
 .heroSubtitle {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: #4b5563;
   max-width: 900px;
   margin: 0 auto 2.5rem;
-  line-height: 1.7;
+  line-height: 1.5;
 }
 
 .primaryCta {
@@ -71,6 +71,7 @@
 
 .primaryCta:hover {
   background: #0a7569;
+  color: white;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(13, 148, 136, 0.4);
 }
@@ -85,14 +86,14 @@
 
 .heroNote {
   margin-top: 1rem;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   color: #6b7280;
 }
 
 /* Trust Section */
 .trustSection {
-  padding: 3rem 1rem;
-  max-width: 1200px;
+  padding: 0rem 1rem;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -215,8 +216,8 @@
 
 /* Why This Matters Section */
 .whyMatters {
-  padding: 3rem 1rem;
-  margin: 3rem auto;
+  padding: 2rem 2rem;
+  margin: 2rem auto;
   max-width: 1200px;
   background: linear-gradient(to right, #0d9488 0%, #3b82f6 100%);
   border-radius: 1.5rem;
@@ -224,15 +225,16 @@
 }
 
 .whyMattersContent {
-  padding: 2rem;
+  padding: 1rem;
   color: white;
 }
 
 .whyMattersTitle {
   font-size: 2rem;
   font-weight: 700;
+  color: white;
   margin-bottom: 2.5rem;
-  text-align: center;
+  text-align: left;
 }
 
 .whyMattersGrid {
@@ -245,6 +247,7 @@
 
 .columnTitle {
   font-size: 1.25rem;
+  color:white;
   font-weight: 600;
   margin-bottom: 1.5rem;
 }
@@ -292,7 +295,7 @@
 
 /* Final CTA Section */
 .finalCta {
-  padding: 4rem 1rem;
+  padding: 3rem 1rem;
   text-align: center;
   background: white;
   margin: 3rem auto;
@@ -307,14 +310,14 @@
 }
 
 .finalCtaTitle {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: #1f2937;
   margin-bottom: 1rem;
 }
 
 .finalCtaText {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   color: #4b5563;
   margin-bottom: 2rem;
   line-height: 1.7;

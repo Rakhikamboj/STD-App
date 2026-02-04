@@ -1,24 +1,44 @@
-import express from 'express';
+import express from 'express'
 import { v4 as uuidv4 } from 'uuid';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import SymptomReport from '../models/SymptomReport.js';
 
 const router = express.Router();
 
-// Enhanced symptom analysis logic with friendly recommendations
-const analyzeSymptoms = (responses) => {
+// Initialize Gemini AI
+let genAI;
+let model;
+
+if (process.env.GEMINI_API_KEY) {
+  genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+} else {
+  console.warn('Warning: GEMINI_API_KEY not found in environment variables. AI analysis will be disabled.');
+}
+
+// Fallback symptom analysis (when Gemini is not available)
+const analyzeSymptomsFallback = (responses) => {
   let riskScore = 0;
   const recommendations = [];
   const possibleConditions = [];
 
-  // Score based on symptoms
-  if (responses.discharge === 'yes-unusual') riskScore += 2;
-  if (responses.sores_type && responses.sores_type.length > 0) riskScore += responses.sores_type.length;
-  if (responses.pain && responses.pain.length > 0) riskScore += responses.pain.length;
-  if (responses.flulike && responses.flulike.length > 0) riskScore += 1;
-  if (responses.lastTest === 'never') riskScore += 1;
-  if (responses.lastTest === 'over-year') riskScore += 1;
+  // Extract key symptoms
+  const discharge = responses.q4_discharge;
+  const bumps = responses.q5_sores_bumps_rash;
+  const pain = responses.q6_pain || [];
+  const flulike = responses.q7_flulike || [];
+  const bumpDetails = responses.q13_bumpsOrSores || [];
+  const dischargeDetail = responses.q16_discharge_detail || [];
+  const lastTest = responses.q9_lastTest;
 
-  // Determine risk level (without showing it to user)
+  // Score based on symptoms
+  if (discharge === 'Yes, unusual discharge') riskScore += 2;
+  if (bumps === 'Yes, on genital area') riskScore += 2;
+  if (Array.isArray(pain) && pain.length > 0) riskScore += pain.length;
+  if (Array.isArray(flulike) && flulike.length > 0) riskScore += 1;
+  if (lastTest === 'Never tested') riskScore += 1;
+
+  // Determine risk level
   let riskLevel;
   if (riskScore <= 2) {
     riskLevel = 'low';
@@ -28,78 +48,37 @@ const analyzeSymptoms = (responses) => {
     riskLevel = 'high';
   }
 
-  // Generate friendly recommendations based on symptoms
-  const hasSymptoms = Object.keys(responses).some(key => 
-    responses[key] === 'yes' || responses[key] === 'yes-unusual' || 
-    (Array.isArray(responses[key]) && responses[key].length > 0)
-  );
+  const hasSymptoms = Object.keys(responses).some(key => {
+    const val = responses[key];
+    return val === 'yes' || val === 'Yes, unusual discharge' || val === 'Yes, on genital area' ||
+      (Array.isArray(val) && val.length > 0 && val[0] !== 'None of these describe what I see');
+  });
 
+  // Generate recommendations
   if (hasSymptoms) {
-    recommendations.push('Consider scheduling an appointment with a healthcare provider within the next few days. They can properly evaluate your symptoms and recommend appropriate testing if needed.');
-    recommendations.push('In the meantime, practice safe hygiene and avoid sexual contact until you\'ve consulted with a professional.');
-    
-    if (responses.discharge === 'yes-unusual' || responses.pain?.includes('pain-urination')) {
-      recommendations.push('Drink plenty of water to stay hydrated and monitor your symptoms closely.');
-    }
-    
-    if (responses.sores_type?.length > 0 || responses.flulike?.length > 0) {
-      recommendations.push('Keep track of when symptoms started and any changes you notice - this information will be helpful for your healthcare provider.');
-    }
+    recommendations.push('Consider scheduling an appointment with a healthcare provider within the next few days.');
+    recommendations.push('Practice safe hygiene and avoid sexual contact until you\'ve consulted with a professional.');
+    recommendations.push('Keep track of when symptoms started and any changes you notice.');
   } else {
-    recommendations.push('Based on your responses, you\'re being proactive about your health. Continue practicing safe sex and get tested regularly.');
-    recommendations.push('If you develop any symptoms in the future, don\'t hesitate to reach out to a healthcare provider.');
+    recommendations.push('Continue practicing safe sex and get tested regularly.');
+    recommendations.push('If you develop any symptoms, don\'t hesitate to reach out to a healthcare provider.');
   }
 
   recommendations.push('Remember to communicate openly with your sexual partners about health and testing.');
-  recommendations.push('Access to confidential, judgment-free care is available in your area.');
+  recommendations.push('Access to confidential, judgment-free care is available.');
 
-  // Identify possible conditions based on symptom combinations
-  if (responses.sores_type?.includes('fluid-filled-blisters')) {
+  // Identify possible conditions
+  if (Array.isArray(bumpDetails) && bumpDetails.includes('Small fluid-filled blisters (like tiny water bubbles)')) {
     possibleConditions.push({
       condition: 'Genital Herpes',
-      description: 'Characterized by fluid-filled blisters that are often painful. Highly manageable with proper medical care.'
+      description: 'Characterized by fluid-filled blisters that are often painful. Highly manageable with proper medical care and antiviral medications.'
     });
   }
 
-  if (responses.sores_type?.includes('painful-ulcers')) {
-    possibleConditions.push({
-      condition: 'Chancroid or other ulcerative conditions',
-      description: 'Painful open sores that require professional treatment. Early medical intervention is important.'
-    });
-  }
-
-  if (responses.sores_type?.includes('cauliflower-like')) {
-    possibleConditions.push({
-      condition: 'Genital Warts (HPV)',
-      description: 'Caused by human papillomavirus. Multiple treatment options are available and highly effective.'
-    });
-  }
-
-  if (responses.discharge === 'yes-unusual' && responses.texture?.includes('thick-white')) {
+  if (discharge === 'Yes, unusual discharge' && Array.isArray(dischargeDetail) && dischargeDetail.includes('Thick, white discharge (like cottage cheese)')) {
     possibleConditions.push({
       condition: 'Yeast Infection',
       description: 'Fungal infection that is very common and easily treated with antifungal medications.'
-    });
-  }
-
-  if (responses.discharge === 'yes-unusual') {
-    possibleConditions.push({
-      condition: 'Bacterial Vaginosis or other bacterial infection',
-      description: 'Treatable with antibiotics. Symptoms usually improve quickly with proper treatment.'
-    });
-  }
-
-  if (responses.pain?.includes('pain-urination') || responses.pain?.includes('pain-intimacy')) {
-    possibleConditions.push({
-      condition: 'Urethritis or Cervicitis',
-      description: 'Inflammation of the urethra or cervix. Responsive to appropriate antibiotic treatment.'
-    });
-  }
-
-  if (responses.itching_rash?.includes('intense-itching') || responses.itching_rash?.includes('burrow-tracks')) {
-    possibleConditions.push({
-      condition: 'Scabies',
-      description: 'Parasitic infection that is treatable with topical medications. Usually clears up quickly with treatment.'
     });
   }
 
@@ -118,8 +97,82 @@ const analyzeSymptoms = (responses) => {
   return { riskLevel, recommendations, possibleConditions, hasSymptoms };
 };
 
+// Gemini AI-powered symptom analysis
+const analyzeWithGemini = async (responses) => {
+  if (!model) {
+    console.log('Gemini not available, using fallback analysis');
+    return analyzeSymptomsFallback(responses);
+  }
+
+  try {
+    // Prepare symptom data for Gemini
+    const symptomData = JSON.stringify(responses, null, 2);
+    
+    const prompt = `You are a compassionate, knowledgeable sexual health advisor. A user has completed a confidential health assessment with the following responses:
+
+${symptomData}
+
+Based on these responses, please provide:
+
+1. A list of 4-6 personalized, actionable recommendations (as an array of strings)
+2. Possible conditions that match their symptoms (as an array of objects with "condition" and "description" fields)
+3. An empathetic, encouraging message about their health journey
+
+Important guidelines:
+- Be warm, supportive, and non-judgmental
+- Emphasize that seeking information is a positive step
+- Recommend professional medical consultation when appropriate
+- Focus on education and empowerment
+- Avoid creating unnecessary anxiety
+- If symptoms are present, encourage timely medical attention
+- If no concerning symptoms, reinforce preventive care
+
+Please respond in the following JSON format:
+{
+  "recommendations": ["recommendation 1", "recommendation 2", ...],
+  "possibleConditions": [
+    {
+      "condition": "Condition Name",
+      "description": "Brief, reassuring description with treatment outlook"
+    }
+  ],
+  "supportiveMessage": "An encouraging, personalized message",
+  "hasSymptoms": true/false
+}`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    
+    // Parse JSON from response
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      const aiAnalysis = JSON.parse(jsonMatch[0]);
+      
+      return {
+        riskLevel: aiAnalysis.hasSymptoms ? 'medium' : 'low',
+        recommendations: aiAnalysis.recommendations || [],
+        possibleConditions: aiAnalysis.possibleConditions || [],
+        hasSymptoms: aiAnalysis.hasSymptoms || false,
+        aiMessage: aiAnalysis.supportiveMessage || '',
+        analyzedByAI: true
+      };
+    } else {
+      throw new Error('Could not parse AI response');
+    }
+  } catch (error) {
+    console.error('Gemini AI error:', error.message);
+    // Fallback to rule-based analysis
+    return {
+      ...analyzeSymptomsFallback(responses),
+      analyzedByAI: false,
+      aiError: 'AI analysis temporarily unavailable, using standard assessment'
+    };
+  }
+};
+
 // @route   POST /api/symptoms/analyze
-// @desc    Analyze symptom responses and generate report
+// @desc    Analyze symptom responses with Gemini AI and generate report
 // @access  Public
 router.post('/analyze', async (req, res) => {
   try {
@@ -129,29 +182,34 @@ router.post('/analyze', async (req, res) => {
       return res.status(400).json({ message: 'Invalid symptom responses' });
     }
 
-    // Analyze symptoms
-    const { riskLevel, recommendations, possibleConditions, hasSymptoms } = analyzeSymptoms(responses);
+    // Analyze symptoms with Gemini AI
+    const analysis = await analyzeWithGemini(responses);
+    const { riskLevel, recommendations, possibleConditions, hasSymptoms, aiMessage, analyzedByAI } = analysis;
 
     // Generate unique session ID
     const sessionId = uuidv4();
 
-    // Optional: Store report in MongoDB (uncomment if using SymptomReport model)
-    const report = await SymptomReport.create({
-      responses,
-      riskLevel,
-      recommendations,
-      possibleConditions,
-      sessionId,
-      hasSymptoms
-    });
+    // Optional: Store report in MongoDB
+    try {
+      await SymptomReport.create({
+        responses,
+        riskLevel,
+        recommendations,
+        possibleConditions,
+        sessionId,
+        hasSymptoms
+      });
+    } catch (dbError) {
+      console.log('MongoDB storage skipped:', dbError.message);
+    }
 
     res.status(201).json({
-      sessionId: report.sessionId,
-      riskLevel: report.riskLevel,
-      recommendations: report.recommendations,
-     
-      possibleConditions: report.possibleConditions,
-      hasSymptoms: report.hasSymptoms,
+      sessionId,
+      recommendations,
+      possibleConditions,
+      hasSymptoms,
+      aiMessage,
+      analyzedByAI,
       message: 'Your health assessment is complete. Please review the recommendations below.'
     });
   } catch (error) {
@@ -160,31 +218,13 @@ router.post('/analyze', async (req, res) => {
   }
 });
 
-// @route   GET /api/symptoms/report/:sessionId
-// @desc    Get symptom report by session ID
-// @access  Public
-router.get('/report/:sessionId', async (req, res) => {
-  try {
-    const report = await SymptomReport.findOne({ sessionId: req.params.sessionId });
-
-    if (!report) {
-      return res.status(404).json({ message: 'Report not found' });
-    }
-
-    res.json(report);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error fetching report' });
-  }
-});
-
 // @route   GET /api/symptoms/questions
-// @desc    Get symptom checker questions with user-provided structure
+// @desc    Get symptom checker questions (19 questions with reference image support)
 // @access  Public
 router.get('/questions', (req, res) => {
   const questions = [
     {
-      id: 'bringYouHere',
+      id: 'q1_bringYouHere',
       question: 'What brings you here today?',
       type: 'multiple-choice',
       options: [
@@ -193,10 +233,11 @@ router.get('/questions', (req, res) => {
         'I want to get tested routinely',
         'I\'m here to learn and stay informed'
       ],
-      category: 'reason'
+      category: 'reason',
+      sensitive: false
     },
     {
-      id: 'feeling',
+      id: 'q2_feeling',
       question: 'How are you feeling right now?',
       type: 'multiple-choice',
       options: [
@@ -205,10 +246,11 @@ router.get('/questions', (req, res) => {
         'Experiencing discomfort',
         'Just being proactive'
       ],
-      category: 'emotion'
+      category: 'emotion',
+      sensitive: false
     },
     {
-      id: 'noticeChanged',
+      id: 'q3_noticeChanged',
       question: 'When did you first notice something different?',
       type: 'multiple-choice',
       options: [
@@ -218,10 +260,11 @@ router.get('/questions', (req, res) => {
         'More than a month ago',
         'Not sure'
       ],
-      category: 'timeline'
+      category: 'timeline',
+      sensitive: false
     },
     {
-      id: 'discharge',
+      id: 'q4_discharge',
       question: 'Are you experiencing any unusual discharge?',
       type: 'multiple-choice',
       options: [
@@ -230,10 +273,12 @@ router.get('/questions', (req, res) => {
         'Not sure',
         'Prefer not to answer'
       ],
-      category: 'symptoms'
+      category: 'symptoms',
+      sensitive: true,
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
     },
     {
-      id: 'sores_bumps_rash',
+      id: 'q5_sores_bumps_rash',
       question: 'Have you noticed any sores, bumps, or rashes?',
       type: 'multiple-choice',
       options: [
@@ -242,10 +287,14 @@ router.get('/questions', (req, res) => {
         'No',
         'Not sure'
       ],
-      category: 'symptoms'
+      category: 'symptoms',
+      sensitive: true,
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.',
+      showReferenceImages: true,
+      referenceImageTypes: ['herpes', 'warts', 'yeast', 'scabies', 'ulcer']
     },
     {
-      id: 'pain',
+      id: 'q6_pain',
       question: 'Are you experiencing pain or discomfort?',
       type: 'multiple-choice',
       options: [
@@ -257,10 +306,12 @@ router.get('/questions', (req, res) => {
         'Other'
       ],
       category: 'symptoms',
-      multiselect: true
+      multiselect: true,
+      sensitive: true,
+      sensitiveMessage: 'This is a sensitive question. You can skip it if you\'re not comfortable answering. Your privacy and comfort matter.'
     },
     {
-      id: 'flulike',
+      id: 'q7_flulike',
       question: 'Have you had any flu-like symptoms?',
       type: 'multiple-choice',
       options: [
@@ -271,16 +322,19 @@ router.get('/questions', (req, res) => {
         'None of these'
       ],
       category: 'symptoms',
-      multiselect: true
+      multiselect: true,
+      sensitive: false
     },
     {
-      id: 'referenceImages',
+      id: 'q8_referenceImages',
       question: 'Would you like to see reference images to help identify your symptoms?',
       type: 'yes-no',
-      category: 'visual'
+      category: 'visual',
+      sensitive: false,
+      helpText: 'Medical reference images can help you better understand and identify symptoms. All images are educational diagrams.'
     },
     {
-      id: 'lastTest',
+      id: 'q9_lastTest',
       question: 'When was your last STI test?',
       type: 'multiple-choice',
       options: [
@@ -291,49 +345,225 @@ router.get('/questions', (req, res) => {
         'Never tested',
         'Prefer not to answer'
       ],
-      category: 'testing'
+      category: 'testing',
+      sensitive: false
     },
-   
     {
-      id: 'lastTest',
-      question: 'When was your last STI test?',
+      id: 'q10_additionalConcerns',
+      question: 'Do you have any additional concerns you\'d like to mention?',
+      type: 'text',
+      placeholder: 'Please describe any other concerns you may have (optional)...',
+      category: 'concerns',
+      sensitive: true,
+      sensitiveMessage: 'This is optional. Share only what you\'re comfortable with.'
+    },
+    {
+      id: 'q13_bumpsOrSores',
+      question: 'If you have bumps or sores, what do they look or feel like? (Select all that apply)',
       type: 'multiple-choice',
       options: [
-        'Within the last 3 months',
-        '3-6 months ago',
-        '6-12 months ago',
-        'Over a year ago',
-        'Never tested',
-        'Prefer not to answer'
+        'Small fluid-filled blisters (like tiny water bubbles)',
+        'Painful red sores or ulcers',
+        'Clustered or grouped together',
+        'Itchy or tingling before they appear',
+        'Crust over or scab as they heal',
+        'Swollen or tender lymph nodes nearby',
+        'None of these describe what I see'
       ],
-      category: 'testing'
+      category: 'symptom-detail',
+      multiselect: true,
+      sensitive: true,
+      sensitiveMessage: 'Select all options that match your experience.',
+      showReferenceImages: true,
+      referenceImageTypes: ['herpes', 'ulcer', 'warts']
+    },
+    {
+      id: 'q14_soreDescription',
+      question: 'If you notice a sore or lesion, which of these best describes it? (Select all that apply)',
+      type: 'multiple-choice',
+      options: [
+        'Single, round, painless sore (chancre)',
+        'Firm to the touch with raised edges',
+        'Located on or near genitals, mouth, or anus',
+        'Does not hurt or itch',
+        'Appears clean with no pus or discharge',
+        'Heals on its own after a few weeks',
+        'None of these describe what I see'
+      ],
+      category: 'symptom-detail',
+      multiselect: true,
+      sensitive: true,
+      sensitiveMessage: 'Select all that apply to your situation.',
+      showReferenceImages: true,
+      referenceImageTypes: ['ulcer']
+    },
+    {
+      id: 'q15_genitalBumps',
+      question: 'If you see or feel bumps in the genital area, what do they look like? (Select all that apply)',
+      type: 'multiple-choice',
+      options: [
+        'Small, flesh-colored or gray bumps',
+        'Cauliflower-like texture (grouped together)',
+        'Flat or slightly raised',
+        'Soft to the touch',
+        'May be itchy but usually painless',
+        'Can appear alone or in clusters',
+        'None of these describe what I see'
+      ],
+      category: 'symptom-detail',
+      multiselect: true,
+      sensitive: true,
+      sensitiveMessage: 'Select all that match your observation.',
+      showReferenceImages: true,
+      referenceImageTypes: ['warts']
+    },
+    {
+      id: 'q16_discharge_detail',
+      question: 'If you have discharge or irritation, what does it look or feel like? (Select all that apply)',
+      type: 'multiple-choice',
+      options: [
+        'Thick, white discharge (like cottage cheese)',
+        'Red, swollen, or irritated skin',
+        'Intense itching or burning',
+        'Soreness or discomfort',
+        'Rash with small red patches',
+        'Painful during urination or sex',
+        'None of these describe what I experience'
+      ],
+      category: 'symptom-detail',
+      multiselect: true,
+      sensitive: true,
+      sensitiveMessage: 'Your responses help us provide better guidance.',
+      showReferenceImages: true,
+      referenceImageTypes: ['yeast']
+    },
+    {
+      id: 'q17_itching_rash',
+      question: 'If you have itching or a rash, what does it look or feel like? (Select all that apply)',
+      type: 'multiple-choice',
+      options: [
+        'Intense itching, especially at night',
+        'Small red bumps or blisters',
+        'Thin, wavy lines on the skin (burrow tracks)',
+        'Rash in skin folds or between fingers',
+        'Scaly or crusty patches',
+        'Affects genital area, hands, or wrists',
+        'None of these describe what I see'
+      ],
+      category: 'symptom-detail',
+      multiselect: true,
+      sensitive: true,
+      sensitiveMessage: 'Select all symptoms you\'re experiencing.',
+      showReferenceImages: true,
+      referenceImageTypes: ['scabies']
+    },
+    {
+      id: 'q18_painfulSores',
+      question: 'If you have painful sores, which of these best describes them? (Select all that apply)',
+      type: 'multiple-choice',
+      options: [
+        'Painful, deep ulcers (open sores)',
+        'Soft to the touch with irregular edges',
+        'Bleeds easily when touched',
+        'Gray or yellowish base with pus',
+        'Swollen, painful lymph nodes in the groin',
+        'Multiple sores may appear',
+        'None of these describe what I see'
+      ],
+      category: 'symptom-detail',
+      multiselect: true,
+      sensitive: true,
+      sensitiveMessage: 'This information helps provide accurate guidance.',
+      showReferenceImages: true,
+      referenceImageTypes: ['ulcer', 'herpes']
+    },
+    {
+      id: 'q19_skinBumps',
+      question: 'If you notice small bumps on your skin, what do they look like? (Select all that apply)',
+      type: 'multiple-choice',
+      options: [
+        'Small, round, dome-shaped bumps',
+        'Flesh-colored, pink, or white',
+        'Shiny or pearly appearance',
+        'Dimple or pit in the center',
+        'Firm but painless to touch',
+        'Can appear in clusters',
+        'None of these describe what I see'
+      ],
+      category: 'symptom-detail',
+      multiselect: true,
+      sensitive: true,
+      sensitiveMessage: 'Your detailed responses ensure personalized guidance.',
+      showReferenceImages: true,
+      referenceImageTypes: ['warts']
     }
   ];
 
   res.json(questions);
 });
 
-// Reference images endpoint
+// @route   GET /api/symptoms/reference-images
+// @desc    Get reference image information
+// @access  Public
 router.get('/reference-images', (req, res) => {
   const images = {
-    skin: [
-      { id: 'clear-skin', label: 'Clear Skin', category: 'baseline' },
-      { id: 'acne-bumpy', label: 'Acne/Bumpy', category: 'condition' },
-      { id: 'patchy-discolored', label: 'Patchy/Discolored', category: 'condition' },
-      { id: 'rash-irritation', label: 'Rash/Irritation', category: 'condition' },
-      { id: 'blisters-sores', label: 'Blisters/Sores', category: 'condition' },
-      { id: 'dry-flaky', label: 'Dry/Flaky Skin', category: 'condition' }
-    ],
-    texture: [
-      { id: 'smooth-no-issues', label: 'Smooth/No Issues', category: 'baseline' },
-      { id: 'small-bumps', label: 'Small Bumps', category: 'condition' },
-      { id: 'rough-textured', label: 'Rough/Textured', category: 'condition' },
-      { id: 'red-inflamed', label: 'Red/Inflamed', category: 'condition' },
-      { id: 'swollen-area', label: 'Swollen Area', category: 'condition' }
-    ]
+    herpes: {
+      id: 'herpes',
+      label: 'Genital Herpes (HSV)',
+      description: 'Fluid-filled blisters that are often painful',
+      details: [
+        'Typically appears 2-7 days after exposure',
+        'Blisters are painful and may rupture',
+        'Highly treatable with antiviral medications',
+        'Can be managed effectively long-term'
+      ]
+    },
+    warts: {
+      id: 'warts',
+      label: 'Genital Warts (HPV)',
+      description: 'Cauliflower-like growths caused by HPV',
+      details: [
+        'Can appear weeks to months after exposure',
+        'Usually painless but may cause itching',
+        'Multiple effective treatment options available',
+        'Vaccines can prevent certain types of HPV'
+      ]
+    },
+    yeast: {
+      id: 'yeast',
+      label: 'Yeast Infection',
+      description: 'Thick discharge with intense itching and irritation',
+      details: [
+        'Discharge often thick and cottage cheese-like',
+        'Red, inflamed, irritated tissue',
+        'One of the most common vaginal infections',
+        'Easily treated with antifungal medications'
+      ]
+    },
+    scabies: {
+      id: 'scabies',
+      label: 'Scabies',
+      description: 'Parasitic infection with burrow tracks and intense itching',
+      details: [
+        'Intense itching, especially at night',
+        'Thin wavy lines (burrows) on skin',
+        'Contagious through close contact',
+        'Treatable with topical medications'
+      ]
+    },
+    ulcer: {
+      id: 'ulcer',
+      label: 'Ulcerative Lesions',
+      description: 'Painful open sores requiring medical evaluation',
+      details: [
+        'Deep, painful open wounds',
+        'Irregular edges and may produce discharge',
+        'Often accompanied by swollen lymph nodes',
+        'Requires professional treatment'
+      ]
+    }
   };
 
   res.json(images);
 });
-
 export default router;
