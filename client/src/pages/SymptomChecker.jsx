@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AlertCircle, CheckCircle, ArrowRight, ArrowLeft, Loader, Shield } from 'lucide-react';
+import { AlertCircle, CheckCircle,  Loader, Shield, ChevronRight, ChevronLeft } from 'lucide-react';
 import api from '../utils/api';
 import ResultsScreen from './ResultsScreen';
 import styles from './SymptomChecker.module.css';
@@ -301,13 +301,15 @@ const SymptomChecker = () => {
             </div>
           )}
 
-          <div className={styles.navigationButtons}>
+
+        </div>
+                  <div className={styles.navigationButtons}>
             <button 
               onClick={handleBack} 
               className={styles.backButton}
               disabled={currentQuestion === 0}
             >
-              <ArrowLeft size={20} />
+              <ChevronLeft size={20} />
               Back
             </button>
             
@@ -318,11 +320,10 @@ const SymptomChecker = () => {
                 className={styles.continueButton}
               >
                 Continue
-                <ArrowRight size={20} />
+                <ChevronRight size={20} />
               </button>
             )}
           </div>
-        </div>
 
         {error && (
           <div className={styles.errorAlert}>
