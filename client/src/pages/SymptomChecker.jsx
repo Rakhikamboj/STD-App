@@ -78,21 +78,6 @@ const SymptomChecker = () => {
           setShowReferenceImagesNotice(false);
         }
       }
-      
-      // Don't auto-advance for image selection or conditional questions
-      if (!question.multiselect && 
-          question.type !== 'text' && 
-          question.type !== 'image-selection' && 
-          question.type !== 'conditional' &&
-          currentQuestion < questions.length - 1) {
-        setTimeout(() => setCurrentQuestion(currentQuestion + 1), 300);
-      } else if (!question.multiselect && 
-                 question.type !== 'text' && 
-                 question.type !== 'image-selection' && 
-                 question.type !== 'conditional' &&
-                 currentQuestion === questions.length - 1) {
-        submitResponses({ ...responses, [question.id]: answer });
-      }
     }
   };
 
@@ -188,7 +173,7 @@ const SymptomChecker = () => {
   const progress = Math.round(((currentQuestion + 1) / questions.length) * 100);
   const isMultiselect = question.multiselect;
   const currentAnswers = responses[question.id] || [];
-  const canProceed = isMultiselect || question.type === 'text' || question.type === 'image-selection' || question.type === 'conditional' || responses[question.id] !== undefined;
+  const canProceed = responses[question.id] !== undefined && responses[question.id] !== '' && (!isMultiselect || currentAnswers.length > 0);
 
   return (
     <div className={styles.container}>
@@ -376,27 +361,25 @@ const SymptomChecker = () => {
 
 
         </div>
-                  <div className={styles.navigationButtons}>
-            <button 
-              onClick={handleBack} 
-              className={styles.backButton}
-              disabled={currentQuestion === 0}
-            >
-              <ChevronLeft size={20} />
-              Back
-            </button>
-            
-           
-              <button 
-                onClick={handleNext}
-               
-                className={styles.continueButton}
-              >
-                Continue
-                <ChevronRight size={20} />
-              </button>
+        <div className={styles.navigationButtons}>
+          <button 
+            onClick={handleBack} 
+            className={styles.backButton}
+            disabled={currentQuestion === 0}
+          >
+            <ChevronLeft size={20} />
+            Back
+          </button>
           
-          </div>
+          <button 
+            onClick={handleNext}
+            disabled={!canProceed}
+            className={styles.continueButton}
+          >
+            Continue
+            <ChevronRight size={20} />
+          </button>
+        </div>
 
         {error && (
           <div className={styles.errorAlert}>
