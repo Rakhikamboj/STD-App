@@ -16,9 +16,6 @@ import swollen from '../assets/swollen-skin.png';
 export const referenceImagesMap = {
   herpes,
   scabies,
-
-
-  // Add placeholder for texture images if you have them
   smooth,
   bumpy,
   rough,
