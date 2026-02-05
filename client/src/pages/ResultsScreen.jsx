@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, AlertCircle, ChevronRight, MessageCircle, Share2, Copy, FileText } from 'lucide-react';
+import { InfoIcon, AlertCircle, ChevronRight, MessageCircle, Share2, Copy, FileText } from 'lucide-react';
 import styles from './ResultsScreen.module.css';
 
 const ResultsScreen = ({ result, onRestart }) => {
@@ -70,7 +70,7 @@ const ResultsScreen = ({ result, onRestart }) => {
         {/* Follow-up Banner */}
         {result.hasSymptoms && (
           <div className={styles.followUpBanner}>
-            <Clock className={styles.bannerIcon} size={24} />
+            <InfoIcon className={styles.bannerIcon} size={24} />
             <div>
               <h3 className={styles.bannerTitle}>Follow-Up Recommended</h3>
               <p className={styles.bannerText}>

@@ -7,7 +7,7 @@
 
 .result {
   max-width: 900px;
-  margin: 0 auto;
+  margin: 1rem auto;
 }
 
 /* Header */
@@ -17,17 +17,17 @@
 }
 
 .resultTitle {
-  font-size: 2.25rem;
+  font-size: 1.76rem;
   font-weight: 700;
   color: #1e293b;
-  margin-bottom: 0.75rem;
+
 }
 
 .resultSubtitle {
-  color: #64748b;
-  font-size: 1rem;
-  max-width: 600px;
-  margin: 0 auto;
+  color: #4b5563;
+  font-size: 0.98rem;
+  max-width: 620px;
+  margin: 0.5rem auto;
 }
 
 /* Follow-Up Banner */
