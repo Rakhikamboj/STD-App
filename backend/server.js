@@ -1,13 +1,13 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import connectDB from './config/db.js';
-
 import cors from 'cors';
-import dotenv from 'dotenv';
 import symptomsRouter from './routes/symptoms.js';
 import questionsRouter from './routes/questions.js';
 import doctorsRouter from './routes/doctors.js'
   
-dotenv.config();
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
