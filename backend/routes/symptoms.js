@@ -16,7 +16,7 @@ let model;
 
 if (process.env.GEMINI_API_KEY) {
   genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-latest' });
+  model = genAI.getGenerativeModel({ model: 'models/gemini-2.5-flash' });
 } else {
   console.warn('Warning: GEMINI_API_KEY not found in environment variables. AI analysis will be disabled.');
 }

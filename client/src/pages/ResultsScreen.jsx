@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InfoIcon, AlertCircle, ChevronRight, MessageCircle, Share2, Copy, FileText } from 'lucide-react';
+import { InfoIcon, AlertCircle, ChevronRight, MessageCircle, FileText, CheckCircle } from 'lucide-react';
 import styles from './ResultsScreen.module.css';
 
 const ResultsScreen = ({ result, onRestart }) => {
@@ -68,24 +68,34 @@ const ResultsScreen = ({ result, onRestart }) => {
         </div>
 
         {/* Follow-up Banner */}
-        {result.hasSymptoms && (
+        {result.hasSymptoms ? (
           <div className={styles.followUpBanner}>
-            <InfoIcon className={styles.bannerIcon} size={24} />
+            <InfoIcon className={styles.bannerIcon} size={22} />
             <div>
-              <h3 className={styles.bannerTitle}>Follow-Up Recommended</h3>
+              <h3 className={styles.bannerTitle}>Medical Evaluation Suggested</h3>
               <p className={styles.bannerText}>
-                Schedule a routine appointment in the coming week or two
+                Consider scheduling an appointment within the next few days
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className={styles.routineCareBanner}>
+            <CheckCircle className={styles.bannerIconGreen} size={24} />
+            <div>
+              <h3 className={styles.bannerTitle}>Routine Care</h3>
+              <p className={styles.bannerText}>
+                Consider this as part of regular health maintenance
               </p>
             </div>
           </div>
         )}
 
-        {/* AI Message */}
-        {result.aiMessage && (
-          <div className={styles.aiMessageBox}>
-            <p>{result.aiMessage}</p>
+        {/* AI Message - Commented out for now */}
+        {/* {result.aiMessage && (
+          <div className={styles.aiMessageSection}>
+            <p className={styles.aiMessage}>{result.aiMessage}</p>
           </div>
-        )}
+        )} */}
 
         {/* Possible Considerations */}
         {result.possibleConditions && result.possibleConditions.length > 0 && (
@@ -139,14 +149,14 @@ const ResultsScreen = ({ result, onRestart }) => {
               })}
             </div>
           </div>
-        )}
+        )}  
 
         {/* Your Next Steps */}
         {result.recommendations && result.recommendations.length > 0 && (
           <div className={styles.resultSection}>
             <h2 className={styles.sectionTitle}>Your Next Steps</h2>
             <div className={styles.nextSteps}>
-              {result.recommendations.slice(0, 4).map((rec, index) => (
+              {result.recommendations.slice(0, 5).map((rec, index) => (
                 <div key={index} className={styles.stepItem}>
                   <div className={styles.stepNumber}>{index + 1}</div>
                   <p className={styles.stepText}>{rec}</p>
@@ -189,7 +199,7 @@ const ResultsScreen = ({ result, onRestart }) => {
 
         {/* Bottom Action Cards */}
         <div className={styles.actionCards}>
-          <div className={styles.actionCard}>
+          <div className={styles.actionCard} onClick={() => window.location.href = '/education'}>
             <FileText className={styles.actionIcon} size={32} />
             <div>
               <h3 className={styles.actionTitle}>Education Hub</h3>
@@ -198,7 +208,7 @@ const ResultsScreen = ({ result, onRestart }) => {
             <ChevronRight className={styles.actionArrow} size={20} />
           </div>
 
-          <div className={styles.actionCard}>
+          <div className={styles.actionCard} onClick={() => window.location.href = '/community'}>
             <MessageCircle className={styles.actionIcon} size={32} />
             <div>
               <h3 className={styles.actionTitle}>Ask a Doctor</h3>

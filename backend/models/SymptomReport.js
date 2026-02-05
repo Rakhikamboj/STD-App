@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const symptomReportSchema = new mongoose.Schema(
   {
@@ -11,7 +11,7 @@ const symptomReportSchema = new mongoose.Schema(
     // Risk level determined by analysis
     riskLevel: {
       type: String,
-      enum: ['low', 'medium', 'high'],
+      enum: ["low", "medium", "high"],
       required: true,
     },
 
@@ -47,17 +47,22 @@ const symptomReportSchema = new mongoose.Schema(
       type: [String],
       default: [],
       enum: [
-        'herpes',
-        'warts',
-        'yeast',
-        'scabies',
-        'ulcer',
-        'clear',
-        'acne',
-        'patchy',
-        'rash',
-        'blisters',
-        'dry',
+        "herpes",
+        "warts",
+        "yeast",
+        "bumpy",
+        "scabies",
+        "smooth",
+        "ulcer",
+        "clear",
+        "acne",
+        "patchy",
+        "rash",
+        "blisters",
+        "dry",
+        "rough",
+        "inflamed",
+        "swollen",
       ],
     },
 
@@ -82,11 +87,11 @@ const symptomReportSchema = new mongoose.Schema(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
 // Virtual: days since report created
-symptomReportSchema.virtual('daysOld').get(function () {
+symptomReportSchema.virtual("daysOld").get(function () {
   return Math.floor((Date.now() - this.createdAt) / (1000 * 60 * 60 * 24));
 });
 
@@ -112,15 +117,15 @@ symptomReportSchema.statics.getAnalytics = async function (days = 30) {
       $group: {
         _id: null,
         total: { $sum: 1 },
-        withSymptoms: { $sum: { $cond: ['$hasSymptoms', 1, 0] } },
-        aiAnalyzed: { $sum: { $cond: ['$analyzedByAI', 1, 0] } },
+        withSymptoms: { $sum: { $cond: ["$hasSymptoms", 1, 0] } },
+        aiAnalyzed: { $sum: { $cond: ["$analyzedByAI", 1, 0] } },
         avgRiskLevel: {
           $avg: {
             $switch: {
               branches: [
-                { case: { $eq: ['$riskLevel', 'low'] }, then: 1 },
-                { case: { $eq: ['$riskLevel', 'medium'] }, then: 2 },
-                { case: { $eq: ['$riskLevel', 'high'] }, then: 3 },
+                { case: { $eq: ["$riskLevel", "low"] }, then: 1 },
+                { case: { $eq: ["$riskLevel", "medium"] }, then: 2 },
+                { case: { $eq: ["$riskLevel", "high"] }, then: 3 },
               ],
               default: 1,
             },
@@ -138,10 +143,10 @@ symptomReportSchema.statics.getCommonImages = async function (days = 30) {
 
   return this.aggregate([
     { $match: { createdAt: { $gte: startDate } } },
-    { $unwind: '$selectedReferenceImages' },
+    { $unwind: "$selectedReferenceImages" },
     {
       $group: {
-        _id: '$selectedReferenceImages',
+        _id: "$selectedReferenceImages",
         count: { $sum: 1 },
       },
     },
@@ -149,5 +154,5 @@ symptomReportSchema.statics.getCommonImages = async function (days = 30) {
   ]);
 };
 
-const SymptomReport = mongoose.model('SymptomReport', symptomReportSchema);
+const SymptomReport = mongoose.model("SymptomReport", symptomReportSchema);
 export default SymptomReport;

@@ -173,60 +173,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div className={styles.footerBrand}>
-            <div className={styles.footerLogo}>
-              <Heart className={styles.footerLogoIcon} />
-              <span className={styles.footerLogoText}>HealthPath</span>
-            </div>
-            <p className={styles.footerTagline}>
-              Reducing stigma and improving health literacy, one person at a time.
-            </p>
-          </div>
-          
-          <div className={styles.footerLinks}>
-            <div className={styles.footerColumn}>
-              <h4 className={styles.footerColumnTitle}>Resources</h4>
-              <ul className={styles.footerList}>
-                <li><Link to="/education">Education Hub</Link></li>
-                <li><Link to="/symptom-checker">Symptom Checker</Link></li>
-                <li><Link to="/community">Community Support</Link></li>
-                <li><Link to="/faq">FAQ</Link></li>
-              </ul>
-            </div>
-            
-            <div className={styles.footerColumn}>
-              <h4 className={styles.footerColumnTitle}>Support</h4>
-              <ul className={styles.footerList}>
-                <li><a href="tel:988">Crisis Hotline: 988</a></li>
-                <li><a href="tel:1-800-232-4636">CDC STI Hotline: 1-800-CDC-INFO</a></li>
-                <li><a href="https://gettested.cdc.gov" target="_blank" rel="noopener noreferrer">Find a Clinic</a></li>
-              </ul>
-            </div>
-            
-            <div className={styles.footerColumn}>
-              <h4 className={styles.footerColumnTitle}>Legal</h4>
-              <ul className={styles.footerList}>
-                <li><Link to="/privacy">Privacy Policy</Link></li>
-                <li><Link to="/terms">Terms of Service</Link></li>
-                <li><Link to="/disclaimer">Medical Disclaimer</Link></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        
-        <div className={styles.footerBottom}>
-          <p className={styles.footerDisclaimer}>
-            This platform provides educational information only and is not a substitute for professional medical advice. 
-            Always consult with a qualified healthcare provider for diagnosis and treatment.
-          </p>
-          <p className={styles.footerCopyright}>
-            © 2024 HealthPath. All rights reserved.
-          </p>
-        </div>
-      </footer>
+     
 
       {/* Quick Poll Component */}
       <QuickPoll />

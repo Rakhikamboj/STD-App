@@ -4,7 +4,7 @@ import {
   CheckCircle,
   Loader,
   HeartIcon,
-
+  
   ChevronRight,
   ChevronLeft,
   CheckIcon,
