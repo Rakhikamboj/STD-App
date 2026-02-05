@@ -8,7 +8,7 @@
 
 /* Hero Section */
 .hero {
-  padding: 4rem 1rem 4rem;
+  padding: 3rem 1rem 4rem;
   text-align: center;
 }
 
@@ -21,21 +21,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   background: #0d9488;
   border-radius: 1rem;
   margin-bottom: 2rem;
 }
 
 .heartIcon {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   color: white;
 }
 
 .heroTitle {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #1f2937;
   margin-bottom: 1.3rem;
@@ -47,9 +47,9 @@
 }
 
 .heroSubtitle {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #4b5563;
-  max-width: 900px;
+  max-width: 600px;
   margin: 0 auto 2.5rem;
   line-height: 1.5;
 }
@@ -58,10 +58,10 @@
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem 1.6rem;
+  padding: 1rem 1.5rem;
   background: #0d9488;
   color: white;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   border-radius: 0.75rem;
   text-decoration: none;
