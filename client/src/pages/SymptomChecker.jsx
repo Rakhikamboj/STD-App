@@ -373,7 +373,7 @@ const SymptomChecker = () => {
           
           <button 
             onClick={handleNext}
-            disabled={!canProceed}
+           
             className={styles.continueButton}
           >
             Continue
