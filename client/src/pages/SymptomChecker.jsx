@@ -386,16 +386,16 @@ const SymptomChecker = () => {
               Back
             </button>
             
-            {(isMultiselect || question?.type === 'text' || question?.type === 'image-selection' || question?.type === 'conditional') && (
+           
               <button 
                 onClick={handleNext}
-                disabled={!canProceed}
+               
                 className={styles.continueButton}
               >
                 Continue
                 <ChevronRight size={20} />
               </button>
-            )}
+          
           </div>
 
         {error && (
