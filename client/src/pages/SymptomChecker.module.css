@@ -2,7 +2,7 @@
 .container {
   min-height: 100vh;
   background: linear-gradient(to bottom right, #f2fdfa 0%, #ffffff 50%, #dbeafe 100%);
-  padding: 0rem 1rem;
+  padding: 0.6rem 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -64,12 +64,11 @@
 
 .sensitiveAlert {
   display: flex;
-  align-items: center;
   gap: 0.65rem;
   background: #f2f7ff;
   border: 1px solid #93c5fd;
   border-radius: 6px;
-  padding: 0.7rem 0.85rem;
+  padding: 0.9rem 0.85rem;
   margin-bottom: 1.25rem;
   font-size: 0.85rem;
   color: #3856b9;
@@ -117,7 +116,8 @@
 }
 
 .answerButton:hover {
-  border-color: #15a18a;
+  border-color: #4fd1c5
+;
   background: #f0fdfa;
   transform: translateY(-1px);
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AlertCircle, CheckCircle, Loader, Shield, ChevronRight, ChevronLeft, CheckIcon } from 'lucide-react';
+import { AlertCircle, CheckCircle, Loader, HeartIcon, Shield, ChevronRight, ChevronLeft, CheckIcon } from 'lucide-react';
 import api from '../utils/api';
 import ResultsScreen from './ResultsScreen';
 import styles from './SymptomChecker.module.css';
@@ -194,7 +194,7 @@ const SymptomChecker = () => {
         <div className={styles.questionCard}>
           {question?.sensitive && (
             <div className={styles.sensitiveAlert}>
-              <Shield size={18} />
+              <HeartIcon size={18} />
               <span>{question?.sensitiveMessage}</span>
             </div>
           )}
