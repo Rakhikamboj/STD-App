@@ -414,53 +414,7 @@ const EducationHub = () => {
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom, #e0f2f1, #ffffff)' }}>
       {/* Header */}
-      <header style={{
-        background: 'white',
-        borderBottom: '1px solid #e0e0e0',
-        padding: '1rem 2rem'
-      }}>
-        <div style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <div style={{
-              width: '40px',
-              height: '40px',
-              background: 'linear-gradient(135deg, #00897b, #26a69a)',
-              borderRadius: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontSize: '24px'
-            }}>♥</div>
-            <span style={{ fontSize: '20px', fontWeight: '600', color: '#333' }}>HealthPath</span>
-          </div>
-          <nav style={{ display: 'flex', gap: '2rem' }}>
-            {['Home', 'Symptom Checker', 'Education', 'Community', 'FAQ'].map(item => (
-              <a
-                key={item}
-                href="#"
-                style={{
-                  color: item === 'Education' ? '#00897b' : '#666',
-                  textDecoration: 'none',
-                  fontSize: '15px',
-                  fontWeight: item === 'Education' ? '600' : '500',
-                  padding: '0.5rem 1rem',
-                  border: item === 'Education' ? '2px solid #00897b' : 'none',
-                  borderRadius: '8px'
-                }}
-              >
-                {item}
-              </a>
-            ))}
-          </nav>
-        </div>
-      </header>
+    
 
       {/* Hero Section */}
       <div style={{
