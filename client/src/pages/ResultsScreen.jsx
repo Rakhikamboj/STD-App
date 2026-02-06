@@ -80,9 +80,9 @@ const ResultsScreen = ({ result, onRestart }) => {
           </div>
         ) : (
           <div className={styles.routineCareBanner}>
-            <CheckCircle className={styles.bannerIconGreen} size={24} />
+            <CheckCircle className={styles.bannerIconGreen} size={28} />
             <div>
-              <h3 className={styles.bannerTitle}>Routine Care</h3>
+              <h3 className={styles.bannerTitleGreen}>Routine Care</h3>
               <p className={styles.bannerText}>
                 Consider this as part of regular health maintenance
               </p>
@@ -129,9 +129,9 @@ const ResultsScreen = ({ result, onRestart }) => {
                     {conditionInfo && (
                       <>
                         <div className={styles.conditionMeta}>
-                          <div className={styles.metaItem}>
-                            <strong>Incubation Period:</strong> {conditionInfo.incubation}
-                          </div>
+                         <span className={styles.metaItem}>
+                          <strong>Incubation Period:</strong> {conditionInfo.incubation}
+                          </span>
                           <div className={styles.metaItem}>
                             <strong>Prevalence:</strong> {conditionInfo.prevalence}
                           </div>
@@ -226,17 +226,7 @@ const ResultsScreen = ({ result, onRestart }) => {
         </div>
 
         {/* Important Disclaimer */}
-        <div className={styles.disclaimer}>
-          <AlertCircle size={20} />
-          <div>
-            <strong>Important Medical Disclaimer:</strong>
-            <p>
-              This tool provides general guidance only and is not a substitute for professional medical advice. 
-              Always consult with a qualified healthcare provider for diagnosis, treatment recommendations, 
-              and personalized medical guidance.
-            </p>
-          </div>
-        </div>
+       
       </div>
     </div>
   );
