@@ -604,11 +604,13 @@
 @media (max-width: 480px) {
   .container {
     margin-top: 0rem;
+  
     padding-top: 0rem;
   }
 
   .checker {
     margin-top: 0.25rem 0.5rem 0.25rem 0.5rem;
+      width: 380px;
   }
 
   .questionCard {
@@ -649,6 +651,16 @@
   .progressSection {
     margin: 1.5rem auto;
   }
+  .privacyNotice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: #64748b;
+  font-size: 0.825rem;
+  text-align: center;
+  padding-top: 2rem;
+}
 }
 
 /* Large screens - keep form centered and at top */
