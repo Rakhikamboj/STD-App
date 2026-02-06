@@ -412,7 +412,7 @@ const EducationHub = () => {
   const workshopsUnlocked = quizzesCompleted >= 3;
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom, #e0f2f1, #ffffff)' }}>
+    <div style={{ minHeight: '100vh' }}>
       {/* Header */}
     
 

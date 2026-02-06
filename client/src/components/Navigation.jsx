@@ -1,27 +1,33 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Heart, UserPlus, Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './Navigation.module.css';
 
 const Navigation = () => {
   const location = useLocation();
   const isDoctorPath = location.pathname.startsWith('/doctor');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mobileMenuRef = useRef(null);
 
   // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Prevent body scroll when mobile menu is open
+  // Close menu when clicking outside
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
     if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+      document.addEventListener('mousedown', handleClickOutside);
     }
+
     return () => {
-      document.body.style.overflow = 'unset';
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isMobileMenuOpen]);
 
@@ -30,7 +36,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className={styles.nav}>
+    <nav className={styles.nav} ref={mobileMenuRef}>
       <div className={styles.container}>
         {/* Logo */}
         <Link to="/" className={styles.logo}>

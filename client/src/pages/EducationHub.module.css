@@ -108,7 +108,7 @@
 
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f4fdfb 0%, #ffffff 50%, #f0fdfa 100%);
+   background: linear-gradient(to bottom right, #f2fdfa 0%, #ffffff 50%, #dbeafe 100%);
   padding: 60px 20px 80px;
   position: relative;
   overflow: hidden;
@@ -121,7 +121,7 @@
   left: -10%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(13, 148, 136, 0.06) 0%, transparent 70%);
+  background: linear-gradient(to bottom right, #f2fdfa 0%, #ffffff 50%, #dbeafe 100%);
   border-radius: 50%;
   animation: float 12s ease-in-out infinite;
 }
