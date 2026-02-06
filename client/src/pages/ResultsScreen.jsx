@@ -123,14 +123,16 @@ const ResultsScreen = ({ result, onRestart }) => {
 
                     {conditionInfo && (
                       <>
-                        <span className={styles.conditionMeta}>
+                        <div className={styles.conditionMeta}>
                          <span className={styles.metaItem}>
                           <strong>Incubation Period:</strong> {conditionInfo.incubation}
                           </span>
                           <div className={styles.metaItem}>
                             <strong>Prevalence:</strong> {conditionInfo.prevalence}
                           </div>
-                        </span>
+                        </div>
+                        <div className={styles.descriptionNote}>{condition.descriptionNote}</div>
+
 
                         {isExpanded && (
                           <div className={styles.expandedInfo}>

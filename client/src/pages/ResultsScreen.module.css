@@ -114,17 +114,17 @@
 }
 
 .sectionTitle {
-  font-size: 1.245rem;
-  font-weight: 550;
+  font-size: 1.25rem;
+  font-weight: 520;
   color: #1e293b;
   margin-bottom: 0.75rem;
 }
 
 .sectionDescription {
   font-size: 0.85rem;
-  color: #4f5c6c;
+  color: #5c5c5c;
   margin-bottom: 1.5rem;
-  line-height: 1.6;
+
 }
 
 /* Condition Cards */
@@ -165,9 +165,17 @@
 
 .conditionDescription {
   font-size: 0.85rem;
-  color: #4a4a4a;
+  color: #646464;
 
   line-height: 1.5;
+}
+.descriptionNote {
+  font-size: 0.75rem;
+  padding: 0.7rem;
+  border-radius: 8px;
+  color: #4a4a4a;
+  background: #eff6ff;
+
 }
 
 .conditionMeta {
@@ -175,6 +183,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   padding-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .metaItem {

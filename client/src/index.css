@@ -35,8 +35,8 @@
   --gray-900: #111827;
   
   /* Typography */
-  --font-display: 'Inter', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-display: 'Inter';
+  --font-body: 'Inter';
   
   /* Spacing - increased values */
   --spacing-xs: 0.75rem;

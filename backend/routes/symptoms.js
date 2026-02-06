@@ -175,7 +175,8 @@ Please respond in the following JSON format:
   "possibleConditions": [
     {
       "condition": "Condition Name",
-      "description": "Reassuring description emphasizing treatability and positive outcomes"
+      "description": "A short one line description about the condition"
+      "descriptionNote": Reassuring description emphasizing treatability and positive outcomes" 
     }
   ],
   "supportiveMessage": "A warm, empathetic, encouraging message that validates their choice to seek information and provides hope and reassurance",
