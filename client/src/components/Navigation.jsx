@@ -1,14 +1,38 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, UserPlus } from 'lucide-react';
+import { Heart, UserPlus, Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import styles from './Navigation.module.css';
 
 const Navigation = () => {
   const location = useLocation();
   const isDoctorPath = location.pathname.startsWith('/doctor');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
     <nav className={styles.nav}>
       <div className={styles.container}>
+        {/* Logo */}
         <Link to="/" className={styles.logo}>
           <div className={styles.logoIconWrapper}>
             <Heart className={styles.logoIcon} />
@@ -16,47 +40,44 @@ const Navigation = () => {
           <span className={styles.logoText}>HealthPath</span>
         </Link>
 
-        <div className={styles.links}>
+        {/* Desktop Navigation Links */}
+        <div className={styles.desktopLinks}>
           {!isDoctorPath && (
             <>
               <Link 
                 to="/" 
                 className={`${styles.link} ${location.pathname === '/' ? styles.active : ''}`}
               >
-              
                 <span>Home</span>
               </Link>
               <Link 
                 to="/symptom-checker" 
                 className={`${styles.link} ${location.pathname === '/symptom-checker' ? styles.active : ''}`}
               >
-               
                 <span>Symptom Checker</span>
               </Link>
               <Link 
                 to="/education" 
                 className={`${styles.link} ${location.pathname === '/education' ? styles.active : ''}`}
               >
-                
                 <span>Education</span>
               </Link>
               <Link 
                 to="/community" 
                 className={`${styles.link} ${location.pathname === '/community' ? styles.active : ''}`}
               >
-               
                 <span>Community</span>
               </Link>
               <Link 
                 to="/faq" 
                 className={`${styles.link} ${location.pathname === '/faq' ? styles.active : ''}`}
               >
-               
                 <span>FAQ</span>
               </Link>
             </>
           )}
           
+          {/* Uncomment if needed */}
           {/* <Link 
             to="/doctor/login" 
             className={`${styles.doctorLink} ${isDoctorPath ? styles.active : ''}`}
@@ -65,6 +86,72 @@ const Navigation = () => {
             <span>For Doctors</span>
           </Link> */}
         </div>
+
+        {/* Mobile Menu Button */}
+        <button 
+          className={styles.mobileMenuButton}
+          onClick={toggleMobileMenu}
+          aria-label="Toggle menu"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+        {/* Mobile Navigation Menu */}
+        <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
+          <div className={styles.mobileMenuContent}>
+            {!isDoctorPath && (
+              <>
+                <Link 
+                  to="/" 
+                  className={`${styles.mobileLink} ${location.pathname === '/' ? styles.mobileActive : ''}`}
+                >
+                  <span>Home</span>
+                </Link>
+                <Link 
+                  to="/symptom-checker" 
+                  className={`${styles.mobileLink} ${location.pathname === '/symptom-checker' ? styles.mobileActive : ''}`}
+                >
+                  <span>Symptom Checker</span>
+                </Link>
+                <Link 
+                  to="/education" 
+                  className={`${styles.mobileLink} ${location.pathname === '/education' ? styles.mobileActive : ''}`}
+                >
+                  <span>Education</span>
+                </Link>
+                <Link 
+                  to="/community" 
+                  className={`${styles.mobileLink} ${location.pathname === '/community' ? styles.mobileActive : ''}`}
+                >
+                  <span>Community</span>
+                </Link>
+                <Link 
+                  to="/faq" 
+                  className={`${styles.mobileLink} ${location.pathname === '/faq' ? styles.mobileActive : ''}`}
+                >
+                  <span>FAQ</span>
+                </Link>
+              </>
+            )}
+            
+            {/* Uncomment if needed */}
+            {/* <Link 
+              to="/doctor/login" 
+              className={`${styles.mobileDoctorLink} ${isDoctorPath ? styles.mobileActive : ''}`}
+            >
+              <UserPlus size={20} />
+              <span>For Doctors</span>
+            </Link> */}
+          </div>
+        </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div 
+            className={styles.mobileMenuOverlay}
+            onClick={toggleMobileMenu}
+          />
+        )}
       </div>
     </nav>
   );
