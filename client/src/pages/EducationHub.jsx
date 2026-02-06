@@ -424,7 +424,7 @@ const EducationHub = () => {
 
         {/* Ask Assistant Button */}
         <button className={styles.assistantButton}>
-          <span className={styles.assistantEmoji}>💬</span>
+          <span className={styles.assistantIcon}><MessageCircle size={20} ></MessageCircle></span>
           Ask the Education Assistant
         </button>
 
