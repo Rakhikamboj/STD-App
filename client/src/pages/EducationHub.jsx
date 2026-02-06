@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BookOpen, Trophy, Calendar, Search, Clock, Eye, ChevronRight, CheckCircle, Lock, Video, MessageCircle, Users, MapPin } from 'lucide-react';
+import styles from './EducationHub.module.css';
 
 const EducationHub = () => {
   const [activeTab, setActiveTab] = useState('articles');
@@ -412,63 +413,23 @@ const EducationHub = () => {
   const workshopsUnlocked = quizzesCompleted >= 3;
 
   return (
-    <div style={{ minHeight: '100vh' }}>
-      {/* Header */}
-    
-
+    <div className={styles.container}>
       {/* Hero Section */}
-      <div style={{
-        textAlign: 'center',
-        padding: '4rem 2rem 2rem',
-        maxWidth: '1400px',
-        margin: '0 auto'
-      }}>
-        <h1 style={{
-          fontSize: '48px',
-          fontWeight: '700',
-          color: '#1a1a1a',
-          marginBottom: '1rem'
-        }}>
-          Education Hub
-        </h1>
-        <p style={{
-          fontSize: '18px',
-          color: '#666',
-          maxWidth: '700px',
-          margin: '0 auto 2rem',
-          lineHeight: '1.6'
-        }}>
+      <div className={styles.hero}>
+        <h1 className={styles.heroTitle}>Education Hub</h1>
+        <p className={styles.heroDescription}>
           Knowledge is power. Explore evidence-based information about sexual health, testing,
           and prevention in a judgment-free space.
         </p>
 
         {/* Ask Assistant Button */}
-        <button style={{
-          background: 'linear-gradient(135deg, #00897b, #1976d2)',
-          color: 'white',
-          border: 'none',
-          padding: '14px 28px',
-          borderRadius: '25px',
-          fontSize: '16px',
-          fontWeight: '600',
-          cursor: 'pointer',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          marginBottom: '3rem',
-          boxShadow: '0 4px 12px rgba(0, 137, 123, 0.3)'
-        }}>
-          <span style={{ fontSize: '20px' }}>💬</span>
+        <button className={styles.assistantButton}>
+          <span className={styles.assistantEmoji}>💬</span>
           Ask the Education Assistant
         </button>
 
         {/* Tabs */}
-        <div style={{
-          display: 'flex',
-          gap: '1rem',
-          justifyContent: 'center',
-          marginBottom: '2rem'
-        }}>
+        <div className={styles.tabsContainer}>
           {[
             { id: 'articles', label: 'Articles', icon: BookOpen },
             { id: 'challenge', label: 'Challenge Yourself', icon: Trophy, badge: `${quizzesCompleted}/3` },
@@ -479,48 +440,15 @@ const EducationHub = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                style={{
-                  background: activeTab === tab.id 
-                    ? 'linear-gradient(135deg, #00897b, #1976d2)'
-                    : 'white',
-                  color: activeTab === tab.id ? 'white' : '#666',
-                  border: activeTab === tab.id ? 'none' : '2px solid #e0e0e0',
-                  padding: '12px 24px',
-                  borderRadius: '25px',
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  position: 'relative'
-                }}
+                className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ''}`}
               >
                 <Icon size={18} />
                 {tab.label}
                 {tab.locked && (
-                  <span style={{
-                    background: '#ff6b35',
-                    color: 'white',
-                    fontSize: '11px',
-                    padding: '2px 8px',
-                    borderRadius: '10px',
-                    fontWeight: '700'
-                  }}>
-                    Locked
-                  </span>
+                  <span className={styles.tabLockedBadge}>Locked</span>
                 )}
                 {tab.badge && (
-                  <span style={{
-                    background: '#fbc02d',
-                    color: '#5d4037',
-                    fontSize: '11px',
-                    padding: '2px 8px',
-                    borderRadius: '10px',
-                    fontWeight: '700'
-                  }}>
-                    {tab.badge}
-                  </span>
+                  <span className={styles.tabBadge}>{tab.badge}</span>
                 )}
               </button>
             );
@@ -530,64 +458,27 @@ const EducationHub = () => {
 
       {/* Articles Tab Content */}
       {activeTab === 'articles' && (
-        <div style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: '0 2rem 4rem'
-        }}>
+        <div className={styles.content}>
           {/* Search Bar */}
-          <div style={{
-            background: 'white',
-            borderRadius: '12px',
-            padding: '12px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            marginBottom: '2rem',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-            border: '2px solid #f0f0f0'
-          }}>
+          <div className={styles.searchBar}>
             <Search size={20} color="#999" />
             <input
               type="text"
               placeholder="Search articles..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                border: 'none',
-                outline: 'none',
-                flex: 1,
-                fontSize: '15px',
-                color: '#333'
-              }}
+              className={styles.searchInput}
             />
           </div>
 
           {/* Category Filters */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            marginBottom: '3rem',
-            overflowX: 'auto',
-            paddingBottom: '8px'
-          }}>
-            <div style={{ color: '#666', fontSize: '20px' }}>🔍</div>
+          <div className={styles.categoryFilters}>
+            <div className={styles.filterIcon}>🔍</div>
             {categories.map(cat => (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                style={{
-                  background: selectedCategory === cat.id ? '#00897b' : 'white',
-                  color: selectedCategory === cat.id ? 'white' : '#666',
-                  border: selectedCategory === cat.id ? 'none' : '2px solid #e0e0e0',
-                  padding: '10px 20px',
-                  borderRadius: '20px',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap'
-                }}
+                className={`${styles.categoryButton} ${selectedCategory === cat.id ? styles.categoryButtonActive : ''}`}
               >
                 {cat.label}
               </button>
@@ -596,96 +487,23 @@ const EducationHub = () => {
 
           {/* Myth Busting Section */}
           {selectedCategory === 'all' && (
-            <div style={{ marginBottom: '3rem' }}>
-              <h2 style={{
-                fontSize: '28px',
-                fontWeight: '700',
-                color: '#1a1a1a',
-                marginBottom: '1.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}>
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>
                 ✨ Myth Busting
               </h2>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))',
-                gap: '1.5rem'
-              }}>
+              <div className={styles.mythGrid}>
                 {mythBusters.map(myth => (
-                  <div
-                    key={myth.id}
-                    style={{
-                      background: 'linear-gradient(135deg, #fff9e6, #fffbf0)',
-                      border: '2px solid #ffd54f',
-                      borderRadius: '16px',
-                      padding: '24px',
-                      cursor: 'pointer',
-                      transition: 'transform 0.2s, box-shadow 0.2s'
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-4px)';
-                      e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 193, 7, 0.2)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}
-                  >
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
-                      marginBottom: '12px'
-                    }}>
-                      <span style={{
-                        background: '#fbc02d',
-                        color: '#5d4037',
-                        fontSize: '11px',
-                        padding: '4px 12px',
-                        borderRadius: '12px',
-                        fontWeight: '700',
-                        letterSpacing: '0.5px'
-                      }}>
-                        {myth.tag}
-                      </span>
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        color: '#666',
-                        fontSize: '14px'
-                      }}>
+                  <div key={myth.id} className={styles.mythCard}>
+                    <div className={styles.mythCardHeader}>
+                      <span className={styles.mythTag}>{myth.tag}</span>
+                      <div className={styles.readTime}>
                         <Clock size={14} />
                         {myth.readTime}
                       </div>
                     </div>
-                    <h3 style={{
-                      fontSize: '20px',
-                      fontWeight: '700',
-                      color: '#1a1a1a',
-                      marginBottom: '8px',
-                      lineHeight: '1.4'
-                    }}>
-                      {myth.title}
-                    </h3>
-                    <p style={{
-                      fontSize: '15px',
-                      color: '#555',
-                      lineHeight: '1.6',
-                      marginBottom: '12px'
-                    }}>
-                      {myth.description}
-                    </p>
-                    <span style={{
-                      color: '#00897b',
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      display: 'inline-block'
-                    }}>
-                      Read More →
-                    </span>
+                    <h3 className={styles.mythTitle}>{myth.title}</h3>
+                    <p className={styles.mythDescription}>{myth.description}</p>
+                    <span className={styles.readMore}>Read More →</span>
                   </div>
                 ))}
               </div>
@@ -694,105 +512,22 @@ const EducationHub = () => {
 
           {/* All Articles Section */}
           <div>
-            <h2 style={{
-              fontSize: '28px',
-              fontWeight: '700',
-              color: '#1a1a1a',
-              marginBottom: '1.5rem'
-            }}>
-              All Articles
-            </h2>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))',
-              gap: '1.5rem'
-            }}>
+            <h2 className={styles.sectionTitle}>All Articles</h2>
+            <div className={styles.articlesGrid}>
               {filteredArticles.map(article => (
-                <div
-                  key={article.id}
-                  style={{
-                    background: 'white',
-                    borderRadius: '16px',
-                    padding: '24px',
-                    cursor: 'pointer',
-                    transition: 'transform 0.2s, box-shadow 0.2s',
-                    border: '1px solid #f0f0f0'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.1)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    marginBottom: '12px'
-                  }}>
-                    <span style={{
-                      background: '#b2dfdb',
-                      color: '#00695c',
-                      fontSize: '11px',
-                      padding: '4px 12px',
-                      borderRadius: '12px',
-                      fontWeight: '700',
-                      letterSpacing: '0.5px'
-                    }}>
-                      {article.tag}
-                    </span>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      color: '#666',
-                      fontSize: '14px'
-                    }}>
+                <div key={article.id} className={styles.articleCard}>
+                  <div className={styles.articleCardHeader}>
+                    <span className={styles.articleTag}>{article.tag}</span>
+                    <div className={styles.readTime}>
                       <Clock size={14} />
                       {article.readTime}
                     </div>
                   </div>
-                  <h3 style={{
-                    fontSize: '19px',
-                    fontWeight: '700',
-                    color: '#1a1a1a',
-                    marginBottom: '8px',
-                    lineHeight: '1.4'
-                  }}>
-                    {article.title}
-                  </h3>
-                  <p style={{
-                    fontSize: '15px',
-                    color: '#555',
-                    lineHeight: '1.6',
-                    marginBottom: '16px'
-                  }}>
-                    {article.description}
-                  </p>
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}>
-                    <span style={{
-                      color: '#00897b',
-                      fontSize: '14px',
-                      fontWeight: '600'
-                    }}>
-                      Read Article
-                    </span>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      color: '#999',
-                      fontSize: '13px'
-                    }}>
-                      {article.views} views
-                    </div>
+                  <h3 className={styles.articleTitle}>{article.title}</h3>
+                  <p className={styles.articleDescription}>{article.description}</p>
+                  <div className={styles.articleFooter}>
+                    <span className={styles.readArticle}>Read Article</span>
+                    <div className={styles.views}>{article.views} views</div>
                   </div>
                 </div>
               ))}
@@ -800,26 +535,9 @@ const EducationHub = () => {
           </div>
 
           {/* Approach Section */}
-          <div style={{
-            background: 'linear-gradient(135deg, #00897b, #1976d2)',
-            borderRadius: '20px',
-            padding: '3rem',
-            marginTop: '4rem',
-            color: 'white'
-          }}>
-            <h2 style={{
-              fontSize: '32px',
-              fontWeight: '700',
-              marginBottom: '2rem',
-              textAlign: 'left'
-            }}>
-              Our Approach to Education
-            </h2>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '2rem'
-            }}>
+          <div className={styles.approachSection}>
+            <h2 className={styles.approachTitle}>Our Approach to Education</h2>
+            <div className={styles.approachGrid}>
               {[
                 {
                   title: 'Evidence-Based',
@@ -835,20 +553,8 @@ const EducationHub = () => {
                 }
               ].map((item, idx) => (
                 <div key={idx}>
-                  <h3 style={{
-                    fontSize: '22px',
-                    fontWeight: '700',
-                    marginBottom: '0.5rem'
-                  }}>
-                    {item.title}
-                  </h3>
-                  <p style={{
-                    fontSize: '16px',
-                    lineHeight: '1.6',
-                    opacity: 0.95
-                  }}>
-                    {item.description}
-                  </p>
+                  <h3 className={styles.approachItemTitle}>{item.title}</h3>
+                  <p className={styles.approachItemDescription}>{item.description}</p>
                 </div>
               ))}
             </div>
@@ -858,174 +564,48 @@ const EducationHub = () => {
 
       {/* Challenge Yourself Tab */}
       {activeTab === 'challenge' && !currentQuiz && (
-        <div style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: '0 2rem 4rem'
-        }}>
+        <div className={styles.content}>
           {/* Header Card */}
-          <div style={{
-            background: 'linear-gradient(135deg, #fff9e6, #fffbf0)',
-            border: '2px solid #ffd54f',
-            borderRadius: '20px',
-            padding: '2rem',
-            marginBottom: '3rem'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-              <div style={{
-                width: '60px',
-                height: '60px',
-                background: '#ff9800',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '28px',
-                flexShrink: 0
-              }}>
-                🏆
-              </div>
-              <div style={{ flex: 1 }}>
-                <h2 style={{
-                  fontSize: '28px',
-                  fontWeight: '700',
-                  color: '#1a1a1a',
-                  marginBottom: '0.5rem'
-                }}>
-                  Challenge Yourself!
-                </h2>
-                <p style={{
-                  fontSize: '16px',
-                  color: '#666',
-                  lineHeight: '1.6'
-                }}>
+          <div className={styles.challengeHeader}>
+            <div className={styles.challengeHeaderContent}>
+              <div className={styles.challengeIcon}>🏆</div>
+              <div className={styles.challengeHeaderText}>
+                <h2 className={styles.challengeTitle}>Challenge Yourself!</h2>
+                <p className={styles.challengeDescription}>
                   Test your knowledge with our myth-busting quizzes. Complete 3 quizzes to unlock exclusive access to expert-led workshops!
                 </p>
               </div>
             </div>
 
             {/* Progress Bar */}
-            <div style={{ marginTop: '1.5rem' }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '0.5rem'
-              }}>
-                <span style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>
-                  Your Progress
-                </span>
-                <span style={{ fontSize: '14px', fontWeight: '700', color: '#00897b' }}>
-                  {quizzesCompleted}/3 quizzes
-                </span>
+            <div className={styles.progressContainer}>
+              <div className={styles.progressHeader}>
+                <span className={styles.progressLabel}>Your Progress</span>
+                <span className={styles.progressCount}>{quizzesCompleted}/3 quizzes</span>
               </div>
-              <div style={{
-                width: '100%',
-                height: '12px',
-                background: '#e0e0e0',
-                borderRadius: '6px',
-                overflow: 'hidden'
-              }}>
-                <div style={{
-                  width: `${(quizzesCompleted / 3) * 100}%`,
-                  height: '100%',
-                  background: 'linear-gradient(90deg, #00897b, #26a69a)',
-                  transition: 'width 0.3s ease'
-                }}></div>
+              <div className={styles.progressBar}>
+                <div 
+                  className={styles.progressFill}
+                  style={{ width: `${(quizzesCompleted / 3) * 100}%` }}
+                ></div>
               </div>
             </div>
           </div>
 
           {/* Quiz Cards */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-            gap: '2rem'
-          }}>
+          <div className={styles.quizGrid}>
             {quizzes.map((quiz, idx) => {
               const isCompleted = completedQuizzes.includes(quiz.id);
               return (
-                <div
-                  key={quiz.id}
-                  style={{
-                    background: 'white',
-                    borderRadius: '16px',
-                    padding: '28px',
-                    border: '2px solid #f0f0f0',
-                    position: 'relative',
-                    transition: 'transform 0.2s, box-shadow 0.2s'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.1)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  <div style={{
-                    width: '48px',
-                    height: '48px',
-                    background: 'linear-gradient(135deg, #00897b, #26a69a)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontSize: '22px',
-                    fontWeight: '700',
-                    marginBottom: '1rem'
-                  }}>
-                    {idx + 1}
-                  </div>
-                  
-                  <h3 style={{
-                    fontSize: '22px',
-                    fontWeight: '700',
-                    color: '#1a1a1a',
-                    marginBottom: '0.5rem'
-                  }}>
-                    {quiz.title}
-                  </h3>
-                  
-                  <p style={{
-                    fontSize: '15px',
-                    color: '#666',
-                    lineHeight: '1.6',
-                    marginBottom: '1.5rem'
-                  }}>
-                    {quiz.description}
-                  </p>
-
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}>
-                    <span style={{
-                      fontSize: '13px',
-                      color: '#999',
-                      fontWeight: '500'
-                    }}>
-                      {quiz.difficulty}
-                    </span>
-                    
+                <div key={quiz.id} className={styles.quizCard}>
+                  <div className={styles.quizNumber}>{idx + 1}</div>
+                  <h3 className={styles.quizTitle}>{quiz.title}</h3>
+                  <p className={styles.quizDescription}>{quiz.description}</p>
+                  <div className={styles.quizFooter}>
+                    <span className={styles.quizDifficulty}>{quiz.difficulty}</span>
                     <button
                       onClick={() => handleStartQuiz(quiz)}
-                      style={{
-                        background: isCompleted ? '#4caf50' : 'linear-gradient(135deg, #00897b, #1976d2)',
-                        color: 'white',
-                        border: 'none',
-                        padding: '10px 20px',
-                        borderRadius: '20px',
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}
+                      className={`${styles.startQuizButton} ${isCompleted ? styles.completedQuizButton : ''}`}
                     >
                       {isCompleted ? (
                         <>
@@ -1033,9 +613,7 @@ const EducationHub = () => {
                           Retake Quiz
                         </>
                       ) : (
-                        <>
-                          Start Quiz →
-                        </>
+                        <>Start Quiz →</>
                       )}
                     </button>
                   </div>
@@ -1045,26 +623,9 @@ const EducationHub = () => {
           </div>
 
           {/* Approach Section */}
-          <div style={{
-            background: 'linear-gradient(135deg, #00897b, #1976d2)',
-            borderRadius: '20px',
-            padding: '3rem',
-            marginTop: '4rem',
-            color: 'white'
-          }}>
-            <h2 style={{
-              fontSize: '32px',
-              fontWeight: '700',
-              marginBottom: '2rem',
-              textAlign: 'left'
-            }}>
-              Our Approach to Education
-            </h2>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '2rem'
-            }}>
+          <div className={styles.approachSection}>
+            <h2 className={styles.approachTitle}>Our Approach to Education</h2>
+            <div className={styles.approachGrid}>
               {[
                 {
                   title: 'Evidence-Based',
@@ -1080,20 +641,8 @@ const EducationHub = () => {
                 }
               ].map((item, idx) => (
                 <div key={idx}>
-                  <h3 style={{
-                    fontSize: '22px',
-                    fontWeight: '700',
-                    marginBottom: '0.5rem'
-                  }}>
-                    {item.title}
-                  </h3>
-                  <p style={{
-                    fontSize: '16px',
-                    lineHeight: '1.6',
-                    opacity: 0.95
-                  }}>
-                    {item.description}
-                  </p>
+                  <h3 className={styles.approachItemTitle}>{item.title}</h3>
+                  <p className={styles.approachItemDescription}>{item.description}</p>
                 </div>
               ))}
             </div>
@@ -1103,79 +652,35 @@ const EducationHub = () => {
 
       {/* Quiz View */}
       {activeTab === 'challenge' && currentQuiz && (
-        <div style={{
-          maxWidth: '800px',
-          margin: '0 auto',
-          padding: '0 2rem 4rem'
-        }}>
-          <button
-            onClick={() => setCurrentQuiz(null)}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#00897b',
-              fontSize: '15px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              marginBottom: '2rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}
-          >
+        <div className={styles.quizView}>
+          <button onClick={() => setCurrentQuiz(null)} className={styles.backButton}>
             ← Back to Quizzes
           </button>
 
-          <div style={{
-            background: 'white',
-            borderRadius: '20px',
-            padding: '3rem',
-            boxShadow: '0 4px 24px rgba(0,0,0,0.08)'
-          }}>
+          <div className={styles.quizContainer}>
             {/* Progress */}
-            <div style={{ marginBottom: '2rem' }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '0.5rem'
-              }}>
-                <span style={{ fontSize: '14px', color: '#666' }}>
+            <div className={styles.quizProgress}>
+              <div className={styles.quizProgressHeader}>
+                <span className={styles.quizProgressLabel}>
                   Question {currentQuestion + 1} of {currentQuiz.questions.length}
                 </span>
-                <span style={{ fontSize: '14px', fontWeight: '600', color: '#00897b' }}>
+                <span className={styles.quizProgressScore}>
                   Score: {quizScore}/{currentQuiz.questions.length}
                 </span>
               </div>
-              <div style={{
-                width: '100%',
-                height: '8px',
-                background: '#e0e0e0',
-                borderRadius: '4px',
-                overflow: 'hidden'
-              }}>
-                <div style={{
-                  width: `${((currentQuestion + 1) / currentQuiz.questions.length) * 100}%`,
-                  height: '100%',
-                  background: 'linear-gradient(90deg, #00897b, #1976d2)',
-                  transition: 'width 0.3s ease'
-                }}></div>
+              <div className={styles.progressBar}>
+                <div 
+                  className={styles.progressFill}
+                  style={{ width: `${((currentQuestion + 1) / currentQuiz.questions.length) * 100}%` }}
+                ></div>
               </div>
             </div>
 
             {/* Question */}
-            <h2 style={{
-              fontSize: '24px',
-              fontWeight: '600',
-              color: '#1a1a1a',
-              marginBottom: '2rem',
-              lineHeight: '1.4'
-            }}>
-              {currentQuiz.questions[currentQuestion].question}
-            </h2>
+            <h2 className={styles.question}>{currentQuiz.questions[currentQuestion].question}</h2>
 
             {/* Options */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+            <div className={styles.optionsContainer}>
               {currentQuiz.questions[currentQuestion].options.map((option, idx) => {
                 const isCorrect = idx === currentQuiz.questions[currentQuestion].correctAnswer;
                 const isSelected = idx === selectedAnswer;
@@ -1186,24 +691,9 @@ const EducationHub = () => {
                     key={idx}
                     onClick={() => handleAnswerSelect(idx)}
                     disabled={showFeedback}
-                    style={{
-                      background: showResult && isSelected
-                        ? isCorrect ? '#c8e6c9' : 'white'
-                        : isSelected ? '#f0f0f0' : 'white',
-                      border: showResult && isSelected && isCorrect
-                        ? '2px solid #4caf50'
-                        : '2px solid #e0e0e0',
-                      padding: '16px 20px',
-                      borderRadius: '12px',
-                      fontSize: '15px',
-                      color: '#333',
-                      cursor: showFeedback ? 'default' : 'pointer',
-                      textAlign: 'left',
-                      transition: 'all 0.2s',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px'
-                    }}
+                    className={`${styles.optionButton} ${
+                      showResult && isSelected && isCorrect ? styles.optionCorrect : ''
+                    } ${isSelected && !showResult ? styles.optionSelected : ''}`}
                   >
                     {showResult && isSelected && isCorrect && (
                       <CheckCircle size={20} color="#4caf50" />
@@ -1216,36 +706,20 @@ const EducationHub = () => {
 
             {/* Feedback */}
             {showFeedback && (
-              <div style={{
-                background: selectedAnswer === currentQuiz.questions[currentQuestion].correctAnswer
-                  ? '#c8e6c9'
-                  : '#ffebee',
-                border: selectedAnswer === currentQuiz.questions[currentQuestion].correctAnswer
-                  ? '2px solid #4caf50'
-                  : '2px solid #ef5350',
-                borderRadius: '12px',
-                padding: '16px 20px',
-                marginBottom: '2rem'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '8px',
-                  marginBottom: '8px'
-                }}>
+              <div className={`${styles.feedback} ${
+                selectedAnswer === currentQuiz.questions[currentQuestion].correctAnswer 
+                  ? styles.feedbackCorrect 
+                  : styles.feedbackIncorrect
+              }`}>
+                <div className={styles.feedbackHeader}>
                   <CheckCircle size={20} color="#4caf50" />
-                  <span style={{ fontWeight: '700', color: '#1a1a1a' }}>
+                  <span className={styles.feedbackTitle}>
                     {selectedAnswer === currentQuiz.questions[currentQuestion].correctAnswer
                       ? 'Correct!'
                       : 'Not quite right'}
                   </span>
                 </div>
-                <p style={{
-                  fontSize: '14px',
-                  color: '#333',
-                  lineHeight: '1.6',
-                  margin: 0
-                }}>
+                <p className={styles.feedbackText}>
                   {currentQuiz.questions[currentQuestion].feedback}
                 </p>
               </div>
@@ -1256,41 +730,12 @@ const EducationHub = () => {
               <button
                 onClick={handleSubmitAnswer}
                 disabled={selectedAnswer === null}
-                style={{
-                  background: selectedAnswer !== null
-                    ? 'linear-gradient(135deg, #00897b, #1976d2)'
-                    : '#e0e0e0',
-                  color: 'white',
-                  border: 'none',
-                  padding: '14px 28px',
-                  borderRadius: '25px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  cursor: selectedAnswer !== null ? 'pointer' : 'not-allowed',
-                  width: '100%'
-                }}
+                className={`${styles.submitButton} ${selectedAnswer === null ? styles.submitButtonDisabled : ''}`}
               >
                 Submit Answer
               </button>
             ) : (
-              <button
-                onClick={handleNextQuestion}
-                style={{
-                  background: 'linear-gradient(135deg, #00897b, #1976d2)',
-                  color: 'white',
-                  border: 'none',
-                  padding: '14px 28px',
-                  borderRadius: '25px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px'
-                }}
-              >
+              <button onClick={handleNextQuestion} className={styles.nextButton}>
                 {currentQuestion < currentQuiz.questions.length - 1 ? 'Next Question' : 'Finish Quiz'}
                 <ChevronRight size={18} />
               </button>
@@ -1301,230 +746,91 @@ const EducationHub = () => {
 
       {/* Workshops Tab */}
       {activeTab === 'workshops' && (
-        <div style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: '0 2rem 4rem'
-        }}>
+        <div className={styles.content}>
           {workshopsUnlocked ? (
             <>
               {/* Success Banner */}
-              <div style={{
-                background: 'linear-gradient(135deg, #c8e6c9, #e0f2f1)',
-                border: '2px solid #4caf50',
-                borderRadius: '16px',
-                padding: '1.5rem 2rem',
-                marginBottom: '3rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem'
-              }}>
-                <div style={{ fontSize: '32px' }}>🎉</div>
+              <div className={styles.successBanner}>
+                <div className={styles.successEmoji}>🎉</div>
                 <div>
-                  <h3 style={{
-                    fontSize: '20px',
-                    fontWeight: '700',
-                    color: '#1a1a1a',
-                    marginBottom: '0.25rem'
-                  }}>
-                    Workshops & Events Unlocked!
-                  </h3>
-                  <p style={{
-                    fontSize: '15px',
-                    color: '#555',
-                    margin: 0
-                  }}>
+                  <h3 className={styles.successTitle}>Workshops & Events Unlocked!</h3>
+                  <p className={styles.successDescription}>
                     Great job completing 3 quizzes! You now have access to all our expert-led workshops and AMA sessions. Choose a session below and join anonymously with just a nickname.
                   </p>
                 </div>
               </div>
 
               {/* Ask Me Anything Events */}
-              <div style={{ marginBottom: '3rem' }}>
-                <h2 style={{
-                  fontSize: '28px',
-                  fontWeight: '700',
-                  color: '#1a1a1a',
-                  marginBottom: '1.5rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px'
-                }}>
+              <div className={styles.section}>
+                <h2 className={styles.workshopSectionTitle}>
                   <MessageCircle size={28} color="#a855f7" />
                   Ask Me Anything Events
                 </h2>
                 
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1.5rem'
-                }}>
+                <div className={styles.workshopList}>
                   {workshops.filter(w => w.type === 'ama').map(workshop => (
-                    <div
-                      key={workshop.id}
-                      style={{
-                        background: 'white',
-                        borderRadius: '16px',
-                        padding: '2rem',
-                        border: '2px solid #f0f0f0'
-                      }}
-                    >
-                      <span style={{
-                        background: '#e9d5ff',
-                        color: '#7c3aed',
-                        fontSize: '11px',
-                        padding: '4px 12px',
-                        borderRadius: '12px',
-                        fontWeight: '700',
-                        letterSpacing: '0.5px',
-                        display: 'inline-block',
-                        marginBottom: '1rem'
-                      }}>
+                    <div key={workshop.id} className={styles.workshopCard}>
+                      <span className={styles.amaTag}>
                         💬 {workshop.category}
                       </span>
 
-                      <h3 style={{
-                        fontSize: '22px',
-                        fontWeight: '700',
-                        color: '#1a1a1a',
-                        marginBottom: '0.75rem'
-                      }}>
-                        {workshop.title}
-                      </h3>
-
-                      <p style={{
-                        fontSize: '15px',
-                        color: '#666',
-                        lineHeight: '1.6',
-                        marginBottom: '1.5rem'
-                      }}>
-                        {workshop.description}
-                      </p>
+                      <h3 className={styles.workshopTitle}>{workshop.title}</h3>
+                      <p className={styles.workshopDescription}>{workshop.description}</p>
 
                       {/* Event Details */}
-                      <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                        gap: '1rem',
-                        marginBottom: '1.5rem',
-                        padding: '1rem 0',
-                        borderTop: '1px solid #f0f0f0',
-                        borderBottom: '1px solid #f0f0f0'
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div className={styles.eventDetails}>
+                        <div className={styles.eventDetail}>
                           <Calendar size={18} color="#a855f7" />
                           <div>
-                            <div style={{ fontSize: '13px', color: '#999' }}>Date</div>
-                            <div style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>
-                              {workshop.date}
-                            </div>
-                            <div style={{ fontSize: '13px', color: '#666' }}>{workshop.time}</div>
+                            <div className={styles.eventDetailLabel}>Date</div>
+                            <div className={styles.eventDetailValue}>{workshop.date}</div>
+                            <div className={styles.eventDetailTime}>{workshop.time}</div>
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div className={styles.eventDetail}>
                           <Clock size={18} color="#a855f7" />
                           <div>
-                            <div style={{ fontSize: '13px', color: '#999' }}>Duration</div>
-                            <div style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>
-                              {workshop.duration}
-                            </div>
+                            <div className={styles.eventDetailLabel}>Duration</div>
+                            <div className={styles.eventDetailValue}>{workshop.duration}</div>
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div className={styles.eventDetail}>
                           {workshop.format === 'Live Video' ? (
                             <Video size={18} color="#a855f7" />
                           ) : (
                             <MessageCircle size={18} color="#a855f7" />
                           )}
                           <div>
-                            <div style={{ fontSize: '13px', color: '#999' }}>Format</div>
-                            <div style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>
-                              {workshop.format}
-                            </div>
+                            <div className={styles.eventDetailLabel}>Format</div>
+                            <div className={styles.eventDetailValue}>{workshop.format}</div>
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div className={styles.eventDetail}>
                           <ChevronRight size={18} color="#a855f7" />
                           <div>
-                            <div style={{ fontSize: '13px', color: '#999' }}>Questions</div>
-                            <div style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>
-                              {workshop.questionsSubmitted} questions submitted
-                            </div>
+                            <div className={styles.eventDetailLabel}>Questions</div>
+                            <div className={styles.eventDetailValue}>{workshop.questionsSubmitted} questions submitted</div>
                           </div>
                         </div>
                       </div>
 
                       {/* Instructor Info */}
-                      <div style={{
-                        background: '#faf5ff',
-                        borderRadius: '12px',
-                        padding: '1rem',
-                        marginBottom: '1.5rem'
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                          <div style={{
-                            width: '48px',
-                            height: '48px',
-                            background: '#a855f7',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontSize: '20px',
-                            fontWeight: '700',
-                            flexShrink: 0
-                          }}>
-                            {workshop.instructor.avatar}
-                          </div>
+                      <div className={styles.instructorInfo}>
+                        <div className={styles.instructorHeader}>
+                          <div className={styles.instructorAvatarAma}>{workshop.instructor.avatar}</div>
                           <div>
-                            <div style={{
-                              fontSize: '16px',
-                              fontWeight: '700',
-                              color: '#1a1a1a',
-                              marginBottom: '2px'
-                            }}>
-                              {workshop.instructor.name}
-                            </div>
-                            <div style={{
-                              fontSize: '13px',
-                              color: '#a855f7',
-                              fontWeight: '600',
-                              marginBottom: '8px'
-                            }}>
-                              {workshop.instructor.title}
-                            </div>
-                            <p style={{
-                              fontSize: '14px',
-                              color: '#555',
-                              lineHeight: '1.5',
-                              margin: 0
-                            }}>
-                              {workshop.instructor.bio}
-                            </p>
+                            <div className={styles.instructorName}>{workshop.instructor.name}</div>
+                            <div className={styles.instructorTitleAma}>{workshop.instructor.title}</div>
+                            <p className={styles.instructorBio}>{workshop.instructor.bio}</p>
                           </div>
                         </div>
                       </div>
 
                       {/* Register Button */}
-                      <button style={{
-                        background: 'linear-gradient(135deg, #a855f7, #d946ef)',
-                        color: 'white',
-                        border: 'none',
-                        padding: '14px 28px',
-                        borderRadius: '25px',
-                        fontSize: '16px',
-                        fontWeight: '600',
-                        cursor: 'pointer',
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px'
-                      }}>
+                      <button className={styles.registerButtonAma}>
                         <MessageCircle size={18} />
                         Register for AMA
                       </button>
@@ -1535,112 +841,54 @@ const EducationHub = () => {
 
               {/* Expert-Led Workshops */}
               <div>
-                <h2 style={{
-                  fontSize: '28px',
-                  fontWeight: '700',
-                  color: '#1a1a1a',
-                  marginBottom: '1.5rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px'
-                }}>
+                <h2 className={styles.workshopSectionTitle}>
                   🎓 Expert-Led Workshops
                 </h2>
                 
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1.5rem'
-                }}>
+                <div className={styles.workshopList}>
                   {workshops.filter(w => w.type === 'workshop').map(workshop => (
-                    <div
-                      key={workshop.id}
-                      style={{
-                        background: 'white',
-                        borderRadius: '16px',
-                        padding: '2rem',
-                        border: '2px solid #f0f0f0'
-                      }}
-                    >
-                      <span style={{
-                        background: workshop.categoryColor,
-                        color: '#00695c',
-                        fontSize: '11px',
-                        padding: '4px 12px',
-                        borderRadius: '12px',
-                        fontWeight: '700',
-                        letterSpacing: '0.5px',
-                        display: 'inline-block',
-                        marginBottom: '1rem'
-                      }}>
-                        {workshop.category}
-                      </span>
+                    <div key={workshop.id} className={styles.workshopCard}>
+                      <span className={styles.workshopTag}>{workshop.category}</span>
 
-                      <h3 style={{
-                        fontSize: '20px',
-                        fontWeight: '700',
-                        color: '#1a1a1a',
-                        marginBottom: '0.75rem'
-                      }}>
-                        {workshop.title}
-                      </h3>
-
-                      <p style={{
-                        fontSize: '15px',
-                        color: '#666',
-                        lineHeight: '1.6',
-                        marginBottom: '1.5rem'
-                      }}>
-                        {workshop.description}
-                      </p>
+                      <h3 className={styles.workshopTitle}>{workshop.title}</h3>
+                      <p className={styles.workshopDescription}>{workshop.description}</p>
 
                       {/* Event Details */}
-                      <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                        gap: '1rem',
-                        marginBottom: '1.5rem'
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div className={styles.eventDetails}>
+                        <div className={styles.eventDetail}>
                           <Calendar size={18} color="#00897b" />
                           <div>
-                            <div style={{ fontSize: '13px', color: '#999' }}>Date</div>
-                            <div style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>
-                              {workshop.date}
-                            </div>
-                            <div style={{ fontSize: '13px', color: '#666' }}>{workshop.time}</div>
+                            <div className={styles.eventDetailLabel}>Date</div>
+                            <div className={styles.eventDetailValue}>{workshop.date}</div>
+                            <div className={styles.eventDetailTime}>{workshop.time}</div>
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div className={styles.eventDetail}>
                           <Clock size={18} color="#00897b" />
                           <div>
-                            <div style={{ fontSize: '13px', color: '#999' }}>Duration</div>
-                            <div style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>
-                              {workshop.duration}
-                            </div>
+                            <div className={styles.eventDetailLabel}>Duration</div>
+                            <div className={styles.eventDetailValue}>{workshop.duration}</div>
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div className={styles.eventDetail}>
                           {workshop.format === 'Online' ? (
                             <Video size={18} color="#00897b" />
                           ) : (
                             <MapPin size={18} color="#00897b" />
                           )}
                           <div>
-                            <div style={{ fontSize: '13px', color: '#999' }}>Format</div>
-                            <div style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>
-                              {workshop.format}
-                            </div>
+                            <div className={styles.eventDetailLabel}>Format</div>
+                            <div className={styles.eventDetailValue}>{workshop.format}</div>
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div className={styles.eventDetail}>
                           <Users size={18} color="#00897b" />
                           <div>
-                            <div style={{ fontSize: '13px', color: '#999' }}>Availability</div>
-                            <div style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>
+                            <div className={styles.eventDetailLabel}>Availability</div>
+                            <div className={styles.eventDetailValue}>
                               {workshop.registered} registered · {workshop.spotsLeft} spots left
                             </div>
                           </div>
@@ -1648,54 +896,16 @@ const EducationHub = () => {
                       </div>
 
                       {/* Instructor */}
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        padding: '12px 0',
-                        borderTop: '1px solid #f0f0f0',
-                        marginBottom: '1.5rem'
-                      }}>
-                        <div style={{
-                          width: '40px',
-                          height: '40px',
-                          background: '#b2dfdb',
-                          borderRadius: '50%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: '#00695c',
-                          fontSize: '18px',
-                          fontWeight: '700'
-                        }}>
-                          {workshop.instructor.avatar}
-                        </div>
+                      <div className={styles.workshopInstructor}>
+                        <div className={styles.instructorAvatar}>{workshop.instructor.avatar}</div>
                         <div>
-                          <div style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a' }}>
-                            {workshop.instructor.name}
-                          </div>
-                          <div style={{ fontSize: '13px', color: '#666' }}>
-                            {workshop.instructor.title}
-                          </div>
+                          <div className={styles.instructorName}>{workshop.instructor.name}</div>
+                          <div className={styles.instructorTitle}>{workshop.instructor.title}</div>
                         </div>
                       </div>
 
                       {/* Register Button */}
-                      <button style={{
-                        background: 'linear-gradient(135deg, #00897b, #1976d2)',
-                        color: 'white',
-                        border: 'none',
-                        padding: '14px 28px',
-                        borderRadius: '25px',
-                        fontSize: '16px',
-                        fontWeight: '600',
-                        cursor: 'pointer',
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px'
-                      }}>
+                      <button className={styles.registerButton}>
                         Register Anonymously
                         <ChevronRight size={18} />
                       </button>
@@ -1705,26 +915,9 @@ const EducationHub = () => {
               </div>
 
               {/* Approach Section */}
-              <div style={{
-                background: 'linear-gradient(135deg, #00897b, #1976d2)',
-                borderRadius: '20px',
-                padding: '3rem',
-                marginTop: '4rem',
-                color: 'white'
-              }}>
-                <h2 style={{
-                  fontSize: '32px',
-                  fontWeight: '700',
-                  marginBottom: '2rem',
-                  textAlign: 'left'
-                }}>
-                  Our Approach to Education
-                </h2>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                  gap: '2rem'
-                }}>
+              <div className={styles.approachSection}>
+                <h2 className={styles.approachTitle}>Our Approach to Education</h2>
+                <div className={styles.approachGrid}>
                   {[
                     {
                       title: 'Evidence-Based',
@@ -1740,20 +933,8 @@ const EducationHub = () => {
                     }
                   ].map((item, idx) => (
                     <div key={idx}>
-                      <h3 style={{
-                        fontSize: '22px',
-                        fontWeight: '700',
-                        marginBottom: '0.5rem'
-                      }}>
-                        {item.title}
-                      </h3>
-                      <p style={{
-                        fontSize: '16px',
-                        lineHeight: '1.6',
-                        opacity: '0.95',
-                      }}>
-                        {item.description}
-                      </p>
+                      <h3 className={styles.approachItemTitle}>{item.title}</h3>
+                      <p className={styles.approachItemDescription}>{item.description}</p>
                     </div>
                   ))}
                 </div>
@@ -1763,100 +944,33 @@ const EducationHub = () => {
             // Locked State
             <div>
               {/* Lock Banner */}
-              <div style={{
-                background: 'linear-gradient(135deg, #fff9e6, #fffbf0)',
-                border: '2px solid #ffd54f',
-                borderRadius: '20px',
-                padding: '3rem',
-                marginBottom: '3rem',
-                textAlign: 'center'
-              }}>
-                <div style={{
-                  width: '80px',
-                  height: '80px',
-                  background: '#ff9800',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '40px',
-                  margin: '0 auto 1.5rem'
-                }}>
-                  🔒
-                </div>
-                <h2 style={{
-                  fontSize: '32px',
-                  fontWeight: '700',
-                  color: '#1a1a1a',
-                  marginBottom: '1rem'
-                }}>
-                  Unlock Expert Workshops
-                </h2>
-                <p style={{
-                  fontSize: '18px',
-                  color: '#666',
-                  lineHeight: '1.6',
-                  maxWidth: '600px',
-                  margin: '0 auto 2rem'
-                }}>
+              <div className={styles.lockedBanner}>
+                <div className={styles.lockedIcon}>🔒</div>
+                <h2 className={styles.lockedTitle}>Unlock Expert Workshops</h2>
+                <p className={styles.lockedDescription}>
                   Complete 3 myth-busting quizzes to unlock access to our exclusive, expert-led workshops!
                 </p>
 
                 {/* Progress */}
-                <div style={{
-                  maxWidth: '500px',
-                  margin: '0 auto 2rem'
-                }}>
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '0.75rem'
-                  }}>
-                    <span style={{ fontSize: '15px', fontWeight: '600', color: '#333' }}>
-                      Your Progress
-                    </span>
-                    <span style={{ fontSize: '15px', fontWeight: '700', color: '#ff9800' }}>
-                      {quizzesCompleted}/3 quizzes
-                    </span>
+                <div className={styles.lockedProgress}>
+                  <div className={styles.progressHeader}>
+                    <span className={styles.progressLabel}>Your Progress</span>
+                    <span className={styles.lockedProgressCount}>{quizzesCompleted}/3 quizzes</span>
                   </div>
-                  <div style={{
-                    width: '100%',
-                    height: '14px',
-                    background: '#e0e0e0',
-                    borderRadius: '7px',
-                    overflow: 'hidden'
-                  }}>
-                    <div style={{
-                      width: `${(quizzesCompleted / 3) * 100}%`,
-                      height: '100%',
-                      background: 'linear-gradient(90deg, #ff9800, #ff6b35)',
-                      transition: 'width 0.3s ease'
-                    }}></div>
+                  <div className={styles.lockedProgressBar}>
+                    <div 
+                      className={styles.lockedProgressFill}
+                      style={{ width: `${(quizzesCompleted / 3) * 100}%` }}
+                    ></div>
                   </div>
                 </div>
 
                 {/* What You'll Unlock */}
-                <div style={{
-                  background: 'white',
-                  borderRadius: '16px',
-                  padding: '2rem',
-                  textAlign: 'left',
-                  maxWidth: '700px',
-                  margin: '0 auto'
-                }}>
-                  <h3 style={{
-                    fontSize: '20px',
-                    fontWeight: '700',
-                    color: '#1a1a1a',
-                    marginBottom: '1rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}>
+                <div className={styles.unlockList}>
+                  <h3 className={styles.unlockListTitle}>
                     ✨ What you'll unlock:
                   </h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div className={styles.unlockItems}>
                     {[
                       'Live sessions with healthcare professionals',
                       'Anonymous attendance with nickname-only participation',
@@ -1864,9 +978,9 @@ const EducationHub = () => {
                       'Both online and in-person options',
                       'Monthly AMA sessions with renowned experts'
                     ].map((item, idx) => (
-                      <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div key={idx} className={styles.unlockItem}>
                         <CheckCircle size={20} color="#00897b" />
-                        <span style={{ fontSize: '15px', color: '#333' }}>{item}</span>
+                        <span>{item}</span>
                       </div>
                     ))}
                   </div>
@@ -1874,21 +988,7 @@ const EducationHub = () => {
 
                 <button
                   onClick={() => setActiveTab('challenge')}
-                  style={{
-                    background: 'linear-gradient(135deg, #00897b, #1976d2)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '16px 32px',
-                    borderRadius: '25px',
-                    fontSize: '17px',
-                    fontWeight: '700',
-                    cursor: 'pointer',
-                    marginTop: '2rem',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    boxShadow: '0 4px 12px rgba(0, 137, 123, 0.3)'
-                  }}
+                  className={styles.startQuizzesButton}
                 >
                   Start Taking Quizzes
                   <ChevronRight size={20} />

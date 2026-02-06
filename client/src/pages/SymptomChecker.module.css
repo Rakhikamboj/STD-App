@@ -2,7 +2,7 @@
 .container {
   min-height: 100vh;
   background: linear-gradient(to bottom right, #f2fdfa 0%, #ffffff 50%, #dbeafe 100%);
-  padding: 2rem 1rem;
+
   width: 100%;
   display: flex;
   justify-content: center;
@@ -10,10 +10,11 @@
 }
 
 .checker {
-  max-width: 600px;
+  max-width: 700px;
   width: 100%;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+  margin-top: 0rem;
+  margin-bottom: 5rem !important;
+
 }
 
 /* Header */
@@ -554,7 +555,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
-    padding: 1.5rem 0.85rem;
+    padding: 1rem 0.85rem;
   }
 
   .checker {
@@ -663,13 +664,3 @@
 }
 }
 
-/* Large screens - keep form centered and at top */
-@media (min-width: 1024px) {
-  .container {
-    padding: 3rem 1rem;
-  }
-
-  .checker {
-    margin-top: 2rem;
-  }
-}
