@@ -41,8 +41,7 @@
 }
 
 .heroTitle {
-  font-size: 2.45;
-  font-size: clamp(2.45rem, 10vw, 3rem);
+  font-size: clamp(1.85rem, 6vw, 2.55rem);
   font-weight: 600;
   color: #1f2937;
   margin-bottom: clamp(0.875rem, 1.5vw, 1.25rem);
@@ -68,7 +67,11 @@
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  padding: clamp(0.75rem, 1.5vw, 0.95rem) clamp(1.25rem, 2.5vw, 1.75rem);
+
+padding:
+  clamp(0.45rem, 0.8vw, 0.8rem)
+  clamp(0.65rem, 1.8vw, 1.15rem);  /* horizontal */
+
   background: #0d9488;
   color: white;
   font-size: clamp(0.875rem, 1.25vw, 0.95rem);
@@ -79,6 +82,7 @@
   box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
   white-space: nowrap;
 }
+
 
 .primaryCta:hover {
   background: #0a7569;
@@ -516,6 +520,10 @@
   .problemList li,
   .solutionList li {
     font-size: 0.85rem;
+  }
+  .primaryCta{
+    padding: 0.75rem 1.5rem 0.75rem 1.5rem;
+    width: auto;
   }
 }
 
