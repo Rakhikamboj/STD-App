@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InfoIcon, AlertCircle, ChevronRight, MessageCircle, FileText, CheckCircle } from 'lucide-react';
+import { InfoIcon, AlertCircle, ArrowRight, MessageCircle, FileText, CheckCircle } from 'lucide-react';
 import styles from './ResultsScreen.module.css';
 
 const ResultsScreen = ({ result, onRestart }) => {
@@ -123,14 +123,14 @@ const ResultsScreen = ({ result, onRestart }) => {
 
                     {conditionInfo && (
                       <>
-                        <div className={styles.conditionMeta}>
+                        <span className={styles.conditionMeta}>
                          <span className={styles.metaItem}>
                           <strong>Incubation Period:</strong> {conditionInfo.incubation}
                           </span>
                           <div className={styles.metaItem}>
                             <strong>Prevalence:</strong> {conditionInfo.prevalence}
                           </div>
-                        </div>
+                        </span>
 
                         {isExpanded && (
                           <div className={styles.expandedInfo}>
@@ -195,21 +195,21 @@ const ResultsScreen = ({ result, onRestart }) => {
         {/* Bottom Action Cards */}
         <div className={styles.actionCards}>
           <div className={styles.actionCard} onClick={() => window.location.href = '/education'}>
-            <FileText className={styles.actionIcon} size={32} />
+            <FileText className={styles.actionIcon} size={28} />
             <div>
               <h3 className={styles.actionTitle}>Education Hub</h3>
               <p className={styles.actionDescription}>Learn more about STI prevention</p>
             </div>
-            <ChevronRight className={styles.actionArrow} size={20} />
+            <ArrowRight className={styles.actionArrow} size={18} />
           </div>
 
           <div className={styles.actionCard} onClick={() => window.location.href = '/community'}>
-            <MessageCircle className={styles.actionIcon} size={32} />
+            <MessageCircle className={styles.actionIcon} size={28} />
             <div>
               <h3 className={styles.actionTitle}>Ask a Doctor</h3>
               <p className={styles.actionDescription}>Get answers from professionals</p>
             </div>
-            <ChevronRight className={styles.actionArrow} size={20} />
+            <ArrowRight className={styles.actionArrow} size={18} />
           </div>
         </div>
 
