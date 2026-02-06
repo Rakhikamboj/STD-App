@@ -173,8 +173,6 @@ const HomePage = () => {
         </div>
       </section>
 
-     
-
       {/* Quick Poll Component */}
       <QuickPoll />
     </div>

@@ -2,18 +2,18 @@
 .container {
   min-height: 100vh;
   background: linear-gradient(to bottom right, #f2fdfa 0%, #ffffff 50%, #dbeafe 100%);
-  padding: 0rem 1rem;
+  padding: 2rem 1rem;
   width: 100%;
-  margin-top: 0rem;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .checker {
-  max-width: 700px;
+  max-width: 600px;
   width: 100%;
-  margin-bottom: 8rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 /* Header */
@@ -250,14 +250,15 @@
 .backButton {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.75rem 1.3rem;
-  background: white;
+  gap: 0.7rem;
+
   border-radius: 8px;
   color: #4e5a6a;
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  width: auto;
+  flex-shrink: 0;
 }
 
 .backButton:hover:not(:disabled) {
@@ -282,7 +283,8 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-left: auto;
+  width: auto;
+  flex-shrink: 0;
 }
 
 .continueButton:hover:not(:disabled) {
@@ -552,11 +554,16 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
-    padding: 0.85rem;
+    padding: 1.5rem 0.85rem;
+  }
+
+  .checker {
+    max-width: 100%;
+    margin-top: 0.5rem;
   }
 
   .questionCard {
-    padding: 1.25rem;
+    padding: 1.25rem 1rem;
   }
 
   .question {
@@ -565,14 +572,20 @@
 
   .imageSelectionGrid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
   }
 
   .navigationButtons {
-    flex-direction: column-reverse;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
+  .backButton,
   .continueButton {
-    margin-left: 0;
+    flex: 1;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
   }
 
   .resultHeader {
@@ -589,7 +602,62 @@
 }
 
 @media (max-width: 480px) {
+  .container {
+    margin-top: 0rem;
+    padding-top: 0rem;
+  }
+
+  .checker {
+    margin-top: 0.25rem 0.5rem 0.25rem 0.5rem;
+  }
+
+  .questionCard {
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .question {
+    font-size: 1.05rem;
+  }
+  .answerButton {
+    margin: 0rem 1rem 0rem 0rem;
+  }
+
   .imageSelectionGrid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .navigationButtons {
+    gap: 7rem;
+  }
+
+  .backButton,
+  .continueButton {
+    
+    font-size: 0.85rem;
+  }
+
+  .answerButton {
+    padding: 0.85rem 0.95rem;
+    font-size: 0.875rem;
+  }
+
+  .progressInfo {
+    font-size: 0.75rem;
+  }
+
+  .progressSection {
+    margin: 1.5rem auto;
+  }
+}
+
+/* Large screens - keep form centered and at top */
+@media (min-width: 1024px) {
+  .container {
+    padding: 3rem 1rem;
+  }
+
+  .checker {
+    margin-top: 2rem;
   }
 }

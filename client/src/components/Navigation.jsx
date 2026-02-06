@@ -98,6 +98,18 @@ const Navigation = () => {
 
         {/* Mobile Navigation Menu */}
         <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
+          {/* Mobile Menu Header */}
+          <div className={styles.mobileMenuHeader}>
+            <Link to="/" className={styles.mobileMenuLogo} onClick={toggleMobileMenu}>
+              <div className={styles.mobileLogoIconWrapper}>
+                <Heart className={styles.mobileLogoIcon} />
+              </div>
+           
+            </Link>
+           
+          </div>
+
+          {/* Mobile Menu Links */}
           <div className={styles.mobileMenuContent}>
             {!isDoctorPath && (
               <>
@@ -144,14 +156,6 @@ const Navigation = () => {
             </Link> */}
           </div>
         </div>
-
-        {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <div 
-            className={styles.mobileMenuOverlay}
-            onClick={toggleMobileMenu}
-          />
-        )}
       </div>
     </nav>
   );

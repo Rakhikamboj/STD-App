@@ -5,7 +5,7 @@ import styles from './ResultsScreen.module.css';
 const ResultsScreen = ({ result, onRestart }) => {
   const [copied, setCopied] = useState(false);
   const [expandedCondition, setExpandedCondition] = useState(null);
-    const [showPartnerTemplate, setShowPartnerTemplate] = useState(false);
+  const [showPartnerTemplate, setShowPartnerTemplate] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState('direct');
 
   const copyToClipboard = (text) => {
@@ -73,7 +73,7 @@ const ResultsScreen = ({ result, onRestart }) => {
         {result.hasSymptoms ? (
           <div className={styles.followUpBanner}>
             <InfoIcon className={styles.bannerIcon} size={22} />
-            <div>
+            <div className={styles.bannerContent}>
               <h3 className={styles.bannerTitle}>Medical Evaluation Suggested</h3>
               <p className={styles.bannerText}>
                 Consider scheduling an appointment within the next few days
@@ -83,7 +83,7 @@ const ResultsScreen = ({ result, onRestart }) => {
         ) : (
           <div className={styles.routineCareBanner}>
             <CheckCircle className={styles.bannerIconGreen} size={28} />
-            <div>
+            <div className={styles.bannerContent}>
               <h3 className={styles.bannerTitleGreen}>Routine Care</h3>
               <p className={styles.bannerText}>
                 Consider this as part of regular health maintenance
@@ -124,15 +124,14 @@ const ResultsScreen = ({ result, onRestart }) => {
                     {conditionInfo && (
                       <>
                         <div className={styles.conditionMeta}>
-                         <span className={styles.metaItem}>
-                          <strong>Incubation Period:</strong> {conditionInfo.incubation}
+                          <span className={styles.metaItem}>
+                            <strong>Incubation Period:</strong> {conditionInfo.incubation}
                           </span>
                           <div className={styles.metaItem}>
                             <strong>Prevalence:</strong> {conditionInfo.prevalence}
                           </div>
                         </div>
                         <div className={styles.descriptionNote}>{condition.descriptionNote}</div>
-
 
                         {isExpanded && (
                           <div className={styles.expandedInfo}>
@@ -164,41 +163,39 @@ const ResultsScreen = ({ result, onRestart }) => {
         )}
 
         {/* Partner Notification */}
-       
-          <div className={styles.partnerNotificationSection}>
-            <div className={styles.gradientCard}>
-              <h2 className={styles.gradientCardTitle}>Partner Notification Templates</h2>
-              <p className={styles.gradientCardSubtitle}>
-                If you test positive, letting partners know is the responsible thing to do. 
-                Here are some ways to approach it:
-              </p>
+        <div className={styles.partnerNotificationSection}>
+          <div className={styles.gradientCard}>
+            <h2 className={styles.gradientCardTitle}>Partner Notification Templates</h2>
+            <p className={styles.gradientCardSubtitle}>
+              If you test positive, letting partners know is the responsible thing to do. 
+              Here are some ways to approach it:
+            </p>
 
-              <div className={styles.templates}>
-                <div className={styles.templateCard}>
-                  <h3 className={styles.templateTitle}>Direct Message</h3>
-                  <p className={styles.templateMessage}>
-                    "I recently got tested and found out I have [condition]. I wanted to let you 
-                    know so you can get tested too. It's treatable, and I'm already working with my doctor."
-                  </p>
-                </div>
+            <div className={styles.templates}>
+              <div className={styles.templateCard}>
+                <h3 className={styles.templateTitle}>Direct Message</h3>
+                <p className={styles.templateMessage}>
+                  "I recently got tested and found out I have [condition]. I wanted to let you 
+                  know so you can get tested too. It's treatable, and I'm already working with my doctor."
+                </p>
+              </div>
 
-                <div className={styles.templateCard}>
-                  <h3 className={styles.templateTitle}>Anonymous Notification</h3>
-                  <p className={styles.templateMessage}>
-                    Many health departments offer anonymous partner notification services. They'll 
-                    contact your partners without revealing your identity.
-                  </p>
-                </div>
+              <div className={styles.templateCard}>
+                <h3 className={styles.templateTitle}>Anonymous Notification</h3>
+                <p className={styles.templateMessage}>
+                  Many health departments offer anonymous partner notification services. They'll 
+                  contact your partners without revealing your identity.
+                </p>
               </div>
             </div>
           </div>
-      
+        </div>
 
         {/* Bottom Action Cards */}
         <div className={styles.actionCards}>
           <div className={styles.actionCard} onClick={() => window.location.href = '/education'}>
             <FileText className={styles.actionIcon} size={28} />
-            <div>
+            <div className={styles.actionCardContent}>
               <h3 className={styles.actionTitle}>Education Hub</h3>
               <p className={styles.actionDescription}>Learn more about STI prevention</p>
             </div>
@@ -207,7 +204,7 @@ const ResultsScreen = ({ result, onRestart }) => {
 
           <div className={styles.actionCard} onClick={() => window.location.href = '/community'}>
             <MessageCircle className={styles.actionIcon} size={28} />
-            <div>
+            <div className={styles.actionCardContent}>
               <h3 className={styles.actionTitle}>Ask a Doctor</h3>
               <p className={styles.actionDescription}>Get answers from professionals</p>
             </div>
@@ -223,7 +220,6 @@ const ResultsScreen = ({ result, onRestart }) => {
         </div>
 
         {/* Important Disclaimer */}
-       
       </div>
     </div>
   );
