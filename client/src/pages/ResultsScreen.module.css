@@ -241,50 +241,53 @@
 }
 
 .gradientCard {
-  background: linear-gradient(135deg, #20c997, #17a2b8);
-  border-radius: 12px;
-  padding: 2rem;
-  color: white;
+background: linear-gradient(to right, #0d9488, #2563eb); 
+  border-radius: 1rem; 
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -4px rgba(0, 0, 0, 0.1); 
+  padding: 2rem; 
+  margin-bottom: 2rem; 
+  color: #ffffff; 
 }
 
 .gradientCardTitle {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 600;
   color: white;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .gradientCardSubtitle {
-  font-size: 1rem;
+  font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.95);
   margin-bottom: 1.5rem;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .templates {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 0.9rem;
 }
 
 .templateCard {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 0.8rem;
   backdrop-filter: blur(10px);
 }
 
 .templateTitle {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 0.87rem;
+  font-weight: 500;
   color: white;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.7rem;
 }
 
 .templateMessage {
-  font-size: 0.95rem;
+  font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.95);
-  line-height: 1.6;
+  line-height: 1.5;
   margin: 0;
 }
 
@@ -293,14 +296,14 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .actionCard {
   background: white;
-  border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 12px rgba(23, 162, 184, 0.15);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -309,7 +312,7 @@
 }
 
 .actionCard:hover {
-  border-color: #17a2b8;
+
   box-shadow: 0 4px 12px rgba(23, 162, 184, 0.15);
   transform: translateY(-2px);
 }

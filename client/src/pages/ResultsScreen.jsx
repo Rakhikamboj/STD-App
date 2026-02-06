@@ -5,6 +5,8 @@ import styles from './ResultsScreen.module.css';
 const ResultsScreen = ({ result, onRestart }) => {
   const [copied, setCopied] = useState(false);
   const [expandedCondition, setExpandedCondition] = useState(null);
+    const [showPartnerTemplate, setShowPartnerTemplate] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState('direct');
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
@@ -90,13 +92,6 @@ const ResultsScreen = ({ result, onRestart }) => {
           </div>
         )}
 
-        {/* AI Message - Commented out for now */}
-        {/* {result.aiMessage && (
-          <div className={styles.aiMessageSection}>
-            <p className={styles.aiMessage}>{result.aiMessage}</p>
-          </div>
-        )} */}
-
         {/* Possible Considerations */}
         {result.possibleConditions && result.possibleConditions.length > 0 && (
           <div className={styles.resultSection}>
@@ -167,7 +162,7 @@ const ResultsScreen = ({ result, onRestart }) => {
         )}
 
         {/* Partner Notification */}
-        {result.hasSymptoms && (
+       
           <div className={styles.partnerNotificationSection}>
             <div className={styles.gradientCard}>
               <h2 className={styles.gradientCardTitle}>Partner Notification Templates</h2>
@@ -195,7 +190,7 @@ const ResultsScreen = ({ result, onRestart }) => {
               </div>
             </div>
           </div>
-        )}
+      
 
         {/* Bottom Action Cards */}
         <div className={styles.actionCards}>
