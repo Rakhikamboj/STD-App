@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Trophy, Calendar, Search, Filter ,Clock, Eye, ChevronRight, CheckCircle, Lock, Video, MessageCircle, Users, MapPin } from 'lucide-react';
+import { BookOpen, Trophy, Calendar, Search, Filter ,Clock, XCircle, Eye, Info, CheckCircle, Lock, Video, MessageCircle, Users, MapPin, ArrowLeft, ArrowRight } from 'lucide-react';
 import styles from './EducationHub.module.css';
 
 const EducationHub = () => {
@@ -489,9 +489,6 @@ const StarIcon = ({
     }
   };
 
-  const handleSubmitAnswer = () => {
-    setShowFeedback(true);
-  };
 
   const workshopsUnlocked = quizzesCompleted >= 3;
 
@@ -687,7 +684,7 @@ const StarIcon = ({
                   <p className={styles.quizDescription}>{quiz.description}</p>
                   <div className={styles.quizFooter}>
                     <span className={styles.quizDifficulty}>{quiz.difficulty}</span>
-                    <button
+                    <div
                       onClick={() => handleStartQuiz(quiz)}
                       className={`${styles.startQuizButton} ${isCompleted ? styles.completedQuizButton : ''}`}
                     >
@@ -699,7 +696,7 @@ const StarIcon = ({
                       ) : (
                         <>Start Quiz →</>
                       )}
-                    </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -734,7 +731,7 @@ const StarIcon = ({
         </div>
       )}
 
-      {/* Quiz View */}
+{/* Quiz View */}
       {activeTab === 'challenge' && currentQuiz && (
         <div className={styles.quizView}>
           <button onClick={() => setCurrentQuiz(null)} className={styles.backButton}>
@@ -768,39 +765,49 @@ const StarIcon = ({
               {currentQuiz.questions[currentQuestion].options.map((option, idx) => {
                 const isCorrect = idx === currentQuiz.questions[currentQuestion].correctAnswer;
                 const isSelected = idx === selectedAnswer;
-                const showResult = showFeedback;
+                const showResult = selectedAnswer !== null; // Show result immediately after selection
 
                 return (
-                  <button
+                  <div
                     key={idx}
                     onClick={() => handleAnswerSelect(idx)}
-                    disabled={showFeedback}
+                    disabled={selectedAnswer !== null} // Disable all options after any selection
                     className={`${styles.optionButton} ${
                       showResult && isSelected && isCorrect ? styles.optionCorrect : ''
-                    } ${isSelected && !showResult ? styles.optionSelected : ''}`}
+                    } ${
+                      showResult && isSelected && !isCorrect ? styles.optionIncorrect : ''
+                    } ${
+                      showResult && !isSelected && isCorrect ? styles.optionCorrect : ''
+                    }`}
                   >
-                    {showResult && isSelected && isCorrect && (
-                      <CheckCircle size={20} color="#4caf50" />
-                    )}
                     {option}
-                  </button>
+                    {showResult && isSelected && isCorrect && (
+                      <CheckCircle size={20} color="#10b981" />
+                    )}
+                    {showResult && !isSelected && isCorrect && (
+                      <CheckCircle size={20} color="#10b981" />
+                    )}
+                    {showResult && isSelected && !isCorrect && (
+                      <XCircle size={20} color="#ef4444" />
+                    )}
+                  </div>
                 );
               })}
             </div>
 
-            {/* Feedback */}
-            {showFeedback && (
+            {/* Feedback - Shows immediately after selection */}
+            {selectedAnswer !== null && (
               <div className={`${styles.feedback} ${
                 selectedAnswer === currentQuiz.questions[currentQuestion].correctAnswer 
                   ? styles.feedbackCorrect 
                   : styles.feedbackIncorrect
               }`}>
                 <div className={styles.feedbackHeader}>
-                  <CheckCircle size={20} color="#4caf50" />
+                  <Info className={styles.infoIcon} size={20} color="#3b82f6" />
                   <span className={styles.feedbackTitle}>
                     {selectedAnswer === currentQuiz.questions[currentQuestion].correctAnswer
                       ? 'Correct!'
-                      : 'Not quite right'}
+                      : 'Not quite!'}
                   </span>
                 </div>
                 <p className={styles.feedbackText}>
@@ -809,19 +816,11 @@ const StarIcon = ({
               </div>
             )}
 
-            {/* Action Button */}
-            {!showFeedback ? (
-              <button
-                onClick={handleSubmitAnswer}
-                disabled={selectedAnswer === null}
-                className={`${styles.submitButton} ${selectedAnswer === null ? styles.submitButtonDisabled : ''}`}
-              >
-                Submit Answer
-              </button>
-            ) : (
+            {/* Next Question Button - Only shows after selection */}
+            {selectedAnswer !== null && (
               <button onClick={handleNextQuestion} className={styles.nextButton}>
                 {currentQuestion < currentQuiz.questions.length - 1 ? 'Next Question' : 'Finish Quiz'}
-                <ChevronRight size={18} />
+                <ArrowRight size={18} />
               </button>
             )}
           </div>
