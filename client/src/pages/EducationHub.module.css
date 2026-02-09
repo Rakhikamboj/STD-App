@@ -107,7 +107,7 @@
 }
 .tab:focus-visible {
   outline: none;
-
+  border: none;
 }
 
 .tabLockedBadge {
@@ -182,8 +182,8 @@
   margin-top: 0.5rem;
   color: #6b7280;
   border: 2px solid #e5e7eb;
-  padding: clamp(0.5rem, 1vw, 0.7rem) clamp(0.75rem, 2vw, 1rem);
-  border-radius: 1.25rem;
+  padding: clamp(0.4rem, 1vw, 0.6rem) clamp(0.75rem, 2vw, 1rem);
+  border-radius: 1.35rem;
   font-size: clamp(0.75rem, 1.25vw, 0.8rem);
   font-weight: 600;
   cursor: pointer;
@@ -435,8 +435,8 @@
    ============================================ */
 
 .challengeHeader {
-  background: linear-gradient(135deg, #fef3c7, #fef9e6);
-  border: 2px solid #fbbf24;
+  background: #fefae9;
+  border: 2px solid #ffd7ad;
   border-radius: 1.25rem;
   padding: clamp(1.25rem, 2.5vw, 2rem);
   margin-bottom: clamp(2rem, 3vw, 3rem);
@@ -452,7 +452,6 @@
 .challengeIcon {
   width: clamp(48px, 6vw, 60px);
   height: clamp(48px, 6vw, 60px);
-  background: #f59e0b;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -467,7 +466,7 @@
 }
 
 .challengeTitle {
-  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-size: clamp(1rem, 2.5vw, 1.55rem);
   font-weight: 700;
   color: #1f2937;
   margin-bottom: clamp(0.375rem, 1vw, 0.5rem);
@@ -481,17 +480,24 @@
 
 .progressContainer {
   margin-top: clamp(1rem, 2vw, 1.5rem);
+  margin-left: 4.7rem;
+  padding: 1rem;
+  width: 950px;
+  background-color: white;
+  border-radius: 0.5rem;
 }
 
 .progressHeader {
   display: flex;
   justify-content: space-between;
+
   align-items: center;
   margin-bottom: 0.5rem;
 }
 
 .progressLabel {
   font-size: clamp(0.8rem, 1.25vw, 0.875rem);
+  
   font-weight: 600;
   color: #1f2937;
 }
