@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Trophy, Calendar, Search, Clock, Eye, ChevronRight, CheckCircle, Lock, Video, MessageCircle, Users, MapPin } from 'lucide-react';
+import { BookOpen, Trophy, Calendar, Search, Filter, Clock, Eye, ChevronRight, CheckCircle, Lock, Video, MessageCircle, Users, MapPin } from 'lucide-react';
 import styles from './EducationHub.module.css';
 
 const EducationHub = () => {
@@ -473,7 +473,7 @@ const EducationHub = () => {
 
           {/* Category Filters */}
           <div className={styles.categoryFilters}>
-            <div className={styles.filterIcon}>🔍</div>
+            <div className={styles.filterIcon}><Filter size={20} color="#6b6b6b" /></div>
             {categories.map(cat => (
               <button
                 key={cat.id}
