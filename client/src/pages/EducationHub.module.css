@@ -45,6 +45,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  margin-bottom: 0.5rem;
   background: linear-gradient(135deg, #0d9488 0%, #3b82f6 100%);
   padding: 0.85rem 1.5rem;
   font-size: 0.975rem;
@@ -68,11 +69,12 @@
 
 .tabsContainer {
   display: flex;
-  gap: clamp(0.7rem, 1.5vw, 0.75rem);
+  gap: clamp(0.8rem, 1.5vw, 0.75rem);
   justify-content: center;
   margin-bottom: 0;
   flex-wrap: wrap;
-  padding: 2rem 1rem 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1rem 0.75rem;
 }
 
 .tab {
@@ -140,7 +142,7 @@
   display: flex;
   align-items: center;
   gap: clamp(0.5rem, 1.5vw, 0.75rem);
-  margin-top: 0.5rem;
+
   margin-bottom: clamp(1rem, 2vw, 1.5rem);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.0);
   border: 2px solid #dddddd;
@@ -208,8 +210,8 @@
   color: #1f2937;
   margin-bottom: clamp(1rem, 2vw, 1.5rem);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: left;
+
   width: 100%;
   gap: 0.5rem;
   line-height: 1.3;
@@ -1188,12 +1190,10 @@
   .tabsContainer {
     flex-wrap: wrap;
     padding: 1.5rem 1rem 0.5rem;
+    margin-top: 2rem;
   }
   
-  .searchBar {
-    margin-top: 0.75rem;
-  }
-  
+
   .mythGrid {
     grid-template-columns: 1fr;
   }
@@ -1238,11 +1238,10 @@
   
   .tabsContainer {
     padding: 1rem 0.5rem 0.25rem;
+    margin-top: 1rem;
   }
   
-  .searchBar {
-    margin-top: 0.5rem;
-  }
+
   
   .content {
     padding: 0 1rem 2rem;
@@ -1272,10 +1271,10 @@
     padding: 1rem 0.5rem 0.25rem;
   }
   
-  .searchBar {
+  /* .searchBar {
     padding: 0.625rem 1rem;
     margin-top: 0.5rem;
-  }
+  } */
   
   .mythCard,
   .articleCard,
