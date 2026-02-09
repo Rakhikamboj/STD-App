@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Trophy, Calendar, Search, Filter, Clock, Eye, ChevronRight, CheckCircle, Lock, Video, MessageCircle, Users, MapPin } from 'lucide-react';
+import { BookOpen, Trophy, Calendar, Search, Filter ,Clock, Eye, ChevronRight, CheckCircle, Lock, Video, MessageCircle, Users, MapPin } from 'lucide-react';
 import styles from './EducationHub.module.css';
 
 const EducationHub = () => {
@@ -21,6 +21,65 @@ const EducationHub = () => {
     { id: 'treatment', label: 'Treatment' },
     { id: 'myths', label: 'Myth Busting' }
   ];
+
+const StarIcon = ({ 
+  size = 32, 
+  color = "#ebb91b", 
+  className = "",
+  ...props 
+}) => {
+  return (
+    <svg
+      version="1.1"
+      id="Icons"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 32 32"
+      xmlSpace="preserve"
+      fill={color}
+      width={size}
+      height={size}
+      className={className}
+      {...props}
+    >
+      <style type="text/css">
+        {`
+          .st0 {
+            fill: none;
+            stroke: ${color};
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-miterlimit: 10;
+          }
+        `}
+      </style>
+      <g>
+        <path 
+          className="st0" 
+          d="M17.9,9.9c-4.6,0.9-6,2.3-6.9,6.9c-0.9-4.6-2.3-6-6.9-6.9C8.7,9,10.1,7.6,11,3C11.9,7.6,13.3,9,17.9,9.9z"
+        />
+      </g>
+      <g>
+        <path 
+          className="st0" 
+          d="M21.8,25c-3.2,0.6-4.1,1.6-4.8,4.8c-0.6-3.2-1.6-4.1-4.8-4.8c3.2-0.6,4.1-1.6,4.8-4.8C17.6,23.4,18.6,24.4,21.8,25z"
+        />
+      </g>
+      <g>
+        <path 
+          className="st0" 
+          d="M29,15c-2.6,0.5-3.4,1.3-3.9,3.9c-0.5-2.6-1.3-3.4-3.9-3.9c2.6-0.5,3.4-1.3,3.9-3.9C25.6,13.7,26.4,14.5,29,15z"
+        />
+      </g>
+      <line className="st0" x1="5" y1="23" x2="5" y2="23" />
+      <line className="st0" x1="28" y1="6" x2="28" y2="6" />
+    </svg>
+  );
+};
+
+
+
 
   const quizzes = [
     {
@@ -473,7 +532,7 @@ const EducationHub = () => {
 
           {/* Category Filters */}
           <div className={styles.categoryFilters}>
-            <div className={styles.filterIcon}><Filter size={20} color="#6b6b6b" /></div>
+            <div className={styles.filterIcon}><Filter size={20} color="#5a5959" /></div>
             {categories.map(cat => (
               <button
                 key={cat.id}
@@ -489,7 +548,8 @@ const EducationHub = () => {
           {selectedCategory === 'all' && (
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>
-                ✨ Myth Busting
+              <StarIcon />
+                Myth Busting
               </h2>
               <div className={styles.mythGrid}>
                 {mythBusters.map(myth => (
