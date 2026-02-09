@@ -1,0 +1,144 @@
+/* Quiz Completion Component Styles */
+
+.completionContainer {
+  background: white;
+  border-radius: 16px;
+  padding: 60px 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Trophy Icon */
+.trophyIcon {
+  width: 96px;
+  height: 96px;
+  background: #f59e0b;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.trophyIcon svg {
+  width: 48px;
+  height: 48px;
+}
+
+/* Completion Title */
+.completionTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 24px 0;
+}
+
+/* Score Display */
+.scoreDisplay {
+  margin-bottom: 8px;
+}
+
+.scoreNumber {
+  font-size: 48px;
+  font-weight: 700;
+  color: #0891b2;
+  line-height: 1;
+}
+
+/* Score Percentage */
+.scorePercentage {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0 0 40px 0;
+}
+
+/* Encouragement Box */
+.encouragementBox {
+  width: 100%;
+  max-width: 600px;
+  background: #ecfeff;
+  border: 1px solid #cffafe;
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.encouragementIcon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.encouragementContent {
+  flex: 1;
+}
+
+.encouragementTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0e7490;
+  margin: 0 0 4px 0;
+}
+
+.encouragementText {
+  font-size: 14px;
+  color: #0e7490;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Continue Button */
+.continueButton {
+  width: 100%;
+  max-width: 600px;
+  padding: 14px 24px;
+  background: linear-gradient(90deg, #14b8a6 0%, #3b82f6 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.continueButton:hover {
+  opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .completionContainer {
+    padding: 40px 24px;
+  }
+
+  .completionTitle {
+    font-size: 24px;
+  }
+
+  .scoreNumber {
+    font-size: 36px;
+  }
+
+  .encouragementBox {
+    padding: 16px 20px;
+  }
+}
