@@ -33,7 +33,7 @@ const symptomReportSchema = new mongoose.Schema(
     sessionId: {
       type: String,
       required: true,
-      unique: true, // ✅ index created automatically
+      unique: true, 
     },
 
     // Whether user has concerning symptoms

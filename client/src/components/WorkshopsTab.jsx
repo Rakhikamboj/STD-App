@@ -1,4 +1,4 @@
-import { Calendar, Clock, Video, MessageCircle, Users, MapPin, ChevronRight, CheckCircle } from 'lucide-react';
+import { Calendar, Clock, Video, MessageCircle, Users, MapPin, ChevronRight, CheckCircle, Lock } from 'lucide-react';
 import styles from './Workshopstab.module.css';
 
 const StarIcon = ({ 
@@ -216,7 +216,7 @@ const WorkshopsTab = ({ workshopsUnlocked, quizzesCompleted, setActiveTab }) => 
             {workshops.filter(w => w.type === 'ama').map(workshop => (
               <div key={workshop.id} className={styles.workshopCard}>
                 <span className={styles.amaTag}>
-                  💬 {workshop.category}
+                   <MessageCircle size={28} color="#a855f7" />   {workshop.category}
                 </span>
 
                 <h3 className={styles.workshopTitle}>{workshop.title}</h3>
@@ -391,10 +391,13 @@ const WorkshopsTab = ({ workshopsUnlocked, quizzesCompleted, setActiveTab }) => 
   // Locked State
   return (
     <div className={styles.content}>
-      {/* Lock Banner */}
+   
       <div className={styles.lockedBanner}>
-        <div className={styles.lockedIcon}>🔒</div>
-        <h2 className={styles.lockedTitle}>Unlock Expert Workshops</h2>
+    <div className={styles.lockedBannerContent}>  
+   <div className={styles.lockedIcon}>
+     <Lock size={28} color="#f0efee" />
+   </div>
+        <h2 className={styles.lockedTitle}>Unlock Expert Workshops</h2></div>  
         <p className={styles.lockedDescription}>
           Complete 3 myth-busting quizzes to unlock access to our exclusive, expert-led workshops!
         </p>
