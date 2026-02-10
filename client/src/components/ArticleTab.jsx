@@ -1,62 +1,8 @@
 import { useState } from 'react';
-import { Search, Filter, Clock } from 'lucide-react';
+import { Search, Filter, Clock, Sparkles } from 'lucide-react';
 import styles from './Articlestab.module.css';
 
-const StarIcon = ({ 
-  size = 32, 
-  color = "#ebb91b", 
-  className = "",
-  ...props 
-}) => {
-  return (
-    <svg
-      version="1.1"
-      id="Icons"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-      viewBox="0 0 32 32"
-      xmlSpace="preserve"
-      fill={color}
-      width={size}
-      height={size}
-      className={className}
-      {...props}
-    >
-      <style type="text/css">
-        {`
-          .st0 {
-            fill: none;
-            stroke: ${color};
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-miterlimit: 10;
-          }
-        `}
-      </style>
-      <g>
-        <path 
-          className="st0" 
-          d="M17.9,9.9c-4.6,0.9-6,2.3-6.9,6.9c-0.9-4.6-2.3-6-6.9-6.9C8.7,9,10.1,7.6,11,3C11.9,7.6,13.3,9,17.9,9.9z"
-        />
-      </g>
-      <g>
-        <path 
-          className="st0" 
-          d="M21.8,25c-3.2,0.6-4.1,1.6-4.8,4.8c-0.6-3.2-1.6-4.1-4.8-4.8c3.2-0.6,4.1-1.6,4.8-4.8C17.6,23.4,18.6,24.4,21.8,25z"
-        />
-      </g>
-      <g>
-        <path 
-          className="st0" 
-          d="M29,15c-2.6,0.5-3.4,1.3-3.9,3.9c-0.5-2.6-1.3-3.4-3.9-3.9c2.6-0.5,3.4-1.3,3.9-3.9C25.6,13.7,26.4,14.5,29,15z"
-        />
-      </g>
-      <line className="st0" x1="5" y1="23" x2="5" y2="23" />
-      <line className="st0" x1="28" y1="6" x2="28" y2="6" />
-    </svg>
-  );
-};
+
 
 const ArticlesTab = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -175,7 +121,7 @@ const ArticlesTab = () => {
 
       {/* Category Filters */}
       <div className={styles.categoryFilters}>
-        <div className={styles.filterIcon}><Filter size={20} color="#5a5959" /></div>
+        <div className={styles.filterIcon}><Filter size={22} color="#5a5959" /></div>
         {categories.map(cat => (
           <div
             key={cat.id}
@@ -191,7 +137,7 @@ const ArticlesTab = () => {
       {selectedCategory === 'all' && (
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>
-            <StarIcon />
+            <Sparkles size={24} color="#f59e0b" />
             Myth Busting
           </h2>
           <div className={styles.mythGrid}>

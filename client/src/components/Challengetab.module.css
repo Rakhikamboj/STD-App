@@ -186,18 +186,19 @@
 
 .quizView {
   width: 100%;
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
+
 }
 
 .backButton {
   background: none;
   border: none;
-  color: #0891b2;
-  font-size: 16px;
+
+  color: #0e7490;
+  font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  padding: 0;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -206,19 +207,19 @@
 }
 
 .backButton:hover {
-  color: #0e7490;
+    color:  #0a7569;
 }
 
 .quizContainer {
   background: white;
   border-radius: 16px;
-  padding: 40px;
+  padding: 1.8rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Progress Section */
 .quizProgress {
-  margin-bottom: 32px;
+  margin-bottom: 1rem;
 }
 
 .quizProgressHeader {
@@ -229,38 +230,37 @@
 }
 
 .quizProgressLabel {
-  font-size: 14px;
+  font-size: 0.8rem;
   color: #6b7280;
   font-weight: 500;
 }
 
 .quizProgressScore {
-  font-size: 14px;
+  font-size: 0.8rem;
   color: #0891b2;
   font-weight: 600;
 }
 
 /* Question */
 .question {
-  font-size: 20px;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #111827;
-  margin-bottom: 28px;
-  line-height: 1.5;
+  margin-bottom: 1.5rem;
 }
 
 /* Options Container */
 .optionsContainer {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 1.5rem;
 }
 
 /* Option Buttons */
 .optionButton {
   width: 100%;
-  padding: 16px 20px;
+  padding: 0.8rem 1.2rem;
   background: #f9fafb;
   border: 2px solid #e5e7eb;
   border-radius: 12px;

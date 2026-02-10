@@ -179,7 +179,7 @@ const SymptomChecker = () => {
   }
 
   const question = questions[currentQuestion];
-  const progress = Math.round(((currentQuestion + 1) / questions.length) * 100);
+  const progress = Math.round(((currentQuestion ) / questions.length) * 100);
   const isMultiselect = question.multiselect;
   const currentAnswers = responses[question.id] || [];
   const canProceed =

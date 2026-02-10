@@ -240,7 +240,11 @@ const ChallengeTab = ({ quizzesCompleted, setQuizzesCompleted }) => {
                     showResult && isSelected && isCorrect ? styles.optionCorrect : ''
                   } ${
                     showResult && isSelected && !isCorrect ? styles.optionIncorrect : ''
-                  } ${
+                  }
+                  ${
+                    showResult && !isSelected && isCorrect ? styles.optionCorrect : ''
+                  }
+                   ${
                     selectedAnswer !== null ? styles.disabled : ''
                   }`}
                 >
@@ -250,6 +254,13 @@ const ChallengeTab = ({ quizzesCompleted, setQuizzesCompleted }) => {
                   )}
                   {showResult && isSelected && !isCorrect && (
                     <XCircle size={20} color="#ef4444" />
+                  )}
+                
+                  {showResult && !isSelected && isCorrect && (
+
+                      <CheckCircle size={16} color="#10b981" />
+                     
+              
                   )}
                 </div>
               );

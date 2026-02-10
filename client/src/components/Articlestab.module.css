@@ -36,6 +36,7 @@
 .categoryFilters {
   display: flex;
   align-items: center;
+  justify-items: center;
   gap: clamp(0.5rem, 1.5vw, 0.75rem);
   margin-bottom: clamp(2rem, 3vw, 3rem);
   overflow-x: auto;
@@ -46,6 +47,7 @@
   color: #6b7280;
   font-size: clamp(18px, 2.5vw, 20px);
   flex-shrink: 0;
+  justify-content: center;
 }
 
 .categoryButton {

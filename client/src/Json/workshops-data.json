@@ -1,0 +1,134 @@
+{
+  "workshops": [
+    {
+      "id": 1,
+      "type": "ama",
+      "category": "ASK ME ANYTHING",
+      "title": "AMA: Real Talk About Sexual Health",
+      "description": "Join Dr. Rachel Martinez for an honest, no-judgment Q&A session. Ask anything about sexual health, testing, relationships, or prevention. All questions are anonymous!",
+      "date": "Thursday, February 12",
+      "time": "5:26 PM",
+      "duration": "90 minutes",
+      "format": "Live Video",
+      "questionsSubmitted": 0,
+      "instructor": {
+        "name": "Dr. Rachel Martinez",
+        "title": "MD, OB-GYN, Sexual Health Specialist, 15+ years experience",
+        "avatar": "D",
+        "bio": "Dr. Martinez is a board-certified OB-GYN specializing in adolescent and young adult sexual health. She has dedicated her career to providing stigma-free, comprehensive sexual health education and care. She believes that no question is too small or too embarrassing when it comes to your health."
+      }
+    },
+    {
+      "id": 2,
+      "type": "ama",
+      "category": "ASK ME ANYTHING",
+      "title": "AMA: Mental Health & Sexual Wellness",
+      "description": "Chat with licensed therapist Jordan Chen about the connection between mental health and sexual wellness. Discuss shame, anxiety, relationships, and self-care in a safe, anonymous space.",
+      "date": "Friday, February 20",
+      "time": "5:26 PM",
+      "duration": "75 minutes",
+      "format": "Chat Only",
+      "questionsSubmitted": 0,
+      "instructor": {
+        "name": "Jordan Chen",
+        "title": "LCSW, Sex Therapist, Mental Health Advocate",
+        "avatar": "J",
+        "bio": "Jordan Chen is a licensed clinical social worker and certified sex therapist with over 10 years of experience helping young adults navigate the emotional aspects of sexual health. They specialize in addressing shame, anxiety, and trauma in a compassionate, affirming environment."
+      }
+    },
+    {
+      "id": 3,
+      "type": "ama",
+      "category": "ASK ME ANYTHING",
+      "title": "AMA: STI Prevention with Dr. James Kim",
+      "description": "Got questions about prevention, condoms, PrEP, or vaccines? Dr. Kim is here to answer everything. This is your chance to learn from one of the top infectious disease experts in the field.",
+      "date": "Friday, February 27",
+      "time": "5:26 PM",
+      "duration": "60 minutes",
+      "format": "Live Video",
+      "questionsSubmitted": 0,
+      "instructor": {
+        "name": "Dr. James Kim",
+        "title": "MD, PhD, Infectious Disease Specialist",
+        "avatar": "D",
+        "bio": "Dr. Kim is a leading expert in STI prevention and public health. He has published over 50 research papers and works with organizations worldwide to improve sexual health education and access to preventive care."
+      }
+    },
+    {
+      "id": 4,
+      "type": "workshop",
+      "category": "Testing & Prevention",
+      "categoryColor": "#b2dfdb",
+      "title": "First Time Testing 101",
+      "description": "Everything you need to know about getting tested for the first time. We'll walk through the process, what to expect, and answer all your questions in a judgment-free space.",
+      "date": "Tuesday, February 17",
+      "time": "5:12 PM",
+      "duration": "75 minutes",
+      "format": "Online",
+      "registered": 0,
+      "spotsLeft": 100,
+      "instructor": {
+        "name": "Dr. Sarah Chen",
+        "title": "MD, Sexual Health Specialist, 10+ years experience",
+        "avatar": "D"
+      }
+    },
+    {
+      "id": 5,
+      "type": "workshop",
+      "category": "Safe Practices",
+      "categoryColor": "#b2dfdb",
+      "title": "Let's Talk Condoms",
+      "description": "An honest, shame-free conversation about condoms, consent, and communication. Learn how to talk about protection with partners confidently.",
+      "date": "Tuesday, February 24",
+      "time": "5:12 PM",
+      "duration": "60 minutes",
+      "format": "Hybrid",
+      "registered": 0,
+      "spotsLeft": 100,
+      "instructor": {
+        "name": "Alex Rodriguez",
+        "title": "MPH, Youth Health Educator",
+        "avatar": "A"
+      }
+    },
+    {
+      "id": 6,
+      "type": "workshop",
+      "category": "Treatment & Support",
+      "categoryColor": "#b2dfdb",
+      "title": "Caring for Your Body After an STI",
+      "description": "Diagnosed with an STI? You're not alone. Join us for practical advice on treatment, talking to partners, and maintaining your mental and physical health.",
+      "date": "Monday, March 2",
+      "time": "5:12 PM",
+      "duration": "90 minutes",
+      "format": "Online",
+      "registered": 0,
+      "spotsLeft": 100,
+      "instructor": {
+        "name": "Dr. Maya Patel",
+        "title": "MD, Infectious Disease Specialist",
+        "avatar": "D"
+      }
+    },
+    {
+      "id": 7,
+      "type": "workshop",
+      "category": "Communication",
+      "categoryColor": "#b2dfdb",
+      "title": "Love, Sex & Shame: How to Talk About It",
+      "description": "Break the silence around sexual health. Learn communication strategies for talking about STIs, testing, and sexual health with partners, friends, and healthcare providers.",
+      "date": "Monday, March 9",
+      "time": "5:12 PM",
+      "duration": "75 minutes",
+      "format": "Online",
+      "registered": 0,
+      "spotsLeft": 100,
+      "instructor": {
+        "name": "Jordan Lee",
+        "title": "LCSW, Relationship Therapist",
+        "avatar": "J"
+      }
+    }
+  ]
+}
