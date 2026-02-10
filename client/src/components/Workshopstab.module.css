@@ -293,17 +293,13 @@
 /* ============================================
    LOCKED STATE
    ============================================ */
-.content {
-  max-width: 1400px;
-  margin: -20px auto;
-  padding: 0 clamp(1rem, 2vw, 2rem) clamp(2rem, 4vw, 4rem);
 
-}
 .lockedBanner {
   background: #fefae9;
+
   border: 2px solid #ffd7ad;
   border-radius: 1rem;
-  padding: 1.5rem; 
+  padding: 1.8rem; 
 }
 
 .lockedBannerContent {
@@ -329,6 +325,28 @@
   font-weight: 800;
   padding-top: 0.5rem;
 }
+.startQuizzesButton {
+  background: #0d9488;
+  color: white;
+  border: none;
+  padding: clamp(0.5rem, 1.5vw, 0.8rem) clamp(0.7rem, 2.5vw, 1rem);
+  border-radius: 0.65rem;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 44rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+  transition: all 0.3s ease;
+}
+
+.startQuizzesButton:hover {
+  background: #0a7569;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(13, 148, 136, 0.4);
+}
 
 .lockedDescription {
   font-size: 0.985rem;
@@ -337,6 +355,7 @@
   padding-left: 4rem;
 
 }
+
 
 
 .lockedProgress {
@@ -385,7 +404,8 @@
    ============================================ */
 
 .unlockList {
-   border-radius: 1rem;
+  border-radius: 1rem;
+
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -414,33 +434,12 @@
 }
 
 .unlockItem span {
-  font-size: clamp(0.85rem, 1.25vw, 0.95rem);
-  color: #1f2937;
-  line-height: 1.5;
+  font-size: clamp(0.8rem, 1.25vw, 0.95rem);
+  color: #686868;
+  line-height: 1;
 }
 
-.startQuizzesButton {
-  background: #0d9488;
-  color: white;
-  border: none;
-  padding: clamp(0.875rem, 1.5vw, 1rem) clamp(1.5rem, 2.5vw, 2rem);
-  border-radius: 0.65rem;
-  font-size: clamp(0.95rem, 1.5vw, 1.0625rem);
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: clamp(1.25rem, 2vw, 2rem);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
-  transition: all 0.3s ease;
-}
 
-.startQuizzesButton:hover {
-  background: #0a7569;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(13, 148, 136, 0.4);
-}
 
 /* ============================================
    APPROACH SECTION

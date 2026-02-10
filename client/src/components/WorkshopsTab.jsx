@@ -393,11 +393,20 @@ const WorkshopsTab = ({ workshopsUnlocked, quizzesCompleted, setActiveTab }) => 
     <div className={styles.content}>
    
       <div className={styles.lockedBanner}>
+     
     <div className={styles.lockedBannerContent}>  
    <div className={styles.lockedIcon}>
      <Lock size={28} color="#f0efee" />
    </div>
-        <h2 className={styles.lockedTitle}>Unlock Expert Workshops</h2></div>  
+        <h2 className={styles.lockedTitle}>Unlock Expert Workshops</h2>
+         <div
+          onClick={() => setActiveTab('challenge')}
+          className={styles.startQuizzesButton}
+        >
+          Start Taking Quizzes
+          <ChevronRight size={20} />
+        </div></div>  
+        
         <p className={styles.lockedDescription}>
           Complete 3 myth-busting quizzes to unlock access to our exclusive, expert-led workshops!
         </p>
@@ -419,7 +428,7 @@ const WorkshopsTab = ({ workshopsUnlocked, quizzesCompleted, setActiveTab }) => 
         {/* What You'll Unlock */}
         <div className={styles.unlockList}>
           <h3 className={styles.unlockListTitle}>
-            ✨ What you'll unlock:
+           <StarIcon size={24} color='#f97316'/> What you'll unlock:
           </h3>
           <div className={styles.unlockItems}>
             {[
@@ -437,13 +446,7 @@ const WorkshopsTab = ({ workshopsUnlocked, quizzesCompleted, setActiveTab }) => 
           </div>
         </div>
 
-        <button
-          onClick={() => setActiveTab('challenge')}
-          className={styles.startQuizzesButton}
-        >
-          Start Taking Quizzes
-          <ChevronRight size={20} />
-        </button>
+       
       </div>
     </div>
   );
