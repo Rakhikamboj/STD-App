@@ -103,7 +103,7 @@ const WorkshopsTab = ({ workshopsUnlocked, quizzesCompleted, setActiveTab }) => 
         {/* Expert-Led Workshops */}
         <div className={styles.sectionExpert}>
           <h2 className={styles.sectionTitle}>
-            <div className={styles.sectionIcon}>
+            <div className={styles.sectionIconGreen}>
               <Sparkles size={20} />
             </div>
             Expert-Led Workshops
