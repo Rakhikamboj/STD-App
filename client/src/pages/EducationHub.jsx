@@ -1,14 +1,15 @@
-import { useState } from 'react';
-import { BookOpen, Trophy, Calendar, MessageCircle } from 'lucide-react';
-import ArticlesTab from "../components/ArticleTab.jsx"
-import ChallengeTab from '../components/ChallengeTab.jsx';
-import WorkshopsTab from '../components/WorkshopsTab.jsx';
-import styles from './EducationHub.module.css';
-
+import { useState } from "react";
+import { BookOpen, Trophy, Calendar, MessageCircle } from "lucide-react";
+import ArticlesTab from "../components/ArticleTab.jsx";
+import ChallengeTab from "../components/ChallengeTab.jsx";
+import WorkshopsTab from "../components/WorkshopsTab.jsx";
+import styles from "./EducationHub.module.css";
+import EducationAssistant from "../components/EducationAssistant.jsx";
 
 const EducationHub = () => {
-  const [activeTab, setActiveTab] = useState('articles');
+  const [activeTab, setActiveTab] = useState("articles");
   const [quizzesCompleted, setQuizzesCompleted] = useState(0);
+  const [isAssistantOpen, setIsAssistantOpen] = useState(false);
 
   const workshopsUnlocked = quizzesCompleted >= 3;
 
@@ -18,29 +19,48 @@ const EducationHub = () => {
       <div className={styles.hero}>
         <h1 className={styles.heroTitle}>Education Hub</h1>
         <p className={styles.heroDescription}>
-          Knowledge is power. Explore evidence-based information about sexual health, testing,
-          and prevention in a judgment-free space.
+          Knowledge is power. Explore evidence-based information about sexual
+          health, testing, and prevention in a judgment-free space.
         </p>
 
         {/* Ask Assistant Button */}
-        <button className={styles.assistantButton}>
-          <span className={styles.assistantIcon}><MessageCircle size={20} /></span>
+        <div
+          className={styles.assistantButton}
+          onClick={() => setIsAssistantOpen(true)}
+        >
+          <span className={styles.assistantIcon}>
+            <MessageCircle size={20} />
+          </span>
           Ask the Education Assistant
-        </button>
+        </div>
+{ /* Modal */}
+<EducationAssistant
+  isOpen={isAssistantOpen}
+  onClose={()=> setIsAssistantOpen(false)}/>
 
         {/* Tabs */}
         <div className={styles.tabsContainer}>
           {[
-            { id: 'articles', label: 'Articles', icon: BookOpen },
-            { id: 'challenge', label: 'Challenge Yourself', icon: Trophy, badge: `${quizzesCompleted}/3` },
-            { id: 'workshops', label: 'Workshops', icon: Calendar, locked: !workshopsUnlocked }
-          ].map(tab => {
+            { id: "articles", label: "Articles", icon: BookOpen },
+            {
+              id: "challenge",
+              label: "Challenge Yourself",
+              icon: Trophy,
+              badge: `${quizzesCompleted}/3`,
+            },
+            {
+              id: "workshops",
+              label: "Workshops",
+              icon: Calendar,
+              locked: !workshopsUnlocked,
+            },
+          ].map((tab) => {
             const Icon = tab.icon;
             return (
               <div
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ''}`}
+                className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ""}`}
               >
                 <Icon size={18} />
                 {tab.label}
@@ -57,18 +77,17 @@ const EducationHub = () => {
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'articles' && <ArticlesTab />}
-      
-      {activeTab === 'challenge' && (
-        <ChallengeTab 
+      {activeTab === "articles" && <ArticlesTab />}
+
+      {activeTab === "challenge" && (
+        <ChallengeTab
           quizzesCompleted={quizzesCompleted}
           setQuizzesCompleted={setQuizzesCompleted}
         />
-        
       )}
-      
-      {activeTab === 'workshops' && (
-        <WorkshopsTab 
+
+      {activeTab === "workshops" && (
+        <WorkshopsTab
           workshopsUnlocked={workshopsUnlocked}
           quizzesCompleted={quizzesCompleted}
           setActiveTab={setActiveTab}

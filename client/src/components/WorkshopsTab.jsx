@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Clock, Video, MessageCircle, Users, MapPin, ChevronRight, CheckCircle, Lock, Sparkles, Sparkle } from 'lucide-react';
+import { Calendar, Clock, Video, MessageCircle, Users, MapPin, ChevronRight, CheckCircle, Lock, Sparkles, TrendingUp } from 'lucide-react';
 import styles from './Workshopstab.module.css';
 import workshopsData from "../Json/workshops-data.json"
 
@@ -71,7 +71,7 @@ const WorkshopsTab = ({ workshopsUnlocked, quizzesCompleted, setActiveTab }) => 
                   </div>
 
                   <div className={styles.detailItem}>
-                    <ChevronRight size={18} className={styles.detailIcon} />
+                    <TrendingUp size={18} className={styles.detailIcon} />
                     <div className={styles.detailContent}>
                       <div className={styles.detailValue}>{workshop.questionsSubmitted} questions submitted</div>
                     </div>
@@ -91,10 +91,10 @@ const WorkshopsTab = ({ workshopsUnlocked, quizzesCompleted, setActiveTab }) => 
                 </div>
 
                 {/* Register Button */}
-                <button className={styles.registerButtonAma}>
+                <div className={styles.registerButtonAma}>
                   Register for AMA
                   <MessageCircle size={18} />
-                </button>
+                </div>
               </div>
             ))}
           </div>
@@ -104,7 +104,7 @@ const WorkshopsTab = ({ workshopsUnlocked, quizzesCompleted, setActiveTab }) => 
         <div className={styles.sectionExpert}>
           <h2 className={styles.sectionTitle}>
             <div className={styles.sectionIconGreen}>
-              <Sparkles size={20} />
+              <Sparkles size={28} />
             </div>
             Expert-Led Workshops
           </h2>
