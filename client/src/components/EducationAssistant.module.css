@@ -195,6 +195,9 @@
   color: #1b9b8a;
   margin-bottom: 12px;
 }
+.textColor {
+  color: rgb(26, 25, 25);
+}
 
 .questionButtons {
   display: flex;
@@ -203,20 +206,20 @@
 }
 
 .questionButton {
-  background-color: white;
-  border: 1px solid #d1d5db;
-  border-radius: 20px;
+  background-color:#E2F7F6;
+ 
+  border-radius: 0.5rem;
   padding: 8px 14px;
   font-size: 13px;
-  color: #1b9b8a;
+  color: #055E66;
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
 }
 
 .questionButton:hover {
-  background-color: #ecfdf5;
-  border-color: #1b9b8a;
+  background-color: #BFF0EE;
+
 }
 
 /* Input Area */

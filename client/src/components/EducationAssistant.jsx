@@ -89,8 +89,8 @@ const EducationAssistant = ({ isOpen, onClose }) => {
         {/* Suggested Questions */}
         <div className={styles.suggestedQuestions}>
           <div className={styles.suggestedLabel}>
-            <Sparkles />
-            <span>Try asking:</span>
+            <Sparkles size={16} />
+            <span className={styles.textColor} >Try asking:</span>
           </div>
           <div className={styles.questionButtons}>
             {suggestedQuestions.map((question, index) => (
@@ -106,7 +106,7 @@ const EducationAssistant = ({ isOpen, onClose }) => {
         </div>
 
         {/* Input Area */}
-        <form onSubmit={handleSubmit} className={styles.inputArea}>
+        <form onSubmit={handleSubmit} className={styles.inputArea}> 
           <input
             type="text"
             className={styles.messageInput}
