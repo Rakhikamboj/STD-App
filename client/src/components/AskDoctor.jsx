@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MessageCircle, Send, ThumbsUp, Eye, Filter, AlertTriangle, Dot,Shield } from 'lucide-react';
+import { MessageCircle, Send, ThumbsUp, Eye, Filter, AlertTriangle, Dot, Shield, Flag } from 'lucide-react';
 import api from '../utils/api';
 import styles from './AskDoctor.module.css';
 
@@ -316,8 +316,11 @@ const AskADoctor = () => {
               >
                 <div className={styles.cardHeader}>
                   <span className={styles.categoryBadge}>
+                  
                     {question.category}
                   </span>
+                  <span className={styles.reportIcon}>
+                   <Flag size={20}/></span>
                 </div>
                 
                 <h3 className={styles.cardTitle}>{question.title}</h3>
