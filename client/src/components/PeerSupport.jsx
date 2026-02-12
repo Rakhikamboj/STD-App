@@ -112,8 +112,8 @@ const PeerSupport = () => {
 
         <span style={{ color: topic.Iconcolor }}><Icon size={26} /></span>
       </div> </div>
-      <h4 className={styles.topicTitle}>{topic.title}</h4>
-            <p className={styles.topicDescription}>{topic.description}</p>
+      <h4 className={styles.topicTitleReal}>{topic.title}</h4>
+            <p className={styles.topicDescriptionReal}>{topic.description}</p>
     
         
     </div>
