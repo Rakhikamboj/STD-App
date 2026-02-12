@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MessageCircle, Send, ThumbsUp, Eye, Filter, AlertTriangle, Shield } from 'lucide-react';
+import { MessageCircle, Send, ThumbsUp, Eye, Filter, AlertTriangle, Dot,Shield } from 'lucide-react';
 import api from '../utils/api';
 import styles from './AskDoctor.module.css';
 
@@ -121,7 +121,7 @@ const AskADoctor = () => {
             <AlertTriangle size={24} />
           </div>
           <div className={styles.boxContentDisclaimer}>
-            
+
             <strong>Important Disclaimer</strong>
             <p>The information provided here is for educational purposes only and should not be considered medical advice. Always consult with a qualified healthcare provider for proper diagnosis and treatment. If you have a medical emergency, call 911.</p>
           </div>
@@ -328,7 +328,7 @@ const AskADoctor = () => {
                 
                 <div className={styles.cardFooter}>
                   <span>Posted {formatDate(question.createdAt)}</span>
-                  <span>{question.views} views</span>
+                 <Dot className={styles.dotIcon} color=' #868788'/> <span>{question.views} views</span>
                 </div>
               </div>
             ))
