@@ -9,6 +9,95 @@
   );
   padding: 2.8rem 4rem;
 }
+/* ================================================================
+   ADD THESE RULES TO THE BOTTOM OF ResultsScreen.module.css
+   All existing rules above remain untouched.
+   ================================================================ */
+
+/* ── AI / fallback badge ─────────────────────────────────────── */
+.analysisBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-top: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* ── AI supportive message card ──────────────────────────────── */
+.aiMessageCard {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+}
+
+.aiMessageText {
+  color: #0c4a6e;
+  font-size: 0.93rem;
+  line-height: 1.6;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ── Risk level pill inside follow-up banner ─────────────────── */
+.riskPill {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* ── Condition card: name + image side-by-side row ───────────── */
+.conditionHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 0.75rem;
+}
+
+.conditionHeaderText {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Reference image thumbnail inside condition card */
+.conditionImageWrapper {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.conditionImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Responsive: stack image below text on small screens ─────── */
+@media (max-width: 479px) {
+  .conditionHeaderRow {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .conditionImageWrapper {
+    width: 64px;
+    height: 64px;
+  }
+}
 
 .result {
   max-width: 800px;

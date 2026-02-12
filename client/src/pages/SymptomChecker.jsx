@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   AlertCircle,
   CheckCircle,
   Loader,
   HeartIcon,
-  
   ChevronRight,
   ChevronLeft,
   CheckIcon,
@@ -12,110 +11,166 @@ import {
 import api from "../utils/api";
 import ResultsScreen from "./ResultsScreen";
 import styles from "./SymptomChecker.module.css";
+
+// ── Static image imports (Vite / CRA resolve these at build time) ──────────────
 import herpes from "../assets/Genetial-herps.png";
 import scabies from "../assets/Genital-scabies2.png";
 import warts from "../assets/Genital-warts.png";
 import ulcer from "../assets/ulcer.png";
 import smooth from "../assets/smooth-skin.png";
 import bumpy from "../assets/bumpy-skin.png";
-import rough from "../assets/rough-skin .png";
+// import rough from "../assets/rough-skin.png";
 import inflamed from "../assets/inflamed-skin.png";
 import swollen from "../assets/swollen-skin.png";
 
+/** Maps imageType keys → imported image URLs */
 export const referenceImagesMap = {
   herpes,
   scabies,
+  warts,
+  ulcer,
   smooth,
   bumpy,
-  rough,
+
   inflamed,
   swollen,
 };
 
+/**
+ * Human-readable clinical label for each imageType.
+ * Sent alongside the image so Gemini has dual grounding.
+ */
+const IMAGE_LABELS = {
+  herpes:   "Genital herpes – fluid-filled blisters (HSV)",
+  warts:    "Genital warts – cauliflower-like growths (HPV)",
+  scabies:  "Scabies – parasitic burrow-track rash",
+  ulcer:    "Ulcer / open sore – requires clinical evaluation",
+  smooth:   "Smooth skin – no visible lesion",
+  bumpy:    "Small raised bumps",
+  // rough:    "Rough / textured skin surface",
+  inflamed: "Red or inflamed skin",
+  swollen:  "Swollen area",
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 const SymptomChecker = () => {
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions]             = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [responses, setResponses] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState("");
-  const [selectedReferenceImages, setSelectedReferenceImages] = useState([]);
-  const [referenceImageData, setReferenceImageData] = useState({});
-  const [showReferenceImagesNotice, setShowReferenceImagesNotice] =
-    useState(false);
+  const [responses, setResponses]             = useState({});
+  const [loading, setLoading]                 = useState(false);
+  const [result, setResult]                   = useState(null);
+  const [error, setError]                     = useState("");
+
+  /**
+   * selectedImages: Array of { imageType, label, blobUrl }
+   * We store the resolved blob URL so the backend can fetch the actual bytes.
+   */
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [showRefNotice, setShowRefNotice]   = useState(false);
 
   useEffect(() => {
     fetchQuestions();
-    fetchReferenceImages();
   }, []);
 
   const fetchQuestions = async () => {
     try {
       const { data } = await api.get("/symptoms/questions");
       setQuestions(data);
-    } catch (err) {
+    } catch {
       setError("Failed to load questions. Please try again.");
     }
   };
 
-  const fetchReferenceImages = async () => {
-    try {
-      const { data } = await api.get("/symptoms/reference-images");
-      setReferenceImageData(data);
-    } catch (err) {
-      console.error("Failed to load reference images");
-    }
-  };
+  // ── Answer handlers ─────────────────────────────────────────────────────────
 
   const handleAnswer = (answer) => {
     const question = questions[currentQuestion];
 
     if (question.multiselect) {
-      const currentAnswers = responses[question.id] || [];
-      const updatedAnswers = currentAnswers.includes(answer)
-        ? currentAnswers.filter((a) => a !== answer)
-        : [...currentAnswers, answer];
-      setResponses({ ...responses, [question.id]: updatedAnswers });
+      const prev    = responses[question.id] || [];
+      const updated = prev.includes(answer)
+        ? prev.filter((a) => a !== answer)
+        : [...prev, answer];
+      setResponses({ ...responses, [question.id]: updated });
     } else {
       setResponses({ ...responses, [question.id]: answer });
 
-      // Show reference images notice if user selects "yes" for reference images question
-      if (question.id === "referenceImages" || question.type === "yes-no") {
-        if (answer === "yes") {
-          setShowReferenceImagesNotice(true);
-        } else {
-          setShowReferenceImagesNotice(false);
-        }
+      if (question.type === "yes-no") {
+        setShowRefNotice(answer === "yes");
       }
     }
   };
 
-  const handleImageSelection = (imageType) => {
+  /**
+   * Called when the user clicks a reference image card.
+   *
+   * Records:
+   *   - The response value for this question
+   *   - The imageType + label in selectedImages (used for multimodal payload)
+   */
+  const handleImageSelection = useCallback((imageType) => {
     const question = questions[currentQuestion];
-    setResponses({ ...responses, [question.id]: imageType });
+    setResponses((prev) => ({ ...prev, [question.id]: imageType }));
 
-    // Track selected reference images for analysis
-    if (!selectedReferenceImages.includes(imageType)) {
-      setSelectedReferenceImages([...selectedReferenceImages, imageType]);
-    }
-  };
+    // Avoid duplicates – replace previous selection for the same question
+    setSelectedImages((prev) => {
+      const filtered = prev.filter((img) => img.questionId !== question.id);
+      if (imageType === "none") return filtered; // "none" carries no image
+      return [
+        ...filtered,
+        {
+          questionId: question.id,
+          imageType,
+          label: IMAGE_LABELS[imageType] || imageType,
+          // blobUrl is the Vite-resolved URL; the backend reads the file from disk
+          blobUrl: referenceImagesMap[imageType] || null,
+        },
+      ];
+    });
+  }, [questions, currentQuestion]);
+
+  // ── Navigation ──────────────────────────────────────────────────────────────
 
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+      setCurrentQuestion((q) => q + 1);
     } else {
       submitResponses();
     }
   };
 
-  const submitResponses = async (finalResponses = responses) => {
+  const handleBack = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion((q) => q - 1);
+      const prevQ = questions[currentQuestion - 1];
+      if (prevQ?.id === "referenceImages") {
+        setShowRefNotice(responses[prevQ.id] === "yes");
+      }
+    }
+  };
+
+  // ── Submission ──────────────────────────────────────────────────────────────
+
+  /**
+   * Builds the request payload.
+   *
+   * selectedReferenceImages – string array of imageType keys (for the backend
+   *   to load files from disk and build inline Gemini parts).
+   * selectedImageLabels – parallel array of human-readable labels.
+   *
+   * Sending the imageType keys (not raw base64) keeps the HTTP payload small.
+   * The backend resolves the actual file bytes before calling Gemini.
+   */
+  const submitResponses = async () => {
     setLoading(true);
     setError("");
 
     try {
       const enrichedResponses = {
-        ...finalResponses,
-        selectedReferenceImages,
+        ...responses,
+        selectedReferenceImages: selectedImages.map((img) => img.imageType),
+        selectedImageLabels:     selectedImages.map((img) => img.label),
       };
 
       const { data } = await api.post("/symptoms/analyze", {
@@ -129,35 +184,26 @@ const SymptomChecker = () => {
     }
   };
 
-  const handleBack = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1);
-      // Reset reference images notice when going back
-      const prevQuestion = questions[currentQuestion - 1];
-      if (prevQuestion?.id === "referenceImages") {
-        setShowReferenceImagesNotice(responses[prevQuestion.id] === "yes");
-      }
-    }
-  };
+  // ── Reset ───────────────────────────────────────────────────────────────────
 
   const restart = () => {
     setCurrentQuestion(0);
     setResponses({});
     setResult(null);
     setError("");
-    setSelectedReferenceImages([]);
-    setShowReferenceImagesNotice(false);
+    setSelectedImages([]);
+    setShowRefNotice(false);
   };
+
+  // ── Loading / Result screens ────────────────────────────────────────────────
 
   if (loading) {
     return (
       <div className={styles.container}>
         <div className={styles.loading}>
           <Loader className={styles.spinner} size={48} />
-          <p>Analyzing your responses...</p>
-          <p className={styles.loadingSubtext}>
-            Generating personalized health insights
-          </p>
+          <p>Analyzing your responses…</p>
+          <p className={styles.loadingSubtext}>Generating personalized health insights</p>
         </div>
       </div>
     );
@@ -172,24 +218,30 @@ const SymptomChecker = () => {
       <div className={styles.container}>
         <div className={styles.loading}>
           <Loader className={styles.spinner} size={48} />
-          <p>Loading assessment...</p>
+          <p>Loading assessment…</p>
         </div>
       </div>
     );
   }
 
-  const question = questions[currentQuestion];
-  const progress = Math.round(((currentQuestion ) / questions.length) * 100);
-  const isMultiselect = question.multiselect;
+  // ── Question render ─────────────────────────────────────────────────────────
+
+  const question       = questions[currentQuestion];
+  const progress       = Math.round((currentQuestion / questions.length) * 100);
+  const isMultiselect  = question.multiselect;
   const currentAnswers = responses[question.id] || [];
-  const canProceed =
+  const canProceed     =
     responses[question.id] !== undefined &&
     responses[question.id] !== "" &&
     (!isMultiselect || currentAnswers.length > 0);
 
+  const showingImages = responses.referenceImages === "yes";
+
   return (
     <div className={styles.container}>
       <div className={styles.checker}>
+
+        {/* Progress */}
         <div className={styles.progressSection}>
           <div className={styles.progressInfo}>
             <span className={styles.progressText}>
@@ -198,25 +250,25 @@ const SymptomChecker = () => {
             <span className={styles.progressPercent}>{progress}% complete</span>
           </div>
           <div className={styles.progressBar}>
-            <div
-              className={styles.progressFill}
-              style={{ width: `${progress}%` }}
-            />
+            <div className={styles.progressFill} style={{ width: `${progress}%` }} />
           </div>
         </div>
 
+        {/* Question card */}
         <div className={styles.questionCard}>
           {question?.sensitive && (
             <div className={styles.sensitiveAlert}>
               <HeartIcon size={18} />
-              <span>{question?.sensitiveMessage}</span>
+              <span>{question.sensitiveMessage}</span>
             </div>
           )}
 
           <h2 className={styles.question}>{question?.question}</h2>
 
           <div className={styles.answers}>
-            {question?.type === "yes-no" ? (
+
+            {/* yes-no */}
+            {question?.type === "yes-no" && (
               <>
                 <button
                   onClick={() => handleAnswer("yes")}
@@ -231,7 +283,10 @@ const SymptomChecker = () => {
                   No, I prefer text descriptions only
                 </button>
               </>
-            ) : question?.type === "text" ? (
+            )}
+
+            {/* free text */}
+            {question?.type === "text" && (
               <textarea
                 placeholder={question.placeholder}
                 value={responses[question.id] || ""}
@@ -241,30 +296,32 @@ const SymptomChecker = () => {
                 className={styles.textInput}
                 rows="4"
               />
-            ) : question?.type === "conditional" ? (
-              // Conditional question - show images OR text based on referenceImages response
-              responses.referenceImages === "yes" ? (
-                // Show image options with imported images
+            )}
+
+            {/* conditional – image grid or text buttons depending on user preference */}
+            {question?.type === "conditional" && (
+              showingImages ? (
                 <div className={styles.imageSelectionGrid}>
-                  {question?.imageOptions?.map((option) => {
-                    // Use imported images map
+                  {question.imageOptions?.map((option) => {
                     const imageSrc = referenceImagesMap[option.imageType];
+                    const isSelected = responses[question.id] === option.value;
 
                     return (
                       <div
                         key={option.value}
                         onClick={() => handleImageSelection(option.value)}
-                        className={`${styles.imageOptionCard} ${
-                          responses[question.id] === option.value
-                            ? styles.selectedImageOption
-                            : ""
-                        }`}
+                        className={`${styles.imageOptionCard} ${isSelected ? styles.selectedImageOption : ""}`}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => e.key === "Enter" && handleImageSelection(option.value)}
+                        aria-pressed={isSelected}
+                        aria-label={option.label}
                       >
                         <div className={styles.imageWrapper}>
                           {imageSrc ? (
                             <img
                               src={imageSrc}
-                              alt={option.label}
+                              alt={IMAGE_LABELS[option.imageType] || option.label}
                               className={styles.optionImage}
                             />
                           ) : (
@@ -273,10 +330,8 @@ const SymptomChecker = () => {
                             </div>
                           )}
                         </div>
-                        <div className={styles.imageOptionLabel}>
-                          {option.label}
-                        </div>
-                        {responses[question.id] === option.value && (
+                        <div className={styles.imageOptionLabel}>{option.label}</div>
+                        {isSelected && (
                           <div className={styles.selectedCheckmark}>
                             <CheckIcon size={18} />
                           </div>
@@ -286,130 +341,104 @@ const SymptomChecker = () => {
                   })}
                 </div>
               ) : (
-                // Show text options
-                <>
-                  {question?.textOptions?.map((option) => (
-                    <button
-                      key={option}
-                      onClick={() => handleAnswer(option)}
-                      className={`${styles.answerButton} ${
-                        responses[question.id] === option ? styles.selected : ""
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </>
+                question.textOptions?.map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => handleAnswer(option)}
+                    className={`${styles.answerButton} ${responses[question.id] === option ? styles.selected : ""}`}
+                  >
+                    {option}
+                  </button>
+                ))
               )
-            ) : question?.type === "image-selection" ? (
+            )}
+
+            {/* image-selection (explicit type) */}
+            {question?.type === "image-selection" && (
               <div className={styles.imageSelectionGrid}>
-                {question?.options?.map((option) => {
-                  const imageSrc = referenceImagesMap[option.imageType];
+                {question.options?.map((option) => {
+                  const imageSrc  = referenceImagesMap[option.imageType];
+                  const isSelected = responses[question.id] === option.value;
 
                   return (
                     <div
                       key={option.value}
                       onClick={() => handleImageSelection(option.value)}
-                      className={`${styles.imageOptionCard} ${
-                        responses[question.id] === option.value
-                          ? styles.selectedImageOption
-                          : ""
-                      }`}
+                      className={`${styles.imageOptionCard} ${isSelected ? styles.selectedImageOption : ""}`}
                     >
                       <div className={styles.imageWrapper}>
                         {imageSrc ? (
-                          <img
-                            src={imageSrc}
-                            alt={option.label}
-                            className={styles.optionImage}
-                          />
+                          <img src={imageSrc} alt={option.label} className={styles.optionImage} />
                         ) : (
-                          <div className={styles.imagePlaceholder}>
-                            <span>{option.label}</span>
-                          </div>
+                          <div className={styles.imagePlaceholder}><span>{option.label}</span></div>
                         )}
                       </div>
-
-                      <div className={styles.imageOptionLabel}>
-                        {option.label}
-                      </div>
-
-                      {responses[question.id] === option.value && (
-                        <div className={styles.selectedCheckmark}>
-                          <CheckCircle size={24} />
-                        </div>
+                      <div className={styles.imageOptionLabel}>{option.label}</div>
+                      {isSelected && (
+                        <div className={styles.selectedCheckmark}><CheckCircle size={24} /></div>
                       )}
                     </div>
                   );
                 })}
               </div>
-            ) : (
-              question?.options?.map((option) => (
+            )}
+
+            {/* standard multiple-choice */}
+            {question?.type === "multiple-choice" &&
+              question.options?.map((option) => (
                 <button
                   key={option}
                   onClick={() => handleAnswer(option)}
                   className={`${styles.answerButton} ${
                     isMultiselect
-                      ? currentAnswers.includes(option)
-                        ? styles.selected
-                        : ""
-                      : responses[question.id] === option
-                        ? styles.selected
-                        : ""
+                      ? currentAnswers.includes(option) ? styles.selected : ""
+                      : responses[question.id] === option ? styles.selected : ""
                   }`}
                 >
                   {option}
                 </button>
               ))
-            )}
+            }
           </div>
 
-          {/* Show reference images notice after yes selection and on subsequent questions */}
           {question?.helpText && (
             <p className={styles.helpText}>{question.helpText}</p>
           )}
-          {(showReferenceImagesNotice ||
-            (responses.referenceImages === "yes" && currentQuestion > 7)) && (
+
+          {(showRefNotice || (responses.referenceImages === "yes" && currentQuestion > 7)) && (
             <div className={styles.referenceImagesNotice}>
               <AlertCircle size={18} className={styles.noticeIcon} />
               <div className={styles.noticeContent}>
                 <strong>Reference Images Enabled</strong>
-                <p>
-                  You'll see medical reference images to help identify symptoms.
-                  These are for educational purposes only.
-                </p>
+                <p>You'll see medical reference images to help identify symptoms. These are for educational purposes only.</p>
               </div>
             </div>
           )}
         </div>
+
+        {/* Navigation */}
         <div className={styles.navigationButtons}>
           <button
             onClick={handleBack}
             className={styles.backButton}
             disabled={currentQuestion === 0}
           >
-            <ChevronLeft size={18} />
-            Back
+            <ChevronLeft size={18} /> Back
           </button>
-
           <button onClick={handleNext} className={styles.continueButton}>
-            Continue
+            {currentQuestion < questions.length - 1 ? "Continue" : "Submit"}
             <ChevronRight size={18} />
           </button>
         </div>
 
         {error && (
           <div className={styles.errorAlert}>
-            <AlertCircle size={18} />
-            {error}
+            <AlertCircle size={18} /> {error}
           </div>
         )}
 
         <div className={styles.privacyNotice}>
-          <span>
-            Your responses are anonymous and help us provide better
-            recommendations
-          </span>
+          <span>Your responses are anonymous and help us provide better recommendations</span>
         </div>
       </div>
     </div>
