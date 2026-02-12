@@ -6,7 +6,7 @@
 
 .doctorHeader {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 1.5rem;
 }
 
 .doctorSubtitle {
@@ -19,14 +19,14 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
-  margin-bottom: 32px;
+  margin-bottom: 1.5rem;
 }
 
 .privacyBox,
 .disclaimerBox {
   display: flex;
   gap: 16px;
-  padding: 24px;
+  padding: 1.2rem 1.5rem;
   border-radius: 12px;
   background: white;
   border: 1px solid #E5E7EB;
@@ -34,12 +34,12 @@
 
 .privacyBox {
   background: #EFF6FF;
-  border-color: #DBEAFE;
+  border: 1px solid #a4c0fd;
 }
 
 .disclaimerBox {
   background: #FFFBEB;
-  border-color: #FEF3C7;
+  border:  1px solid #f8e9ac;
 }
 
 .boxIcon {
@@ -50,7 +50,7 @@
 }
 
 .disclaimerBox .boxIcon {
-  color: #F59E0B;
+  color: #cc8407;
 }
 
 .boxContent {
@@ -59,29 +59,39 @@
 
 .boxContent strong {
   display: block;
-  font-size: 16px;
+  font-size: 0.89rem;
   font-weight: 600;
-  color: #1F2937;
+  color: #052c80;
   margin-bottom: 12px;
 }
 
 .boxContent p {
-  font-size: 14px;
+  font-size: 0.8rem;
   color: #4B5563;
   margin: 0;
   line-height: 1.6;
 }
+.boxContentDisclaimer strong {
+  color: #805305;
+  display: block;
+  font-size: 0.9rem;
 
+}
 .boxContent ul {
   margin: 0;
-  padding-left: 20px;
-  font-size: 14px;
-  color: #4B5563;
-  line-height: 1.8;
+  padding-left: 0.8rem;
+  font-size: 0.8rem;
+  color: #587eca;
+
 }
 
 .boxContent li {
   margin-bottom: 4px;
+}
+.boxContentDisclaimer p {
+  color: #a4795f;
+  font-size: 0.8rem;
+  margin-top: 12px;
 }
 
 .askButton {
@@ -90,20 +100,20 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: #0891B2;
+  background:#0d9488;
   color: white;
   border: none;
-  padding: 16px 24px;
+  padding: 0.95rem 24px;
   border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 0.95rem;
+
   cursor: pointer;
   transition: background 0.2s ease;
   margin-bottom: 32px;
 }
 
 .askButton:hover {
-  background: #0E7490;
+  background: #0a7c73;
 }
 
 .askForm {
@@ -151,7 +161,7 @@
 .formInput:focus,
 .formTextarea:focus {
   outline: none;
-  border-color: #0891B2;
+  border-color:#0d9488;
   box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
 }
 
@@ -176,7 +186,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #0891B2;
+  background: #0d9488;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -255,14 +265,14 @@
 }
 
 .categoryTab:hover {
-  border-color: #0891B2;
-  color: #0891B2;
+  border-color: #0d9488;
+  color: #0d9488;
 }
 
 .categoryTab.active {
-  background: #0891B2;
+  background: #0d9488;
   color: white;
-  border-color: #0891B2;
+  border-color: #0d9488;
 }
 
 .questionsList {
@@ -281,7 +291,7 @@
 }
 
 .questionCard:hover {
-  border-color: #0891B2;
+  border-color: #0d9488;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -291,14 +301,14 @@
 
 .categoryBadge {
   display: inline-block;
-  background: #DBEAFE;
-  color: #1E40AF;
-  padding: 4px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
+  background: #ccfbf1;
+  color: #0d9488;
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-size: 0.6rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  line-height: 2; 
 }
 
 .cardTitle {
@@ -335,7 +345,7 @@
   width: 40px;
   height: 40px;
   border: 4px solid #E5E7EB;
-  border-top-color: #0891B2;
+  border-top-color: #0d9488;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 16px;
@@ -389,7 +399,7 @@
 .backButton {
   background: transparent;
   border: none;
-  color: #0891B2;
+  color: #0d9488;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -399,7 +409,7 @@
 }
 
 .backButton:hover {
-  color: #0E7490;
+  color: #0a7c73;
 }
 
 .questionHeader {
@@ -450,7 +460,7 @@
 
 .tag {
   background: #E0F2FE;
-  color: #0369A1;
+  color: #0d9488;
   padding: 4px 12px;
   border-radius: 4px;
   font-size: 12px;

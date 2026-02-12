@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MessageCircle, Send, ThumbsUp, Eye, Filter, AlertCircle, Shield } from 'lucide-react';
+import { MessageCircle, Send, ThumbsUp, Eye, Filter, AlertTriangle, Shield } from 'lucide-react';
 import api from '../utils/api';
 import styles from './AskDoctor.module.css';
 
@@ -118,9 +118,10 @@ const AskADoctor = () => {
 
         <div className={styles.disclaimerBox}>
           <div className={styles.boxIcon}>
-            <AlertCircle size={24} />
+            <AlertTriangle size={24} />
           </div>
-          <div className={styles.boxContent}>
+          <div className={styles.boxContentDisclaimer}>
+            
             <strong>Important Disclaimer</strong>
             <p>The information provided here is for educational purposes only and should not be considered medical advice. Always consult with a qualified healthcare provider for proper diagnosis and treatment. If you have a medical emergency, call 911.</p>
           </div>
