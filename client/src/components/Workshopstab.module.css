@@ -314,7 +314,7 @@
 }
 
 .registerButton {
-    background: linear-gradient(90deg, #0D9488, #2563EB);
+  background: linear-gradient(90deg, #0D9488, #2563EB);
   color: white;
   border: none;
   padding: 0.875rem 1.5rem;
