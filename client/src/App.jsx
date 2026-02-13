@@ -33,7 +33,7 @@ function App() {
 
   return (
     <Router>
-      <AnalyticsTracker /> 
+     
       <div className="App">
         <Navigation />
         <Routes>
