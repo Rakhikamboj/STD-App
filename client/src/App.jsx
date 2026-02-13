@@ -13,7 +13,7 @@ import Footer from "./components/Footer.jsx";
 
 const GA_TRACKING_ID = "G-E2Z53DVEZ5";
 
-// This component tracks route changes
+
 function AnalyticsTracker() {
   const location = useLocation();
 
