@@ -1,6 +1,9 @@
-import { Heart, Shield, Sparkles, MessageCircle, BookOpen, Users} from 'lucide-react';
+import { useState } from 'react';
+import { Heart, Shield, Sparkles, MessageCircle, BookOpen, Users } from 'lucide-react';
 import styles from './PeerSupport.module.css';
+import TopicDetail from "../components/TopicDetail.jsx"
 
+/* ── Data ── */
 const PEER_SUPPORT_TOPICS = [
   {
     id: 'first-time',
@@ -8,9 +11,7 @@ const PEER_SUPPORT_TOPICS = [
     title: 'First-Time Testing',
     description: 'For those taking the brave step of getting tested for the first time',
     color: '#ccfbf1',
-    Iconcolor: "#0d9488"
-
-
+    Iconcolor: '#0d9488',
   },
   {
     id: 'living-with-sti',
@@ -18,7 +19,7 @@ const PEER_SUPPORT_TOPICS = [
     title: 'Living with an STI',
     description: 'Support and stories from people managing a recent or ongoing diagnosis',
     color: '#fce7f3',
-    Iconcolor: "#db2777"
+    Iconcolor: '#db2777',
   },
   {
     id: 'partner-communication',
@@ -26,17 +27,18 @@ const PEER_SUPPORT_TOPICS = [
     title: 'Partner Communication',
     description: 'Tips and experiences on talking to partners about testing or results',
     color: '#dbeafe',
-    Iconcolor: "#2c68eb"
-  },];
+    Iconcolor: '#2c68eb',
+  },
+];
 
-  const Real_Stories =[
+const Real_Stories = [
   {
     id: 'real-stories',
     icon: BookOpen,
     title: 'Real Stories',
-    description: 'Anonymous experiences from people who\'ve been where you are',
+    description: "Anonymous experiences from people who've been where you are",
     color: '#ccfbf1',
-    Iconcolor: "#0d9488"
+    Iconcolor: '#0d9488',
   },
   {
     id: 'discussion-groups',
@@ -44,7 +46,7 @@ const PEER_SUPPORT_TOPICS = [
     title: 'Discussion Groups',
     description: 'Join conversations with others on similar journeys',
     color: '#fce7f3',
-    Iconcolor: "#db2777"
+    Iconcolor: '#db2777',
   },
   {
     id: 'zero-judgment',
@@ -52,75 +54,103 @@ const PEER_SUPPORT_TOPICS = [
     title: 'Zero Judgment',
     description: 'A compassionate community free from stigma and shame',
     color: '#dbeafe',
-    Iconcolor: "#2c68eb"
-  }
+    Iconcolor: '#2c68eb',
+  },
 ];
 
+/* ── Component ── */
 const PeerSupport = () => {
+  // null = landing, string = topic id being explored
+  const [activeTopic, setActiveTopic] = useState(null);
+
+  if (activeTopic) {
+    return (
+      <TopicDetail
+        topicId={activeTopic}
+        onBack={() => setActiveTopic(null)}
+      />
+    );
+  }
+
   return (
     <div className={styles.peerSupport}>
+      {/* ── Hero ── */}
       <div className={styles.peerHero}>
         <div className={styles.peerIcon}>
           <Heart size={48} />
         </div>
         <h2 className={styles.peerTitle}>Peer-Safe Companion</h2>
         <p className={styles.peerDescription}>
-          You're not alone. Connect with others, read real stories, and find support on your journey.
+          You're not alone. Connect with others, read real stories, and find
+          support on your journey.
         </p>
       </div>
 
+      {/* ── Safety notice ── */}
       <div className={styles.safetyNotice}>
         <div className={styles.safetyIcon}>
           <Shield size={20} />
         </div>
         <div className={styles.safetyContent}>
           <strong>This is a safe, anonymous space</strong>
-          <p>Everyone here uses a nickname. No personal information is required or shared. All content is moderated to keep this space supportive and judgment-free.</p>
+          <p>
+            Everyone here uses a nickname. No personal information is required
+            or shared. All content is moderated to keep this space supportive
+            and judgment-free.
+          </p>
         </div>
       </div>
 
+      {/* ── Topic cards (with Explore) ── */}
       <h3 className={styles.topicsHeading}>What brings you here today?</h3>
-      
+
       <div className={styles.topicsGrid}>
-{PEER_SUPPORT_TOPICS.map(topic => {
-  const Icon = topic.icon;
-
-  return (
-    <div key={topic.id} className={styles.topicCard}>
-      <div className={styles.topicIcon} style={{ backgroundColor: topic.color }}>
-        <span style={{ color: topic.Iconcolor }}><Icon size={26} /></span>
+        {PEER_SUPPORT_TOPICS.map((topic) => {
+          const Icon = topic.icon;
+          return (
+            <div key={topic.id} className={styles.topicCard}>
+              <div
+                className={styles.topicIcon}
+                style={{ backgroundColor: topic.color }}
+              >
+                <span style={{ color: topic.Iconcolor }}>
+                  <Icon size={26} />
+                </span>
+              </div>
+              <h4 className={styles.topicTitle}>{topic.title}</h4>
+              <p className={styles.topicDescription}>{topic.description}</p>
+              <button
+                className={styles.exploreButton}
+                onClick={() => setActiveTopic(topic.id)}
+              >
+                Explore →
+              </button>
+            </div>
+          );
+        })}
       </div>
-      <h4 className={styles.topicTitle}>{topic.title}</h4>
-            <p className={styles.topicDescription}>{topic.description}</p>
-    
-         <button className={styles.exploreButton}>
-              Explore →
-            </button>
-    </div>
-  );
-})}
 
-      </div>
+      {/* ── Real Stories / Discussion Groups / Zero Judgment ── */}
       <div className={styles.topicsGridReal}>
-{Real_Stories.map(topic => {
-  const Icon = topic.icon;
-
-  return (
-    <div key={topic.id} className={styles.topicCardReal}> 
-    <div className={styles.iconReal} style={{ backgroundColor: topic.color }}>
-      <div className={styles.topicIconReal} > 
-
-        <span style={{ color: topic.Iconcolor }}><Icon size={26} /></span>
-      </div> </div>
-      <h4 className={styles.topicTitleReal}>{topic.title}</h4>
-            <p className={styles.topicDescriptionReal}>{topic.description}</p>
-    
-        
-    </div>
-
-  );
-})}
-
+        {Real_Stories.map((topic) => {
+          const Icon = topic.icon;
+          return (
+            <div key={topic.id} className={styles.topicCardReal}>
+              <div
+                className={styles.iconReal}
+                style={{ backgroundColor: topic.color }}
+              >
+                <div className={styles.topicIconReal}>
+                  <span style={{ color: topic.Iconcolor }}>
+                    <Icon size={26} />
+                  </span>
+                </div>
+              </div>
+              <h4 className={styles.topicTitleReal}>{topic.title}</h4>
+              <p className={styles.topicDescriptionReal}>{topic.description}</p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

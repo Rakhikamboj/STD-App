@@ -1,0 +1,139 @@
+{
+  "topics": [
+    {
+      "id": "first-time",
+      "title": "First-Time Testing",
+      "description": "For those taking the brave step of getting tested for the first time",
+      "icon": "Sparkles",
+      "color": "#ccfbf1",
+      "iconColor": "#0d9488",
+      "stories": [
+        {
+          "id": "ft-1",
+          "title": "I Tested Because I Had No Symptoms",
+          "content": "I never thought I needed to get tested because I felt completely fine. But after learning more about how many STIs show no symptoms, I decided to take the step. The clinic was welcoming, the staff were non-judgmental, and the whole process took under 30 minutes. My results came back clean, but more importantly, I now test regularly. Knowledge really is power.",
+          "author": "QuietWarrior",
+          "likes": 84
+        },
+        {
+          "id": "ft-2",
+          "title": "My First STI Test Was Easier Than I Thought",
+          "content": "I was really nervous before my first test — I didn't know what to expect and I kept putting it off. When I finally went, the nurse was so calm and kind. She explained everything step by step. The whole experience took about 20 minutes. I wish I had gone sooner. If you're hesitating, just go. It's so much easier than you think.",
+          "author": "BraveTester",
+          "likes": 97
+        },
+        {
+          "id": "ft-3",
+          "title": "How I Overcame the Shame of Getting Tested",
+          "content": "Growing up, STI testing felt like something shameful. It took me years to realize that testing is responsible, not embarrassing. When I finally walked into that clinic, I felt proud of myself. The staff treated me with complete dignity. Now I tell all my friends: getting tested is an act of self-care, not something to be ashamed of.",
+          "author": "StigmaFree22",
+          "likes": 112
+        }
+      ],
+      "discussions": [
+        {
+          "id": "ft-d1",
+          "title": "Nervous About Your First Test? Let's Talk",
+          "description": "Share your fears, questions, and experiences about getting tested for the first time. We're all here to support each other.",
+          "participants": 47
+        },
+        {
+          "id": "ft-d2",
+          "title": "What to Expect at a Testing Clinic",
+          "description": "Everything you wanted to know but were afraid to ask — from what happens during the appointment to how results are shared.",
+          "participants": 29
+        }
+      ]
+    },
+    {
+      "id": "living-with-sti",
+      "title": "Living with an STI",
+      "description": "Support and stories from people managing a recent or ongoing diagnosis",
+      "icon": "Heart",
+      "color": "#fce7f3",
+      "iconColor": "#db2777",
+      "stories": [
+        {
+          "id": "lwi-1",
+          "title": "A Positive Diagnosis Didn't End My Dating Life",
+          "content": "When I was diagnosed with herpes, I thought my romantic life was over. I spent weeks in shock. But slowly I found communities online, learned about transmission risk, and discovered that millions of people live full, loving lives with this diagnosis. It took time, but I found a partner who accepts me completely. Your diagnosis doesn't define your worth.",
+          "author": "StillBlossoming",
+          "likes": 145
+        },
+        {
+          "id": "lwi-2",
+          "title": "Managing HIV in 2025: My Experience",
+          "content": "I was diagnosed HIV-positive four years ago. With modern medication, my viral load is undetectable and I live a completely healthy, normal life. I run marathons, date, and work full time. The stigma is the hardest part — not the virus itself. Please educate yourself and don't let fear prevent you from supporting someone with a diagnosis.",
+          "author": "Undetectable_U",
+          "likes": 203
+        },
+        {
+          "id": "lwi-3",
+          "title": "Chlamydia Was Caught Early — Here's What I Learned",
+          "content": "I got diagnosed with chlamydia at a routine check. It was completely treatable with a single course of antibiotics. The experience taught me not to skip annual testing even when I feel healthy. It also helped me have better conversations with partners about sexual health. Early detection matters so much.",
+          "author": "EarlyBirdTester",
+          "likes": 78
+        }
+      ],
+      "discussions": [
+        {
+          "id": "lwi-d1",
+          "title": "Newly Diagnosed: Processing Your Feelings",
+          "description": "A safe space to talk about the emotional journey after a new STI diagnosis. No judgment, only understanding.",
+          "participants": 63
+        },
+        {
+          "id": "lwi-d2",
+          "title": "Dating with an STI: Tips & Experiences",
+          "description": "Real conversations about disclosure, finding supportive partners, and maintaining a healthy romantic life.",
+          "participants": 51
+        }
+      ]
+    },
+    {
+      "id": "partner-communication",
+      "title": "Partner Communication",
+      "description": "Tips and experiences on talking to partners about testing or results",
+      "icon": "MessageCircle",
+      "color": "#dbeafe",
+      "iconColor": "#2c68eb",
+      "stories": [
+        {
+          "id": "pc-1",
+          "title": "Starting the STI Conversation Early",
+          "content": "My current partner and I talked about STI testing before we were intimate. At first, I was worried it would kill the mood, but it actually made me feel safer and more connected. We both got tested, shared our results, and then felt comfortable moving forward. It set a great foundation of trust. Don't be afraid to have the conversation early — it shows maturity and care.",
+          "author": "TrustBuilder",
+          "likes": 71
+        },
+        {
+          "id": "pc-2",
+          "title": "How I Told My Partner About My Results",
+          "content": "I tested positive for chlamydia and had to tell my partner. I was terrified they would be angry or leave. I chose a calm moment, explained what happened, and encouraged them to get tested too. They were surprised but appreciated my honesty. We both got treated, and it actually brought us closer because we learned to communicate better. Honesty really is the best policy, even when it's scary.",
+          "author": "BraveTalker",
+          "likes": 62
+        },
+        {
+          "id": "pc-3",
+          "title": "Scripts That Helped Me Start the Conversation",
+          "content": "I used to freeze up whenever I tried to bring up testing with a new partner. Then a friend gave me some actual language to use: 'Before we get more serious, I'd love for us both to get tested — it makes me feel safe and shows we care about each other.' Having the words ready made all the difference. Now the conversation feels natural.",
+          "author": "WordsmithLover",
+          "likes": 89
+        }
+      ],
+      "discussions": [
+        {
+          "id": "pc-d1",
+          "title": "How to Talk to Partners About Testing",
+          "description": "Navigating the conversation about STI testing and results can be tough. Let's share tips, scripts, and encouragement for honest communication.",
+          "participants": 31
+        },
+        {
+          "id": "pc-d2",
+          "title": "When Partners React Badly: Support & Advice",
+          "description": "Sometimes disclosure doesn't go as planned. Share experiences and get support for difficult partner reactions.",
+          "participants": 22
+        }
+      ]
+    }
+  ]
+}
