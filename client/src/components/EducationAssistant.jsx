@@ -2,8 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import styles from './EducationAssistant.module.css';
 import { Sparkles, User, Bot, Send } from 'lucide-react';
 
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
+
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY; 
+const GEMINI_API_URL =
+  `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 const SYSTEM_PROMPT = `You are a compassionate, trustworthy, and non-judgmental sexual-health education advisor.
 
@@ -13,7 +15,7 @@ Your goals:
 3. Always respond with kindness, warmth, and zero stigma. Normalize the question and reassure the user it's okay to ask.
 4. Encourage users to take care of their health, make informed choices, and seek professional care when appropriate.
 5. Keep track of what the user has already asked so your replies become more personalized and relevant over time.
-6. After every answer, suggest 1-2 natural follow-up questions to help the user continue learning (e.g. "Would you like to know about safer sex practices?" or "Do you have questions about STI testing?").
+6. After every answer, suggest 1–2 natural follow-up questions to help the user continue learning (e.g. "Would you like to know about safer sex practices?" or "Do you have questions about STI testing?").
 
 Tone: Warm, supportive, patient — like a caring health educator.
 
@@ -22,45 +24,53 @@ DO NOT:
 - Encourage risky sexual behavior.
 - Diagnose medical conditions or prescribe medication. Instead, recommend consulting a healthcare provider.
 
-Always end your reply with 1-2 supportive follow-up questions to guide the user's learning journey.`;
+Always end your reply with 1–2 supportive follow-up questions to guide the user's learning journey.`;
 
-async function callOpenAI(conversationHistory) {
-  const messages = [
-    { role: 'system', content: SYSTEM_PROMPT },
-    ...conversationHistory.map(m => ({
-      role: m.role === 'assistant' ? 'assistant' : 'user',
-      content: m.content,
-    })),
-  ];
+async function callGemini(conversationHistory) {
+  const contents = conversationHistory
+    .filter(m => m.role !== 'system')
+    .map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }],
+    }));
 
-  const res = await fetch(OPENAI_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'gpt-4o-mini',
-      messages,
+  const body = {
+    system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+    contents,
+    generationConfig: {
       temperature: 0.7,
-      max_tokens: 1024,
-    }),
+      topK: 40,
+      topP: 0.95,
+      maxOutputTokens: 1024,
+    },
+    safetySettings: [
+      { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      { category: 'HARM_CATEGORY_HATE_SPEECH',       threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+    ],
+  };
+
+  const res = await fetch(GEMINI_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err?.error?.message || 'OpenAI API error');
+    throw new Error(err?.error?.message || 'Gemini API error');
   }
 
   const data = await res.json();
   return (
-    data.choices?.[0]?.message?.content ||
+    data.candidates?.[0]?.content?.parts?.[0]?.text ||
     "I'm sorry, I couldn't generate a response. Please try again."
   );
 }
 
 /* ─────────────────────────────────────────────────────────────────────
-   TYPING DOTS — animated indicator while OpenAI is responding
+   TYPING DOTS — animated indicator while Gemini is responding
    ───────────────────────────────────────────────────────────────────── */
 const dotStyle = {
   display: 'inline-block',
@@ -135,7 +145,7 @@ const EducationAssistant = ({ isOpen, onClose }) => {
     setIsLoading(true);
 
     try {
-      const reply = await callOpenAI(updatedHistory);
+      const reply = await callGemini(updatedHistory);
       setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
     } catch (err) {
       setMessages(prev => [
@@ -216,7 +226,7 @@ const EducationAssistant = ({ isOpen, onClose }) => {
             </div>
           ))}
 
-          {/* Typing indicator while waiting for OpenAI */}
+          {/* Typing indicator while waiting for Gemini */}
           {isLoading && (
             <div className={`${styles.message} ${styles.messageAssistant}`}>
               <div className={styles.messageAvatar}>
