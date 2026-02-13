@@ -12,11 +12,11 @@ import styles from './ResultsScreen.module.css';
 import { referenceImagesMap } from './SymptomChecker';
 
 // ─── Risk level display config ────────────────────────────────────────────────
-const RISK_CONFIG = {
-  low:    { label: 'Low Concern',      color: '#16a34a', bg: '#f0fdf4' },
-  medium: { label: 'Moderate Concern', color: '#d97706', bg: '#fffbeb' },
-  high:   { label: 'High Concern',     color: '#dc2626', bg: '#fef2f2' },
-};
+// const RISK_CONFIG = {
+//   low:    { label: 'Low Concern',      color: '#16a34a', bg: '#f0fdf4' },
+//   medium: { label: 'Moderate Concern', color: '#d97706', bg: '#fffbeb' },
+//   high:   { label: 'High Concern',     color: '#dc2626', bg: '#fef2f2' },
+// };
 
 // ─── Static fallback details for known condition names ────────────────────────
 // Used when the AI omits incubation / prevalence / expandedInfo for a condition
@@ -97,7 +97,7 @@ const ResultsScreen = ({ result, onRestart }) => {
     selectedReferenceImages = [],
   } = result;
 
-  const riskConfig = RISK_CONFIG[riskLevel] || RISK_CONFIG.low;
+  // const riskConfig = RISK_CONFIG[riskLevel] || RISK_CONFIG.low;
 
   return (
     <div className={styles.container}>
@@ -110,34 +110,15 @@ const ResultsScreen = ({ result, onRestart }) => {
             This is not a diagnosis. Please consult a healthcare provider for proper evaluation.
           </p>
 
-          <div
-            className={styles.analysisBadge}
-            style={{ background: analyzedByAI ? '#eff6ff' : '#f9fafb' }}
-          >
-            {analyzedByAI ? (
-              <>
-                <Sparkles size={14} color="#3b82f6" />
-                <span style={{ color: '#3b82f6', fontSize: '0.75rem', fontWeight: 600 }}>
-                  AI-powered analysis
-                </span>
-              </>
-            ) : (
-              <>
-                <ShieldCheck size={14} color="#6b7280" />
-                <span style={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 600 }}>
-                  Standard assessment
-                </span>
-              </>
-            )}
-          </div>
+          
         </div>
 
         {/* ── AI Supportive Message ─────────────────────────────────────────── */}
-        {aiMessage && (
+        {/* {aiMessage && (
           <div className={styles.aiMessageCard}>
             <p className={styles.aiMessageText}>{aiMessage}</p>
           </div>
-        )}
+        )} */}
 
         {/* ── Follow-up / Routine care banner ──────────────────────────────── */}
         {hasSymptoms ? (
@@ -149,12 +130,12 @@ const ResultsScreen = ({ result, onRestart }) => {
                 Consider scheduling an appointment within the next few days
               </p>
             </div>
-            <div
+            {/* <div
               className={styles.riskPill}
               style={{ background: riskConfig.bg, color: riskConfig.color }}
             >
               {riskConfig.label}
-            </div>
+            </div> */}
           </div>
         ) : (
           <div className={styles.routineCareBanner}>

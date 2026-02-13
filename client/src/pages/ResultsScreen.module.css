@@ -257,7 +257,7 @@
   font-size: 1rem;
   font-weight: 500;
   color: #1a1a1a;
-  margin: 0;
+  margin-bottom: 0.5rem;
 }
 
 .conditionDescription {
@@ -268,7 +268,7 @@
 }
 
 .descriptionNote {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   padding: 0.7rem;
   border-radius: 8px;
   color: #4a4a4a;
@@ -285,10 +285,10 @@
 }
 
 .metaItem {
-  font-size: 0.75rem;
-  gap: 0.3rem;
+  font-size: 0.78rem;
+  gap: 0.5rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   color: #4f5c6c;
 }
 
@@ -305,7 +305,7 @@
 }
 
 .expandedInfo p {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: #4a4a4a;
   line-height: 1.6;
   margin: 0;

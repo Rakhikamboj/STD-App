@@ -17,7 +17,7 @@ let model;
 if (process.env.GEMINI_API_KEY) {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-  model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 } else {
   console.warn('Warning: GEMINI_API_KEY missing. AI analysis disabled.');
 }
@@ -217,15 +217,19 @@ const buildSymptomSummary = (r) => {
 // Returns all fields ResultsScreen renders, including incubation, prevalence,
 // expandedInfo, and imageType so each condition card is fully self-contained.
 const ANALYSIS_PROMPT = `
-You are a compassionate sexual-health advisor. Using the image(s) and symptom data above:
-
-1. Ground analysis in BOTH visual features observed AND the clinical labels provided.
-2. If an image does not match its label, favour visual evidence and note the discrepancy.
-3. Use warm, reassuring language. Emphasise treatability without alarming the user.
-4. CRITICAL: Every condition MUST have completely unique wording for description, descriptionNote, and expandedInfo — never reuse the same sentence across conditions.
+You are a compassionate sexual-health advisor. Use the image(s) and user's text responses in symptom data.:
+1. Ground analysis in BOTH visual features AND the clinical labels and other answers observed provided.
+2. Prioritize the user's lived experience and symptoms over textbook definitions.
+3. If an image does not match its label, favour visual evidence and note the discrepancy.
+4. Always provide 4-6 gentle, actionable recommendations based on the user's unique combination of symptoms and images. Avoid generic advice. Tailor suggestions to the individual's situation and feelings.
+5. Use warm, reassuring language. Emphasise treatability without alarming the user.
+6. CRITICAL: Every condition MUST have completely unique wording for description, descriptionNote, and expandedInfo — never reuse the same sentence across conditions.
 
 For each possibleCondition include ALL fields:
-- "imageType": exact imageType key corresponding to this condition ("herpes","warts","scabies","ulcer","bumpy","inflamed","swollen","rough","smooth") — null if none.
+- "condition": concise clinical name for this condition-condition can be based on the image provided or other symptoms.
+- "description": a unique one-line clinical description of this condition based on the user's symptoms text responses and images.
+- "descriptionNote": a unique reassuring note about treatability or management for this condition.
+- "imageType": exact imageType key corresponding to this condition and if responded in text format or response is in text, analyze the user's conditon based on that text or options selcted.("herpes","warts","scabies","ulcer","bumpy","inflamed","swollen","rough","smooth") — null if none.
 - "incubation": realistic clinical incubation period string (e.g. "2-12 days") — null if not applicable.
 - "prevalence": short phrase on how common this condition is.
 - "expandedInfo": 1-2 sentences of unique additional clinical context for THIS condition only.
