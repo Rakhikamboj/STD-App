@@ -1,6 +1,6 @@
 .faqContainer {
   width: 100%;
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 60px 20px;
 
@@ -9,57 +9,54 @@
 .questionIconGreen{
     color: #0d9488;
 }
-.iconWrapperWhite{
+/* .iconWrapperWhite{
     color: white;
     background-color: #0d9488;
     display: flex;
     align-items: center;
     width: fit-content;
     justify-content: center;
-}
+} */
 .header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 2.4rem;
 }
 
-.iconWrapper {
+.iconWrapperWhite {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
-  border-radius: 20px;
-  margin-bottom: 30px;
-  box-shadow: 0 8px 20px rgba(20, 184, 166, 0.3);
+  width: 75px;
+  height: 75px;
+  background: #0d9488;
+  border-radius: 18px;
+  margin-bottom: 1.2rem;
+  
 }
 
-.icon {
-  width: 40px;
-  height: 40px;
-}
+
 
 .title {
-  font-size: 48px;
+  font-size: 2.6rem;
   font-weight: 700;
   color: #1e293b;
-  margin: 0 0 16px 0;
+  margin: 0 0 0.5rem 0;
   letter-spacing: -0.5px;
 }
 
 .subtitle {
   font-size: 18px;
-  color: #64748b;
+  color: #596577;
   margin: 0;
-  line-height: 1.6;
-  max-width: 600px;
+
+  max-width: 700px;
   margin: 0 auto;
 }
 
 .faqList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -67,21 +64,22 @@
 .faqItem {
   background: white;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: all 0.3s ease;
 }
 
 .faqItem:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .faqQuestion {
   width: 100%;
   display: flex;
   align-items: center;
+  font-size: 0.3rem;
   justify-content: space-between;
-  padding: 24px 28px;
+  padding: 1.2rem 1.5rem;
   background: none;
   border: none;
   cursor: pointer;
@@ -103,24 +101,24 @@
 .questionIcon {
   width: 24px;
   height: 24px;
-  color: #14b8a6;
+  color: #0d9488;;
   flex-shrink: 0;
 }
 
 .questionText {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 0.99rem;
+  font-weight: 500;
   color: #1e293b;
   line-height: 1.4;
 }
 
 .toggleIcon {
-  width: 28px;
-  height: 28px;
-  color: #14b8a6;
+  width: 22px;
+  height: 22px;
+  color: #0d9488;;
   flex-shrink: 0;
   transition: transform 0.3s ease;
-  border: 2px solid #14b8a6;
+  border: 2px solid #0d9488;
   border-radius: 50%;
   padding: 4px;
 }
