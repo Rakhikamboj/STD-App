@@ -1,7 +1,7 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { createRequire } from 'module';
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -12,17 +12,17 @@ const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-// ─── Gemini Setup ─────────────────────────────────────────────────────────────
+
 let model;
 if (process.env.GEMINI_API_KEY) {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  // Use gemini-2.0-flash for multimodal (image + text) support
+
   model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 } else {
   console.warn('Warning: GEMINI_API_KEY missing. AI analysis disabled.');
 }
 
-// ─── Reference image paths (served as static assets) ──────────────────────────
+
 const REFERENCE_IMAGE_PATHS = {
   herpes:   'assets/Genetial-herps.png',
   warts:    'assets/Genital-warts.png',
@@ -289,10 +289,9 @@ router.post('/analyze', async (req, res) => {
   }
 });
 
-// GET /api/symptoms/questions  – loaded from external JSON file
 router.get('/questions', (req, res) => {
   try {
-    const questionsPath = path.join(__dirname, '../data/questions.data.json');
+    const questionsPath = path.join(process.cwd(), 'config/questions.data.json');
     const questions = JSON.parse(fs.readFileSync(questionsPath, 'utf-8'));
     res.json(questions);
   } catch (err) {
@@ -300,6 +299,8 @@ router.get('/questions', (req, res) => {
     res.status(500).json({ message: 'Could not load questions' });
   }
 });
+
+
 
 // GET /api/symptoms/reference-images
 router.get('/reference-images', (req, res) => {

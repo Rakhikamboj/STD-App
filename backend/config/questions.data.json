@@ -1,0 +1,308 @@
+[
+  {
+    "id": "q1_bringYouHere",
+    "question": "What brings you here today?",
+    "type": "multiple-choice",
+    "options": [
+      "I have symptoms that concern me",
+      "I had a recent exposure or encounter",
+      "I want to get tested routinely",
+      "I'm here to learn and stay informed"
+    ],
+    "category": "reason",
+    "sensitive": false
+  },
+  {
+    "id": "q2_feeling",
+    "question": "How are you feeling right now?",
+    "type": "multiple-choice",
+    "options": [
+      "Anxious or worried",
+      "Curious and informed",
+      "Experiencing discomfort",
+      "Just being proactive"
+    ],
+    "category": "emotion",
+    "sensitive": false
+  },
+  {
+    "id": "q3_noticeChanged",
+    "question": "When did you first notice something different?",
+    "type": "multiple-choice",
+    "options": [
+      "Within the last few days",
+      "1-2 weeks ago",
+      "2-4 weeks ago",
+      "More than a month ago",
+      "Not sure"
+    ],
+    "category": "timeline",
+    "sensitive": false
+  },
+  {
+    "id": "q4_discharge",
+    "question": "Are you experiencing any unusual discharge?",
+    "type": "multiple-choice",
+    "options": [
+      "Yes, unusual discharge",
+      "No discharge",
+      "Not sure",
+      "Prefer not to answer"
+    ],
+    "category": "symptoms"
+  },
+  {
+    "id": "q5_sores_bumps_rash",
+    "question": "Have you noticed any sores, bumps, or rashes?",
+    "type": "multiple-choice",
+    "options": [
+      "Yes, on genital area",
+      "Yes, elsewhere on body",
+      "No",
+      "Not sure"
+    ],
+    "category": "symptoms",
+    "sensitive": true,
+    "sensitiveMessage": "This is a sensitive question. You can skip it if you're not comfortable answering. Your privacy and comfort matter."
+  },
+  {
+    "id": "q6_pain",
+    "question": "Are you experiencing pain or discomfort?",
+    "type": "multiple-choice",
+    "options": [
+      "Pain during urination",
+      "Abdominal or pelvic pain",
+      "Pain during intimacy",
+      "Genital itching or irritation",
+      "No pain",
+      "Other"
+    ],
+    "category": "symptoms",
+    "multiselect": true,
+    "sensitive": true,
+    "sensitiveMessage": "This is a sensitive question. You can skip it if you're not comfortable answering. Your privacy and comfort matter."
+  },
+  {
+    "id": "q7_flulike",
+    "question": "Have you had any flu-like symptoms?",
+    "type": "multiple-choice",
+    "options": [
+      "Fever or chills",
+      "Fatigue",
+      "Swollen glands",
+      "Body aches",
+      "None of these"
+    ],
+    "category": "symptoms",
+    "multiselect": true
+  },
+  {
+    "id": "referenceImages",
+    "question": "Would you like to see reference images to help identify your symptoms?",
+    "type": "yes-no",
+    "category": "visual",
+    "helpText": "Medical reference images can help you better understand and identify symptoms. All images are educational diagrams."
+  },
+  {
+    "id": "q9_lastTest",
+    "question": "When was your last STI test?",
+    "type": "multiple-choice",
+    "options": [
+      "Within the last 3 months",
+      "3-6 months ago",
+      "6-12 months ago",
+      "Over a year ago",
+      "Never tested",
+      "Prefer not to answer"
+    ],
+    "category": "testing",
+    "sensitive": false
+  },
+  {
+    "id": "q10_additionalConcerns",
+    "question": "Do you have any additional concerns?",
+    "type": "text",
+    "placeholder": "Please describe any other concerns you may have (optional)...",
+    "category": "concerns",
+    "sensitive": true,
+    "sensitiveMessage": "This is optional. Share only what you're comfortable with."
+  },
+  {
+    "id": "q11_skinCondition",
+    "question": "Which of following best matches your skin condition or symptoms?",
+    "questionText": "Which of these best describes your skin condition or symptoms?",
+    "type": "conditional",
+    "conditionalOn": "referenceImages",
+    "imageOptions": [
+      { "value": "herpes", "label": "Blisters/Herpes-like", "imageType": "herpes" },
+      { "value": "bumpy", "label": "Warts", "imageType": "bumpy" },
+      { "value": "scabies", "label": "Scabies-like Rash", "imageType": "scabies" },
+      { "value": "swollen", "label": "Ulcer/Open Sore", "imageType": "swollen" },
+      { "value": "none", "label": "None of these match", "imageType": "none" }
+    ],
+    "textOptions": [
+      "Small fluid-filled blisters",
+      "Wart-like bumps or growths",
+      "Rash with intense itching",
+      "Open sores or ulcers",
+      "None of these describe my symptoms"
+    ],
+    "category": "visual-detail",
+    "sensitive": true,
+    "sensitiveMessage": "This is a sensitive question. You can skip it if you're not comfortable answering. Your privacy and comfort matter.",
+    "helpText": "This helps us guide you without needing to see or store any photos. Your answers are private and stay on your device."
+  },
+  {
+    "id": "q12_texture",
+    "question": "Which texture best describes what you're experiencing?",
+    "questionText": "Which texture best describes what you're experiencing?",
+    "type": "conditional",
+    "conditionalOn": "referenceImages",
+    "imageOptions": [
+      { "value": "smooth", "label": "Smooth/No Issues", "imageType": "smooth" },
+      { "value": "bumpy", "label": "Small Bumps", "imageType": "bumpy" },
+      { "value": "rough", "label": "Rough/Textured", "imageType": "rough" },
+      { "value": "inflamed", "label": "Red/Inflamed", "imageType": "inflamed" },
+      { "value": "swollen", "label": "Swollen Area", "imageType": "swollen" },
+      { "value": "none", "label": "None of these match", "imageType": "none" }
+    ],
+    "textOptions": [
+      "Smooth skin with no visible issues",
+      "Small raised bumps on the skin",
+      "Rough or textured surface",
+      "Red, inflamed, or irritated skin",
+      "Swollen or puffy area",
+      "None of these describe what I'm experiencing"
+    ],
+    "category": "visual-detail",
+    "sensitive": true,
+    "sensitiveMessage": "This is a sensitive question. You can skip it if you're not comfortable answering. Your privacy and comfort matter.",
+    "helpText": "This helps us guide you without needing to see or store any photos. Your answers are private and stay on your device."
+  },
+  {
+    "id": "q13_bumpsOrSores",
+    "question": "If you have bumps or sores in the genital area, what do they look or feel like?",
+    "type": "multiple-choice",
+    "options": [
+      "Small fluid-filled blisters (like tiny water bubbles)",
+      "Painful red sores or ulcers",
+      "Clustered or grouped together",
+      "Itchy or tingling before they appear",
+      "Crust over or scab as they heal",
+      "Swollen or tender lymph nodes nearby",
+      "None of these describe what I see"
+    ],
+    "category": "symptom-detail",
+    "multiselect": true,
+    "sensitive": true,
+    "sensitiveMessage": "Select all that apply to your situation."
+  },
+  {
+    "id": "q14_soreDescription",
+    "question": "If you notice a sore or lesion, which of these best describes it?",
+    "type": "multiple-choice",
+    "options": [
+      "Single, round, painless sore (chancre)",
+      "Firm to the touch with raised edges",
+      "Located on or near genitals, mouth, or anus",
+      "Does not hurt or itch",
+      "Appears clean with no pus or discharge",
+      "Heals on its own after a few weeks",
+      "None of these describe what I see"
+    ],
+    "category": "symptom-detail",
+    "multiselect": true,
+    "sensitive": true,
+    "sensitiveMessage": "Select all that apply to your situation."
+  },
+  {
+    "id": "q15_genitalBumps",
+    "question": "If you see or feel bumps in the genital area, what do they look like?",
+    "type": "multiple-choice",
+    "options": [
+      "Small, flesh-colored or gray bumps",
+      "Cauliflower-like texture (grouped together)",
+      "Flat or slightly raised",
+      "Soft to the touch",
+      "May be itchy but usually painless",
+      "Can appear alone or in clusters",
+      "None of these describe what I see"
+    ],
+    "category": "symptom-detail",
+    "multiselect": true,
+    "sensitive": true,
+    "sensitiveMessage": "Select all that match your observation."
+  },
+  {
+    "id": "q16_discharge_detail",
+    "question": "If you have discharge or irritation, what does the area feel or look like?",
+    "type": "multiple-choice",
+    "options": [
+      "Thick, white discharge (like cottage cheese)",
+      "Red, swollen, or irritated skin",
+      "Intense itching or burning",
+      "Soreness or discomfort",
+      "Rash with small red patches",
+      "Painful during urination or sex",
+      "None of these describe what I experience"
+    ],
+    "category": "symptom-detail",
+    "multiselect": true,
+    "sensitive": true,
+    "sensitiveMessage": "Your responses help us provide better guidance."
+  },
+  {
+    "id": "q17_itching_rash",
+    "question": "If you have itching or a rash, what does it look or feel like?",
+    "type": "multiple-choice",
+    "options": [
+      "Intense itching, especially at night",
+      "Small red bumps or blisters",
+      "Thin, wavy lines on the skin (burrow tracks)",
+      "Rash in skin folds or between fingers",
+      "Scaly or crusty patches",
+      "Affects genital area, hands, or wrists",
+      "None of these describe what I see"
+    ],
+    "category": "symptom-detail",
+    "multiselect": true,
+    "sensitive": true,
+    "sensitiveMessage": "Select all symptoms you're experiencing."
+  },
+  {
+    "id": "q18_painfulSores",
+    "question": "If you have painful sores, which of these best describes them?",
+    "type": "multiple-choice",
+    "options": [
+      "Painful, deep ulcers (open sores)",
+      "Soft to the touch with irregular edges",
+      "Bleeds easily when touched",
+      "Gray or yellowish base with pus",
+      "Swollen, painful lymph nodes in the groin",
+      "Multiple sores may appear",
+      "None of these describe what I see"
+    ],
+    "category": "symptom-detail",
+    "multiselect": true,
+    "sensitive": true,
+    "sensitiveMessage": "This information helps provide accurate guidance."
+  },
+  {
+    "id": "q19_skinBumps",
+    "question": "If you notice small bumps on your skin, what do they look like?",
+    "type": "multiple-choice",
+    "options": [
+      "Small, round, dome-shaped bumps",
+      "Flesh-colored, pink, or white",
+      "Shiny or pearly appearance",
+      "Dimple or pit in the center",
+      "Firm but painless to touch",
+      "Can appear in clusters",
+      "None of these describe what I see"
+    ],
+    "category": "symptom-detail",
+    "multiselect": true,
+    "sensitive": true,
+    "sensitiveMessage": "Your detailed responses ensure personalized guidance."
+  }
+]

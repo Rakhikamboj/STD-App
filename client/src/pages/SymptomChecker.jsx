@@ -12,7 +12,7 @@ import api from "../utils/api";
 import ResultsScreen from "./ResultsScreen";
 import styles from "./SymptomChecker.module.css";
 
-// ── Static image imports (Vite / CRA resolve these at build time) ──────────────
+
 import herpes from "../assets/Genetial-herps.png";
 import scabies from "../assets/Genital-scabies2.png";
 import warts from "../assets/Genital-warts.png";
@@ -23,7 +23,7 @@ import bumpy from "../assets/bumpy-skin.png";
 import inflamed from "../assets/inflamed-skin.png";
 import swollen from "../assets/swollen-skin.png";
 
-/** Maps imageType keys → imported image URLs */
+
 export const referenceImagesMap = {
   herpes,
   scabies,
@@ -36,16 +36,12 @@ export const referenceImagesMap = {
   swollen,
 };
 
-/**
- * Human-readable clinical label for each imageType.
- * Sent alongside the image so Gemini has dual grounding.
- */
 const IMAGE_LABELS = {
-  herpes:   "Genital herpes – fluid-filled blisters (HSV)",
-  warts:    "Genital warts – cauliflower-like growths (HPV)",
-  scabies:  "Scabies – parasitic burrow-track rash",
-  ulcer:    "Ulcer / open sore – requires clinical evaluation",
-  smooth:   "Smooth skin – no visible lesion",
+  herpes:   "Genital herpes - fluid-filled blisters (HSV)",
+  warts:    "Genital warts - cauliflower-like growths (HPV)",
+  scabies:  "Scabies - parasitic burrow-track rash",
+  ulcer:    "Ulcer / open sore - requires clinical evaluation",
+  smooth:   "Smooth skin - no visible lesion",
   bumpy:    "Small raised bumps",
   // rough:    "Rough / textured skin surface",
   inflamed: "Red or inflamed skin",
@@ -62,10 +58,7 @@ const SymptomChecker = () => {
   const [result, setResult]                   = useState(null);
   const [error, setError]                     = useState("");
 
-  /**
-   * selectedImages: Array of { imageType, label, blobUrl }
-   * We store the resolved blob URL so the backend can fetch the actual bytes.
-   */
+
   const [selectedImages, setSelectedImages] = useState([]);
   const [showRefNotice, setShowRefNotice]   = useState(false);
 
