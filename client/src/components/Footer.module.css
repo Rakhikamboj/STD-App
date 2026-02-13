@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap');
+
+.footer {
+  background-color: #1b2a35;
+  color: #cdd8e0;
+  font-family: 'DM Sans', sans-serif;
+  padding: 46px 150px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.topSection {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 20px;
+}
+
+/* Brand Column */
+.brandCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logoIcon {
+  width: 34px;
+  height: 34px;
+  background-color: #0d9488;
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+
+
+.brandName {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+}
+
+.tagline {
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.65;
+  color: #8fa8b8;
+  max-width: 300px;
+}
+
+/* Nav Columns */
+.navCol {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.colTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  margin-bottom: 4px;
+}
+
+.navLink {
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: #8fa8b8;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.navLink:hover {
+  color: white;
+}
+
+/* Divider */
+.divider {
+  border: none;
+  border-top: 1px solid #2a3c4a;
+  margin: 0;
+}
+
+/* Bottom Section */
+.bottomSection {
+  padding: 24px 0 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.disclaimer {
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: #8fa8b8;
+  line-height: 1.6;
+  max-width: 1200px;
+}
+
+.copyright {
+  font-size: 12.5px;
+  font-weight: 400;
+  color: #8fa8b8;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .footer {
+    padding: 48px 40px 0;
+  }
+
+  .topSection {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer {
+    padding: 40px 24px 0;
+  }
+
+  .topSection {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .tagline {
+    max-width: 100%;
+  }
+}
