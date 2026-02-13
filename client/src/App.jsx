@@ -11,24 +11,26 @@ import ResultsScreen from "./pages/ResultsScreen";
 import FAQ from "./pages/Faqs.jsx";
 import Footer from "./components/Footer.jsx";
 
-const GA_TRACKING_ID = "G-E2Z53DVEZ5";
-
-
-function AnalyticsTracker() {
-  const location = useLocation();
-
-  useEffect(() => {
-    if (window.gtag) {
-      window.gtag("config", GA_TRACKING_ID, {
-        page_path: location.pathname,
-      });
-    }
-  }, [location]);
-
-  return null;
-}
 
 function App() {
+   useEffect(() => {
+    const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ window.dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", GA_ID);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
   return (
     <Router>
       <AnalyticsTracker /> 
