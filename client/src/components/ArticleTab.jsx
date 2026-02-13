@@ -121,7 +121,7 @@ const ArticlesTab = () => {
 
       {/* Category Filters */}
       <div className={styles.categoryFilters}>
-        <div className={styles.filterIcon}><Filter size={22} color="#5a5959" /></div>
+        <div className={styles.filterIcon}><Filter size={24} color="#5a5959" /></div>
         {categories.map(cat => (
           <div
             key={cat.id}

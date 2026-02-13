@@ -37,6 +37,7 @@
   display: flex;
   align-items: center;
   justify-items: center;
+  text-align: center;
   gap: clamp(0.5rem, 1.5vw, 0.75rem);
   margin-bottom: clamp(2rem, 3vw, 3rem);
   overflow-x: auto;
@@ -47,6 +48,11 @@
   color: #6b7280;
   font-size: clamp(18px, 2.5vw, 20px);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+
+
+
   justify-content: center;
 }
 
@@ -124,12 +130,12 @@
 }
 
 .mythTag {
-  background: #f59e0b;
-  color: white;
-  font-size: clamp(0.65rem, 1vw, 0.7rem);
+  background: #fef08a;
+  color: #664a02;
+  font-size: clamp(0.5rem, 1vw, 0.65rem);
   padding: 0.25rem 0.75rem;
-  border-radius: 0.5rem;
-  font-weight: 700;
+  border-radius: 1.1rem;
+  font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -203,18 +209,18 @@
 }
 
 .articleTag {
-  background: #d1fae5;
-  color: #065f46;
-  font-size: clamp(0.65rem, 1vw, 0.7rem);
+  background: #ccfbf1;
+  color: #077a5a;
+  font-size: clamp(0.5rem, 1vw, 0.65rem);
   padding: 0.25rem 0.75rem;
-  border-radius: 0.5rem;
-  font-weight: 700;
+  border-radius: 1.1rem;
+  font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .articleTitle {
-  font-size: clamp(1.05rem, 1.75vw, 1.25rem);
+  font-size: clamp(1rem, 1.75vw, 1.09rem);
   font-weight: 600;
   color: #1f2937;
   margin-bottom: clamp(0.5rem, 1vw, 0.65rem);
